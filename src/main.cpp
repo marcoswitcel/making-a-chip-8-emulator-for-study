@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+#include "chip8_machine.cpp"
+
 int main(int argc, char **argv)
 {
   printf("Olá mundo da emulação Chip-8!\n");
