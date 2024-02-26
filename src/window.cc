@@ -29,8 +29,25 @@ static void render_scene(SDL_Renderer *renderer, Context_Data *context)
   };
 
   SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
- 
   SDL_RenderFillRect(renderer, &area);
+
+
+  // Copiando um buffer para a tela
+  // @exemplo https://gamedev.stackexchange.com/questions/102490/fastest-way-to-render-image-data-from-buffer
+  SDL_Texture *chip8_screen_memory = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, 64, 32);
+  void *pixels = NULL;
+  int pitch;
+  SDL_LockTexture(chip8_screen_memory, NULL, &pixels, &pitch);
+
+  for (unsigned i = 0; i < 64 * 32; i++)
+  {
+    ((uint32_t *) pixels)[i] = 0x000000FF; 
+  }
+
+  SDL_UnlockTexture(chip8_screen_memory);
+
+  SDL_Rect dest = { 10, 10, 64, 32 };
+  SDL_RenderCopy(renderer, chip8_screen_memory, NULL, &dest);
 
   SDL_RenderPresent(renderer);
 }
