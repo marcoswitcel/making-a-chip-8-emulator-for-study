@@ -16,6 +16,25 @@ typedef struct Context_Data {
   int32_t mouse_y;
 } Context_Data;
 
+static void render_scene(SDL_Renderer *renderer, Context_Data *context)
+{
+  // Seta o fundo do renderer
+  SDL_RenderClear(renderer);
+
+  SDL_Rect area = {
+    .x = 0,
+    .y = 0,
+    .w = WIDTH,
+    .h = HEIGHT,
+  };
+
+  SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+ 
+  SDL_RenderFillRect(renderer, &area);
+
+  SDL_RenderPresent(renderer);
+}
+
 
 static void handle_events_and_inputs(SDL_Window *window, Context_Data *context, bool *should_quit)
 {
@@ -113,7 +132,8 @@ int open_window(void)
     // update(&context, delta_time);
     last_timestamp = current_timestamp;
 
-    // Renderiza aqui
+    // Renderiza
+    render_scene(renderer, &context);
     
     SDL_Delay(1000 / UI_TICKS_PER_SECOND);
   }
@@ -121,4 +141,6 @@ int open_window(void)
   SDL_DestroyWindow(window);
   SDL_Quit();
   printf("Aplicação encerrada com sucesso.\n");
+
+  return EXIT_SUCCESS;
 }
