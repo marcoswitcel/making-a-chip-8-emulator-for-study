@@ -6,7 +6,7 @@
 
 static constexpr int WIDTH = 1024;
 static constexpr int HEIGHT = 728;
-static unsigned UI_TICKS_PER_SECOND = 60;
+static unsigned UI_TICKS_PER_SECOND = 20;
 
 typedef struct Context_Data {
   bool clicked;
@@ -115,7 +115,7 @@ int open_window(void)
 
     // Renderiza aqui
     
-    SDL_Delay(1000 / UI_TICKS_PER_SECOND / 4); // @note Não está correto, deveria descontar o tempo de renderização
+    SDL_Delay(1000 / UI_TICKS_PER_SECOND);
   }
 
   SDL_DestroyWindow(window);

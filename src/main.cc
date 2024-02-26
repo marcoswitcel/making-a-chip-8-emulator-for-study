@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "chip8_machine.cpp"
-#include "window.cpp"
+#include "chip8_machine.cc"
+#include "window.cc"
 
 int main(int argc, char **argv)
 {

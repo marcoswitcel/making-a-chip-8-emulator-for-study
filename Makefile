@@ -12,8 +12,8 @@ SOURCE_FOLDER_NAME=src
 build-folder-setup:
 	@ mkdir -p $(BUILD_FOLDER_NAME)
 
-main: build-folder-setup  $(SOURCE_FOLDER_NAME)/main.cpp  
-	$(CC) $(SOURCE_FOLDER_NAME)/main.cpp -o $(BUILD_FOLDER_NAME)/main $(CFLAGS) $(LFLAGS) $(DEF)
+main: build-folder-setup  $(SOURCE_FOLDER_NAME)/main.cc  
+	$(CC) $(SOURCE_FOLDER_NAME)/main.cc -o $(BUILD_FOLDER_NAME)/main $(CFLAGS) $(LFLAGS) $(DEF)
 run: main
 	@echo "cd ./$(BUILD_FOLDER_NAME)"
 	@echo ./main
