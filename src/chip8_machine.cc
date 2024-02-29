@@ -3,8 +3,6 @@
 #include <stdint.h>
 
 typedef struct Chip8_Machine {
-  // Memória de 4096 bytes, range 0x000-0xFFF
-  uint8_t memory[4096];
   // 16 registradores de 8 bits, sendo que o 16º é usado para armazenar o resultados de operaçẽos
   uint8_t registers[16];
   // Registrador de índice
@@ -15,6 +13,8 @@ typedef struct Chip8_Machine {
   uint16_t stack[16];
   // stack pointer (stack índice)
   uint8_t stack_pointer;
+  // Memória de 4096 bytes, range 0x000-0xFFF
+  uint8_t memory[4096];
 
   // Memória de vídeo, estou usando cores 'rgba', um byte por canal, apesar de ser monocromático na prática
   uint32_t screen_buffer[64 * 32];
