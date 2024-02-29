@@ -4,6 +4,8 @@
 
 #include <SDL2/SDL.h>
 
+#include "./chip8_machine.cc"
+
 static constexpr int WIDTH = 1024;
 static constexpr int HEIGHT = 728;
 static unsigned UI_TICKS_PER_SECOND = 20;
@@ -16,7 +18,7 @@ typedef struct Context_Data {
   int32_t mouse_y;
 } Context_Data;
 
-static void render_scene(SDL_Renderer *renderer, Context_Data *context)
+static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, Context_Data *context)
 {
   // Seta o fundo do renderer
   SDL_RenderClear(renderer);
@@ -39,10 +41,7 @@ static void render_scene(SDL_Renderer *renderer, Context_Data *context)
   int pitch;
   SDL_LockTexture(chip8_screen_memory, NULL, &pixels, &pitch);
 
-  for (unsigned i = 0; i < 64 * 32; i++)
-  {
-    ((uint32_t *) pixels)[i] = 0x000000FF; 
-  }
+  memcpy(pixels, chip8_machine->screen_buffer, 64 * 32 * 4);
 
   SDL_UnlockTexture(chip8_screen_memory);
 
@@ -133,6 +132,14 @@ int open_window(void)
   bool should_quit = false;
   uint32_t last_timestamp = 0;
 
+  Chip8_Machine chip8_machine;
+
+  // Preenchendo o buffer da tela com a cor preta
+  for (unsigned i = 0; i < 64 * 32; i++)
+  {
+    chip8_machine.screen_buffer[i] = 0x000000FF; 
+  }
+
   while (!should_quit)
   {
     // @note João, não achei a versão 64 bits na minha instalação
@@ -150,7 +157,7 @@ int open_window(void)
     last_timestamp = current_timestamp;
 
     // Renderiza
-    render_scene(renderer, &context);
+    render_scene(renderer, &chip8_machine, &context);
     
     SDL_Delay(1000 / UI_TICKS_PER_SECOND);
   }
