@@ -45,7 +45,8 @@ static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, C
 
   SDL_UnlockTexture(chip8_screen_memory);
 
-  SDL_Rect dest = { 10, 10, 64, 32 };
+  constexpr int scale_factor = 14; // temporário?
+  SDL_Rect dest = { 10, 10, 64 * scale_factor, 32 * scale_factor };
   SDL_RenderCopy(renderer, chip8_screen_memory, NULL, &dest);
 
   SDL_RenderPresent(renderer);
@@ -139,6 +140,11 @@ int open_window(void)
   {
     chip8_machine.screen_buffer[i] = 0x000000FF; 
   }
+
+  // @note testando visualmente como fica o pixel scalonado
+  chip8_machine.screen_buffer[0] = 0xFF0000FF;
+  chip8_machine.screen_buffer[1] = 0x00FF00FF;
+  chip8_machine.screen_buffer[2] = 0xFF00FFFF;
 
   while (!should_quit)
   {
