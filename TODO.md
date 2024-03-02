@@ -2,7 +2,7 @@
 
 # Onde parei na leitura
 
-subtítulo: '8-bit Delay Timer' da página: [https://austinmorlan.com/posts/chip8_emulator/](https://austinmorlan.com/posts/chip8_emulator/)
+subtítulo: 'Loading the Fonts' da página: [https://austinmorlan.com/posts/chip8_emulator/](https://austinmorlan.com/posts/chip8_emulator/)
 
 
 # Pendências

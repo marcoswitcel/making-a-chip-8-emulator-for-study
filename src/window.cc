@@ -134,12 +134,9 @@ int open_window(void)
   uint32_t last_timestamp = 0;
 
   Chip8_Machine chip8_machine;
-
-  // Preenchendo o buffer da tela com a cor preta
-  for (unsigned i = 0; i < 64 * 32; i++)
-  {
-    chip8_machine.screen_buffer[i] = 0x000000FF; 
-  }
+  
+  reset_machine(chip8_machine);
+  clearing_screen_buffer(chip8_machine);
 
   // @note testando visualmente como fica o pixel scalonado
   chip8_machine.screen_buffer[0] = 0xFF0000FF;
