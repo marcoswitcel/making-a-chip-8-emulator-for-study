@@ -2,7 +2,7 @@
 
 # Onde parei na leitura
 
-subtítulo: 'Loading the Fonts' da página: [https://austinmorlan.com/posts/chip8_emulator/](https://austinmorlan.com/posts/chip8_emulator/)
+subtítulo: 'The Instructions' da página: [https://austinmorlan.com/posts/chip8_emulator/](https://austinmorlan.com/posts/chip8_emulator/)
 
 
 # Pendências
