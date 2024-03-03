@@ -13,6 +13,8 @@ constexpr unsigned CHIP8_SCREEN_HEIGHT = 32;
 constexpr unsigned CHIP8_SCREEN_BUFFER_SIZE = 64 * 32;
 constexpr unsigned CHIP8_SCREEN_BUFFER_SIZE_IN_BYTES = CHIP8_SCREEN_BUFFER_SIZE * 4;
 
+constexpr unsigned CHIP8_MEMORY_SIZE = 4096;
+
 #define BLACK_COLOR 0x000000FF
 
 typedef struct Chip8_Machine {
@@ -32,7 +34,7 @@ typedef struct Chip8_Machine {
   uint8_t sound_timer;
 
   // Memória de 4096 bytes, range 0x000-0xFFF
-  uint8_t memory[4096];
+  uint8_t memory[CHIP8_MEMORY_SIZE];
 
   // Memória de vídeo, estou usando cores 'rgba', um byte por canal, apesar de ser monocromático na prática
   uint32_t screen_buffer[CHIP8_SCREEN_BUFFER_SIZE];
@@ -142,4 +144,23 @@ void init_jump_table()
   }
 
   jump_table_inited = true;
+}
+
+void execute_a_cycle(Chip8_Machine &chip8_machine)
+{
+  if (chip8_machine.program_counter >= CHIP8_MEMORY_SIZE)
+  {
+    printf("programa terminado...\n");
+    return;
+  }
+
+  const uint8_t *memory = chip8_machine.memory; // alias
+  
+  // fetch opcode, como possuem dois bytes é necessário fazer o SHIFT e o OR
+  uint16_t opcode = (memory[chip8_machine.program_counter] << 8u) | memory[chip8_machine.program_counter + 1];
+
+  // incrementando o program counter
+  chip8_machine.program_counter += 2;
+
+  printf("opcode: 0x%X\n", opcode); // apenas para visualização
 }

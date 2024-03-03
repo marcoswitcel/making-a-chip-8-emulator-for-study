@@ -159,13 +159,15 @@ int open_window(void)
     uint32_t current_timestamp = SDL_GetTicks();
     float delta_time = (current_timestamp - last_timestamp) / 1000.0f;
 
-    printf("delta_time: %f\n", delta_time);
+    // printf("delta_time: %f\n", delta_time);
 
     // Processa eventos e inputs aqui
     handle_events_and_inputs(window, &context, &should_quit);
 
     // Atualiza aqui
     last_timestamp = current_timestamp;
+
+    execute_a_cycle(chip8_machine);
 
     // Renderiza
     render_scene(renderer, &chip8_machine, &context);
