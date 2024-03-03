@@ -8,7 +8,7 @@
 
 static constexpr int WIDTH = 1024;
 static constexpr int HEIGHT = 728;
-static unsigned UI_TICKS_PER_SECOND = 20;
+static unsigned UI_TICKS_PER_SECOND = 24;
 
 typedef struct Context_Data {
   bool clicked;
@@ -143,6 +143,15 @@ int open_window(void)
   chip8_machine.screen_buffer[1] = 0x00FF00FF;
   chip8_machine.screen_buffer[2] = 0xFF00FFFF;
 
+  /**
+   * @brief usando ROM de teste
+   * @reference
+   * - https://github.com/corax89/chip8-test-rom/tree/master
+   * - https://github.com/corax89/chip8-test-rom/blob/master/test_opcode.ch8
+   */
+  bool is_loaded = load_rom(chip8_machine, "test_opcode.ch8");
+  printf("is loaded: %d\n", is_loaded);
+
   while (!should_quit)
   {
     // @note João, não achei a versão 64 bits na minha instalação
@@ -156,7 +165,6 @@ int open_window(void)
     handle_events_and_inputs(window, &context, &should_quit);
 
     // Atualiza aqui
-    // update(&context, delta_time);
     last_timestamp = current_timestamp;
 
     // Renderiza

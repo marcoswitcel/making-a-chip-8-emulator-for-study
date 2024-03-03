@@ -2,6 +2,8 @@
 
 #include <string.h>
 #include <stdint.h>
+#include <stdlib.h>
+#include <fstream>
 
 constexpr unsigned START_INSTRUCTION_ADDRESS = 0x200;
 constexpr unsigned FONT_START_ADDRESS = 0x50;
@@ -81,6 +83,32 @@ static inline void clearing_screen_buffer(Chip8_Machine &chip8_machine)
   {
     chip8_machine.screen_buffer[i] = BLACK_COLOR; 
   }
+}
+
+static bool load_rom(Chip8_Machine &chip8_machine, const char *filename)
+{
+  // abre o arquivo já com o cursor do arquivo no final graças a flag `std::ios::ate`
+  std::ifstream file(filename, std::ios::binary | std::ios::ate);
+
+  if (!file.is_open()) return false;
+
+  const std::streampos size_of_content = file.tellg();
+  char *content_buffer = (char *) malloc(size_of_content * sizeof(char));
+
+  file.seekg(0, std::ios::beg); // volta o cursor para o início do arquivo
+  file.read(content_buffer, size_of_content);
+  file.close();
+
+  // move os dados do buffer de conteúdo para a memória da máquina no endereço correto
+  // @note Aqui podeira passar o endereço da memória da máquina para a função read?
+  for (long i = 0; i < size_of_content; i++)
+  {
+    chip8_machine.memory[START_INSTRUCTION_ADDRESS + i] = content_buffer[i];
+  }
+
+  free(content_buffer);
+
+  return true;
 }
 
 // Instruções
