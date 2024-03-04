@@ -162,5 +162,14 @@ void execute_a_cycle(Chip8_Machine &chip8_machine)
   // incrementando o program counter
   chip8_machine.program_counter += 2;
 
+  /**
+   * @note Pelo que entendi vou precisar ajustar minha jump table para apontar para instruções
+   * em alguns casos e em outros, a função que será executada será um segundo nível de decode, que
+   * acionará a instrução correta. Portanto, em alguns casos será um salto direto para a função
+   * que computa o efeito desejado pelo opcode, e em outros casos será um segunda função de decode
+   * que fará o dispatch, criando assim um sistema flexível que pode ter vários níveis e e ainda assim
+   * ter salto diretos.
+   */
+
   printf("opcode: 0x%X\n", opcode); // apenas para visualização
 }
