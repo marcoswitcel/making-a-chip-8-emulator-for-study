@@ -118,6 +118,10 @@ static bool load_rom(Chip8_Machine &chip8_machine, const char *filename)
 
 typedef void (*Chip8_Instruction_Execution_Code)(Chip8_Machine *chip8_machine, uint16_t opcode);
 
+static bool jump_table_inited = false;
+static Chip8_Instruction_Execution_Code base_instruction_jump_table[16] = {};
+static Chip8_Instruction_Execution_Code index_0_instruction_jump_table[16] = {};
+
 /**
  * @brief CLS - Clear de display
  * 
@@ -127,14 +131,21 @@ void execute_op_00E0(Chip8_Machine *chip8_machine, uint16_t opcode)
   memset(chip8_machine->memory, 0, CHIP8_SCREEN_BUFFER_SIZE_IN_BYTES);
 }
 
+void decode_0_index_opcode(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  // Eventualmente talvez vou usar essa função pra fazer algum tipo de assert?
+  uint8_t index = opcode & 0x000Fu; // @note Testar e revisar
+  assert(index < 17);
+  printf("decoding 0, index: %d\n", index);
+
+  index_0_instruction_jump_table[index](chip8_machine, opcode);
+}
+
 void noop(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
   // Eventualmente talvez vou usar essa função pra fazer algum tipo de assert?
   printf("noop...\n");
 }
-
-static bool jump_table_inited = false;
-static Chip8_Instruction_Execution_Code instruction_jump_table[16] = {};
 
 void init_jump_table()
 {
@@ -142,8 +153,12 @@ void init_jump_table()
 
   for (unsigned i = 0; i < 16; i++)
   {
-    instruction_jump_table[i] = noop;
+    base_instruction_jump_table[i] = noop;
+    index_0_instruction_jump_table[i] = noop;
   }
+
+  base_instruction_jump_table[0x0] = decode_0_index_opcode;
+  index_0_instruction_jump_table[0x0] = execute_op_00E0;
 
   jump_table_inited = true;
 }
@@ -164,10 +179,10 @@ void execute_a_cycle(Chip8_Machine &chip8_machine)
   // incrementando o program counter
   chip8_machine.program_counter += 2;
 
-  uint8_t index = (opcode & 0xF00u) >> 12;
+  uint8_t index = (opcode & 0xF000u) >> 12u;
   assert(index < 17);
 
-  instruction_jump_table[index](&chip8_machine, opcode);
+  base_instruction_jump_table[index](&chip8_machine, opcode);
 
   /**
    * @note Pelo que entendi vou precisar ajustar minha jump table para apontar para instruções
@@ -178,5 +193,5 @@ void execute_a_cycle(Chip8_Machine &chip8_machine)
    * ter salto diretos.
    */
 
-  printf("opcode: 0x%X\n", opcode); // apenas para visualização
+  printf("opcode: 0x%X, index: %d\n", opcode, index); // apenas para visualização
 }
