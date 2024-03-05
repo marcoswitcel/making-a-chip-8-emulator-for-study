@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <fstream>
+#include <assert.h>
 
 constexpr unsigned START_INSTRUCTION_ADDRESS = 0x200;
 constexpr unsigned FONT_START_ADDRESS = 0x50;
@@ -129,16 +130,17 @@ void execute_op_00E0(Chip8_Machine *chip8_machine)
 void noop(Chip8_Machine *chip8_machine)
 {
   // Eventualmente talvez vou usar essa função pra fazer algum tipo de assert?
+  printf("noop...\n");
 }
 
 static bool jump_table_inited = false;
-static Chip8_Instruction_Execution_Code instruction_jump_table[255] = {};
+static Chip8_Instruction_Execution_Code instruction_jump_table[16] = {};
 
 void init_jump_table()
 {
   if (jump_table_inited) return;
 
-  for (unsigned i = 0; i < 255; i++)
+  for (unsigned i = 0; i < 16; i++)
   {
     instruction_jump_table[i] = noop;
   }
@@ -161,6 +163,11 @@ void execute_a_cycle(Chip8_Machine &chip8_machine)
 
   // incrementando o program counter
   chip8_machine.program_counter += 2;
+
+  uint8_t index = (opcode & 0xF00u) >> 12;
+  assert(index < 17);
+
+  instruction_jump_table[index](&chip8_machine);
 
   /**
    * @note Pelo que entendi vou precisar ajustar minha jump table para apontar para instruções
