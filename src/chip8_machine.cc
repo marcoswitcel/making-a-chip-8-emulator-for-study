@@ -116,18 +116,18 @@ static bool load_rom(Chip8_Machine &chip8_machine, const char *filename)
 
 // Instruções
 
-typedef void (*Chip8_Instruction_Execution_Code)(Chip8_Machine *chip8_machine);
+typedef void (*Chip8_Instruction_Execution_Code)(Chip8_Machine *chip8_machine, uint16_t opcode);
 
 /**
  * @brief CLS - Clear de display
  * 
  */
-void execute_op_00E0(Chip8_Machine *chip8_machine)
+void execute_op_00E0(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
   memset(chip8_machine->memory, 0, CHIP8_SCREEN_BUFFER_SIZE_IN_BYTES);
 }
 
-void noop(Chip8_Machine *chip8_machine)
+void noop(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
   // Eventualmente talvez vou usar essa função pra fazer algum tipo de assert?
   printf("noop...\n");
@@ -167,7 +167,7 @@ void execute_a_cycle(Chip8_Machine &chip8_machine)
   uint8_t index = (opcode & 0xF00u) >> 12;
   assert(index < 17);
 
-  instruction_jump_table[index](&chip8_machine);
+  instruction_jump_table[index](&chip8_machine, opcode);
 
   /**
    * @note Pelo que entendi vou precisar ajustar minha jump table para apontar para instruções
