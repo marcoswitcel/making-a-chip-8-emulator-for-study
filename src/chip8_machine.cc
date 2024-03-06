@@ -134,6 +134,32 @@ void execute_op_00E0(Chip8_Machine *chip8_machine, uint16_t opcode)
   memset(chip8_machine->memory, 0, CHIP8_SCREEN_BUFFER_SIZE_IN_BYTES);
 }
 
+/**
+ * @brief RET - Return from a subroutine
+ * 
+ * @param chip8_machine 
+ * @param opcode 
+ */
+void execute_op_00EE(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  // @todo João, analisar se faz sentido colocar um if pra bloquear o o underflow da stack pointer
+
+  chip8_machine->stack_pointer -= 1; // @note validar se está 100% decrementar antes
+  chip8_machine->program_counter = chip8_machine->stack[chip8_machine->stack_pointer];
+}
+
+/**
+ * @brief JP Address - Jump to location nnn
+ * 
+ * @param chip8_machine 
+ * @param opcode 
+ */
+void execute_op_1nnn(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  // @todo João, tá estranho, parece estar em loop
+  chip8_machine->program_counter = opcode & 0x0FFFu;
+}
+
 void decode_0_index_opcode(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
   // Eventualmente talvez vou usar essa função pra fazer algum tipo de assert?
@@ -162,8 +188,13 @@ void init_jump_table()
     index_0_instruction_jump_table[i] = noop;
   }
 
+  // Primeira nível
   base_instruction_jump_table[0x0] = decode_0_index_opcode;
+  base_instruction_jump_table[0x1] = execute_op_1nnn;
+
+  // Segunda nível
   index_0_instruction_jump_table[0x0] = execute_op_00E0;
+  index_0_instruction_jump_table[0xE] = execute_op_00EE;
 
   jump_table_inited = true;
 }
@@ -198,5 +229,5 @@ void execute_a_cycle(Chip8_Machine &chip8_machine)
    * ter salto diretos.
    */
 
-  printf("opcode: 0x%X, index: %d\n", opcode, index); // apenas para visualização
+  printf("opcode: 0x%X, index: %d, pc: %d\n", opcode, index, chip8_machine.program_counter); // apenas para visualização
 }
