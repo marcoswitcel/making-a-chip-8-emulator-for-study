@@ -3,8 +3,10 @@
 #include <string.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include <fstream>
 #include <assert.h>
+#include <fstream>
+
+#include "./utils.macro.h"
 
 constexpr unsigned START_INSTRUCTION_ADDRESS = 0x200;
 constexpr unsigned FONT_START_ADDRESS = 0x50;
@@ -128,6 +130,7 @@ static Chip8_Instruction_Execution_Code index_0_instruction_jump_table[16] = {};
  */
 void execute_op_00E0(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
+  UNUSED(opcode);
   memset(chip8_machine->memory, 0, CHIP8_SCREEN_BUFFER_SIZE_IN_BYTES);
 }
 
@@ -143,6 +146,8 @@ void decode_0_index_opcode(Chip8_Machine *chip8_machine, uint16_t opcode)
 
 void noop(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
+  UNUSED(chip8_machine);
+  UNUSED(opcode);
   // Eventualmente talvez vou usar essa função pra fazer algum tipo de assert?
   printf("noop...\n");
 }

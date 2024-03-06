@@ -5,6 +5,7 @@
 #include <SDL2/SDL.h>
 
 #include "./chip8_machine.cc"
+#include "./utils.macro.h"
 
 static constexpr int WIDTH = 1024;
 static constexpr int HEIGHT = 728;
@@ -20,6 +21,8 @@ typedef struct Context_Data {
 
 static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, Context_Data *context)
 {
+  UNUSED(context);
+
   // Seta o fundo do renderer
   SDL_RenderClear(renderer);
 
@@ -55,6 +58,7 @@ static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, C
 
 static void handle_events_and_inputs(SDL_Window *window, Context_Data *context, bool *should_quit)
 {
+  UNUSED(window);
   SDL_Event event;
 
   context->clicked = false;
@@ -158,6 +162,7 @@ int open_window(void)
     // https://wiki.libsdl.org/SDL2/SDL_GetTicks
     uint32_t current_timestamp = SDL_GetTicks();
     float delta_time = (current_timestamp - last_timestamp) / 1000.0f;
+    UNUSED(delta_time);
 
     // printf("delta_time: %f\n", delta_time);
 
