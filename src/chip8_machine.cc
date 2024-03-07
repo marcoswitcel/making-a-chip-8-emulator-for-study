@@ -164,7 +164,6 @@ void decode_0_index_opcode(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
   // Eventualmente talvez vou usar essa função pra fazer algum tipo de assert?
   uint8_t index = opcode & 0x000Fu; // @note Testar e revisar
-  assert(index < 17);
   printf("decoding 0, index: %d\n", index);
 
   index_0_instruction_jump_table[index](chip8_machine, opcode);
@@ -188,7 +187,7 @@ void init_jump_table()
     index_0_instruction_jump_table[i] = noop;
   }
 
-  // Primeira nível
+  // Primeiro nível
   base_instruction_jump_table[0x0] = decode_0_index_opcode;
   base_instruction_jump_table[0x1] = execute_op_1nnn;
 
