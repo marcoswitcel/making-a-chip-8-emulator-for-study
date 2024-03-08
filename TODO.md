@@ -10,6 +10,8 @@ subtítulo: 'The Instructions' da página: [https://austinmorlan.com/posts/chip8
 * configurar SDL2 e abrir uma janela -- OK
 * desenhar algo na tela a partir de um frame buffer -- OK
 * escalar a tela para ficar visível (com teste de cores, parece ser um escalonamento sem filtro) -- OK
+* terminar de implementar instruções e fazer a rom de teste funcionar corretamente
+* adicionar testes para as instruções
 
 # Ideias
 

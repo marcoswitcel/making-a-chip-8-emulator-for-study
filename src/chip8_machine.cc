@@ -160,6 +160,24 @@ void execute_op_1nnn(Chip8_Machine *chip8_machine, uint16_t opcode)
   chip8_machine->program_counter = opcode & 0x0FFFu;
 }
 
+/**
+ * @brief CALL Address - Call subroutine at nnn
+ * 
+ * @param chip8_machine 
+ * @param opcode 
+ */
+void execute_op_2nnn(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  // program counter aponta para a próxima instrução após o comando CALL,
+  // por isso não precisa incrementar aqui
+  chip8_machine->stack[chip8_machine->stack_pointer] = chip8_machine->program_counter;
+  // meu stack_pointer aponta para o próximo endereço disponível, por isso
+  // pode ser incrementado após
+  chip8_machine->stack_pointer += 1;
+
+  chip8_machine->program_counter = opcode & 0x0FFFu;
+}
+
 void decode_0_index_opcode(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
   // Eventualmente talvez vou usar essa função pra fazer algum tipo de assert?
@@ -190,6 +208,7 @@ void init_jump_table()
   // Primeiro nível
   base_instruction_jump_table[0x0] = decode_0_index_opcode;
   base_instruction_jump_table[0x1] = execute_op_1nnn;
+  base_instruction_jump_table[0x2] = execute_op_2nnn;
 
   // Segunda nível
   index_0_instruction_jump_table[0x0] = execute_op_00E0;
