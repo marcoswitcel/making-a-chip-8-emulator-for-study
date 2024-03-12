@@ -190,6 +190,17 @@ void execute_op_3xkk(Chip8_Machine *chip8_machine, uint16_t opcode)
   }
 }
 
+void execute_op_4xkk(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  uint8_t r_index = (opcode & 0x0F00u) >> 8u;
+  uint8_t byte_value = (opcode & 0x00FFu);
+
+  if (chip8_machine->registers[r_index] != byte_value)
+  {
+    chip8_machine->program_counter += 2;
+  }
+}
+
 void decode_0_index_opcode(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
   // Eventualmente talvez vou usar essa função pra fazer algum tipo de assert?
@@ -222,6 +233,7 @@ void init_jump_table()
   base_instruction_jump_table[0x1] = execute_op_1nnn;
   base_instruction_jump_table[0x2] = execute_op_2nnn;
   base_instruction_jump_table[0x3] = execute_op_3xkk;
+  base_instruction_jump_table[0x4] = execute_op_3xkk;
 
   // Segunda nível
   index_0_instruction_jump_table[0x0] = execute_op_00E0;
