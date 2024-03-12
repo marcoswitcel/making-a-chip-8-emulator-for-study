@@ -142,6 +142,7 @@ void execute_op_00E0(Chip8_Machine *chip8_machine, uint16_t opcode)
  */
 void execute_op_00EE(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
+  UNUSED(opcode);
   // @todo João, analisar se faz sentido colocar um if pra bloquear o o underflow da stack pointer
 
   chip8_machine->stack_pointer -= 1; // @note validar se está 100% decrementar antes
@@ -178,6 +179,17 @@ void execute_op_2nnn(Chip8_Machine *chip8_machine, uint16_t opcode)
   chip8_machine->program_counter = opcode & 0x0FFFu;
 }
 
+void execute_op_3xkk(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  uint8_t r_index = (opcode & 0x0F00u) >> 8u;
+  uint8_t byte_value = (opcode & 0x00FFu);
+
+  if (chip8_machine->registers[r_index] == byte_value)
+  {
+    chip8_machine->program_counter += 2;
+  }
+}
+
 void decode_0_index_opcode(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
   // Eventualmente talvez vou usar essa função pra fazer algum tipo de assert?
@@ -209,6 +221,7 @@ void init_jump_table()
   base_instruction_jump_table[0x0] = decode_0_index_opcode;
   base_instruction_jump_table[0x1] = execute_op_1nnn;
   base_instruction_jump_table[0x2] = execute_op_2nnn;
+  base_instruction_jump_table[0x3] = execute_op_3xkk;
 
   // Segunda nível
   index_0_instruction_jump_table[0x0] = execute_op_00E0;
