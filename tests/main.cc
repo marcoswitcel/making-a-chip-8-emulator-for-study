@@ -65,6 +65,33 @@ void test_op_4xkk(void)
   }
 }
 
+void test_op_5xy0(void)
+{
+  Chip8_Machine machine = {};
+  
+  {
+    uint16_t opcode = 0x5350;
+
+    machine.registers[3] = 0xAE;
+    machine.registers[5] = 0xAC;
+    machine.program_counter = 0;
+
+    execute_op_5xy0(&machine, opcode);
+    assert(machine.program_counter == 0);
+  }
+
+  {
+    uint16_t opcode = 0x5350;
+
+    machine.registers[3] = 0xAE;
+    machine.registers[5] = 0xAE;
+    machine.program_counter = 0;
+
+    execute_op_5xy0(&machine, opcode);
+    assert(machine.program_counter == 2);
+  }
+}
+
 /**
  * @brief ponto de entrada dos testes
  * @todo João, considerar trazer a interface gráfica e as melhorias dos outros projetos para esse
@@ -79,6 +106,7 @@ int main(void)
   test_op_00E0();
   test_op_3xkk();
   test_op_4xkk();
+  test_op_5xy0();
 
   return EXIT_SUCCESS;
 }
