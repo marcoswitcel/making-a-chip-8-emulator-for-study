@@ -233,7 +233,7 @@ void init_jump_table()
   base_instruction_jump_table[0x1] = execute_op_1nnn;
   base_instruction_jump_table[0x2] = execute_op_2nnn;
   base_instruction_jump_table[0x3] = execute_op_3xkk;
-  base_instruction_jump_table[0x4] = execute_op_3xkk;
+  base_instruction_jump_table[0x4] = execute_op_4xkk;
 
   // Segunda nível
   index_0_instruction_jump_table[0x0] = execute_op_00E0;
