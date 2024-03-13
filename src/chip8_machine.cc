@@ -179,6 +179,12 @@ void execute_op_2nnn(Chip8_Machine *chip8_machine, uint16_t opcode)
   chip8_machine->program_counter = opcode & 0x0FFFu;
 }
 
+/**
+ * @brief Skip Equals Vx, byte - Skip next instruction if Vx = kk
+ * 
+ * @param chip8_machine 
+ * @param opcode 
+ */
 void execute_op_3xkk(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
   uint8_t r_index = (opcode & 0x0F00u) >> 8u;
@@ -190,12 +196,35 @@ void execute_op_3xkk(Chip8_Machine *chip8_machine, uint16_t opcode)
   }
 }
 
+/**
+ * @brief Skip Not Equals Vx, byte - Skip next instruction if Vx = kk
+ * 
+ * @param chip8_machine 
+ * @param opcode 
+ */
 void execute_op_4xkk(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
   uint8_t r_index = (opcode & 0x0F00u) >> 8u;
   uint8_t byte_value = (opcode & 0x00FFu);
 
   if (chip8_machine->registers[r_index] != byte_value)
+  {
+    chip8_machine->program_counter += 2;
+  }
+}
+
+/**
+ * @brief Skip Equals Vx, Vy - Skip next instruction if Vx = Vy
+ * 
+ * @param chip8_machine 
+ * @param opcode 
+ */
+void execute_op_5xy0(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  uint8_t x_index = (opcode & 0x0F00u) >> 8u;
+  uint8_t y_index = (opcode & 0x00F0u) >> 4u;
+
+  if (chip8_machine->registers[x_index] == chip8_machine->registers[y_index])
   {
     chip8_machine->program_counter += 2;
   }
@@ -234,6 +263,7 @@ void init_jump_table()
   base_instruction_jump_table[0x2] = execute_op_2nnn;
   base_instruction_jump_table[0x3] = execute_op_3xkk;
   base_instruction_jump_table[0x4] = execute_op_4xkk;
+  base_instruction_jump_table[0x5] = execute_op_5xy0;
 
   // Segunda nível
   index_0_instruction_jump_table[0x0] = execute_op_00E0;
