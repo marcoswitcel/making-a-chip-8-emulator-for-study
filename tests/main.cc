@@ -92,6 +92,19 @@ void test_op_5xy0(void)
   }
 }
 
+void test_op_6xkk(void)
+{
+  Chip8_Machine machine = {};
+
+  machine.registers[0xA] = 0;
+  execute_op_6xkk(&machine, 0x6ABE);
+  assert(machine.registers[0xA] == 0xBE);
+
+  machine.registers[0x6] = 0;
+  execute_op_6xkk(&machine, 0x66BE);
+  assert(machine.registers[0x6] == 0xBE);
+}
+
 /**
  * @brief ponto de entrada dos testes
  * @todo João, considerar trazer a interface gráfica e as melhorias dos outros projetos para esse
@@ -107,6 +120,7 @@ int main(void)
   test_op_3xkk();
   test_op_4xkk();
   test_op_5xy0();
+  test_op_6xkk();
 
   return EXIT_SUCCESS;
 }
