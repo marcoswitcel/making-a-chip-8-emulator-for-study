@@ -244,6 +244,20 @@ void execute_op_6xkk(Chip8_Machine *chip8_machine, uint16_t opcode)
   chip8_machine->registers[r_index] = byte_value;
 }
 
+/**
+ * @brief Add Vx, byte - Set Vx = Vx + kk
+ * 
+ * @param chip8_machine 
+ * @param opcode 
+ */
+void execute_op_7xkk(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  uint8_t r_index = (opcode & 0x0F00u) >> 8u;
+  uint8_t byte_value = (opcode & 0x00FFu);
+
+  chip8_machine->registers[r_index] += byte_value;
+} 
+
 void decode_0_index_opcode(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
   // Eventualmente talvez vou usar essa função pra fazer algum tipo de assert?
@@ -279,6 +293,7 @@ void init_jump_table()
   base_instruction_jump_table[0x4] = execute_op_4xkk;
   base_instruction_jump_table[0x5] = execute_op_5xy0;
   base_instruction_jump_table[0x6] = execute_op_6xkk;
+  base_instruction_jump_table[0x7] = execute_op_7xkk;
 
   // Segunda nível
   index_0_instruction_jump_table[0x0] = execute_op_00E0;
