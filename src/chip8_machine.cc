@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <time.h>
 #include <fstream>
 
 #include "./utils.macro.h"
@@ -64,6 +65,25 @@ static const uint8_t fontset[FONT_SET_SIZE] = {
 	0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
 	0xF0, 0x80, 0xF0, 0x80, 0x80  // F
 };
+
+static bool seed_inited = false;
+static int random_seed = -1;
+
+static uint8_t random_byte()
+{
+  // @todo João, setar o seed em outro lugar e pensar em como alimentá-lo melhor.
+  // Talvez usar um outro método, tanto pela perfomance quanto pela qualidade dos valores.
+  // Tem umas dicas pra gerar números aleatório no linux.
+  // @reference https://stackoverflow.com/questions/822323/how-to-generate-a-random-int-in-c
+  if (!seed_inited)
+  {
+    random_seed = time(NULL);
+    seed_inited = true;
+    srand(random_seed);
+  }
+
+  return rand() % 256;
+}
 
 void init_jump_table(); // por hora fica aqui em cima
 
@@ -297,6 +317,22 @@ void execute_op_Bnnn(Chip8_Machine *chip8_machine, uint16_t opcode)
   chip8_machine->program_counter = chip8_machine->registers[0] + (opcode & 0x0FFFu);
 }
 
+/**
+ * @brief Rand Vx, byte - Set Vx = random byte AND kk
+ * 
+ * @param chip8_machine 
+ * @param opcode 
+ */
+void execute_op_Cxkk(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  uint8_t r_index = (opcode & 0x0F00u) >> 8u;
+  uint8_t byte_value = (opcode & 0x00FFu);
+
+  uint8_t rand_byte = random_byte();
+
+  chip8_machine->registers[r_index] = rand_byte & byte_value;
+}
+
 void decode_0_index_opcode(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
   // Eventualmente talvez vou usar essa função pra fazer algum tipo de assert?
@@ -338,6 +374,7 @@ void init_jump_table()
   base_instruction_jump_table[0x9] = execute_op_9xy0;
   base_instruction_jump_table[0xA] = execute_op_Annn;
   base_instruction_jump_table[0xB] = execute_op_Bnnn;
+  base_instruction_jump_table[0xC] = execute_op_Cxkk;
   
 
   // Segunda nível

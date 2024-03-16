@@ -157,6 +157,31 @@ void test_op_Bnnn(void)
   assert(machine.program_counter == 0x0125);
 }
 
+
+void test_op_Cxkk(void)
+{
+  Chip8_Machine machine = {};
+
+  machine.registers[2] = 5;
+  execute_op_Cxkk(&machine, 0xC200);
+  assert(machine.registers[2] == 0);
+
+  machine.registers[5] = 5;
+  execute_op_Cxkk(&machine, 0xC500);
+  assert(machine.registers[5] == 0);
+
+  for (int i = 0; i < 128; i++)
+  {
+    machine.registers[2] = UINT8_MAX;
+    execute_op_Cxkk(&machine, 0xC20F);
+    assert(machine.registers[2] <= 0x0F);
+
+    machine.registers[2] = UINT8_MAX;
+    execute_op_Cxkk(&machine, 0xC21F);
+    assert(machine.registers[2] <= 0x1F);
+  }
+}
+
 /**
  * @brief ponto de entrada dos testes
  * @todo João, considerar trazer a interface gráfica e as melhorias dos outros projetos para esse
@@ -177,6 +202,7 @@ int main(void)
   test_op_9xkk();
   test_op_Annn();
   test_op_Bnnn();
+  test_op_Cxkk();
 
   return EXIT_SUCCESS;
 }

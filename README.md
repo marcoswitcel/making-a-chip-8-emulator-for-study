@@ -11,3 +11,4 @@ Esboço inicial da descrição.
 * [https://chip-8.github.io/links/](https://chip-8.github.io/links/)
 * [https://google.github.io/styleguide/cppguide.html](https://google.github.io/styleguide/cppguide.html)
 * [https://github.com/corax89/chip8-test-rom](https://github.com/corax89/chip8-test-rom)
+* [https://stackoverflow.com/questions/822323/how-to-generate-a-random-int-in-c](https://stackoverflow.com/questions/822323/how-to-generate-a-random-int-in-c)
