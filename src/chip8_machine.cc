@@ -286,6 +286,17 @@ void execute_op_Annn(Chip8_Machine *chip8_machine, uint16_t opcode)
   chip8_machine->index_register = (opcode & 0x0FFFu);
 }
 
+/**
+ * @brief Jump V0, addr - Jump to location nnn + V0 (register 0)
+ * 
+ * @param chip8_machine 
+ * @param opcode 
+ */
+void execute_op_Bnnn(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  chip8_machine->program_counter = chip8_machine->registers[0] + (opcode & 0x0FFFu);
+}
+
 void decode_0_index_opcode(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
   // Eventualmente talvez vou usar essa função pra fazer algum tipo de assert?
@@ -326,6 +337,7 @@ void init_jump_table()
   // base_instruction_jump_table[0x8] = decode_8_index_opcode;
   base_instruction_jump_table[0x9] = execute_op_9xy0;
   base_instruction_jump_table[0xA] = execute_op_Annn;
+  base_instruction_jump_table[0xB] = execute_op_Bnnn;
   
 
   // Segunda nível

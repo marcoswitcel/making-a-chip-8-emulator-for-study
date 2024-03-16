@@ -143,6 +143,20 @@ void test_op_Annn(void)
   assert(machine.index_register == 0x333);
 }
 
+void test_op_Bnnn(void)
+{
+  Chip8_Machine machine = {};
+
+  machine.program_counter = 0;
+  machine.registers[0] = 0;
+
+  execute_op_Bnnn(&machine, 0xB123);
+  assert(machine.program_counter == 0x0123);
+
+  execute_op_Bnnn(&machine, 0xB125);
+  assert(machine.program_counter == 0x0125);
+}
+
 /**
  * @brief ponto de entrada dos testes
  * @todo João, considerar trazer a interface gráfica e as melhorias dos outros projetos para esse
@@ -162,6 +176,7 @@ int main(void)
   test_op_7xkk();
   test_op_9xkk();
   test_op_Annn();
+  test_op_Bnnn();
 
   return EXIT_SUCCESS;
 }
