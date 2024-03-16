@@ -256,7 +256,24 @@ void execute_op_7xkk(Chip8_Machine *chip8_machine, uint16_t opcode)
   uint8_t byte_value = (opcode & 0x00FFu);
 
   chip8_machine->registers[r_index] += byte_value;
-} 
+}
+
+/**
+ * @brief Skip Not Equals Vx, Vy - Skip next instruction if Vx != Vy
+ * 
+ * @param chip8_machine 
+ * @param opcode 
+ */
+void execute_op_9xy0(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  uint8_t x_index = (opcode & 0x0F00u) >> 8u;
+  uint8_t y_index = (opcode & 0x00F0u) >> 4u;
+
+  if (chip8_machine->registers[x_index] != chip8_machine->registers[y_index])
+  {
+    chip8_machine->program_counter += 2;
+  }
+}
 
 void decode_0_index_opcode(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
@@ -294,6 +311,10 @@ void init_jump_table()
   base_instruction_jump_table[0x5] = execute_op_5xy0;
   base_instruction_jump_table[0x6] = execute_op_6xkk;
   base_instruction_jump_table[0x7] = execute_op_7xkk;
+  // @todo João, montar decode table 8
+  // base_instruction_jump_table[0x8] = decode_8_index_opcode;
+  base_instruction_jump_table[0x9] = execute_op_9xy0;
+  
 
   // Segunda nível
   index_0_instruction_jump_table[0x0] = execute_op_00E0;

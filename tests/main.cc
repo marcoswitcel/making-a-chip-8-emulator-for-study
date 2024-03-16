@@ -118,6 +118,27 @@ void test_op_7xkk(void)
   assert(machine.registers[0x6] == 0xAC);
 }
 
+void test_op_9xkk(void)
+{
+ Chip8_Machine machine = {};
+  
+  uint16_t opcode = 0x5350;
+
+  machine.registers[3] = 0xAE;
+  machine.registers[5] = 0xAC;
+  machine.program_counter = 0;
+
+  execute_op_9xy0(&machine, opcode);
+  assert(machine.program_counter == 2);
+
+  machine.registers[3] = 0xAE;
+  machine.registers[5] = 0xAE;
+  machine.program_counter = 0;
+
+  execute_op_9xy0(&machine, opcode);
+  assert(machine.program_counter == 0);
+}
+
 /**
  * @brief ponto de entrada dos testes
  * @todo João, considerar trazer a interface gráfica e as melhorias dos outros projetos para esse
@@ -135,6 +156,7 @@ int main(void)
   test_op_5xy0();
   test_op_6xkk();
   test_op_7xkk();
+  test_op_9xkk();
 
   return EXIT_SUCCESS;
 }
