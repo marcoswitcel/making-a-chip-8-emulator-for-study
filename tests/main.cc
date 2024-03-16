@@ -68,28 +68,21 @@ void test_op_4xkk(void)
 void test_op_5xy0(void)
 {
   Chip8_Machine machine = {};
-  
-  {
-    uint16_t opcode = 0x5350;
+  uint16_t opcode = 0x5350;
 
-    machine.registers[3] = 0xAE;
-    machine.registers[5] = 0xAC;
-    machine.program_counter = 0;
+  machine.registers[3] = 0xAE;
+  machine.registers[5] = 0xAC;
+  machine.program_counter = 0;
 
-    execute_op_5xy0(&machine, opcode);
-    assert(machine.program_counter == 0);
-  }
+  execute_op_5xy0(&machine, opcode);
+  assert(machine.program_counter == 0);
 
-  {
-    uint16_t opcode = 0x5350;
+  machine.registers[3] = 0xAE;
+  machine.registers[5] = 0xAE;
+  machine.program_counter = 0;
 
-    machine.registers[3] = 0xAE;
-    machine.registers[5] = 0xAE;
-    machine.program_counter = 0;
-
-    execute_op_5xy0(&machine, opcode);
-    assert(machine.program_counter == 2);
-  }
+  execute_op_5xy0(&machine, opcode);
+  assert(machine.program_counter == 2);
 }
 
 void test_op_6xkk(void)
@@ -120,7 +113,7 @@ void test_op_7xkk(void)
 
 void test_op_9xkk(void)
 {
- Chip8_Machine machine = {};
+  Chip8_Machine machine = {};
   
   uint16_t opcode = 0x5350;
 
@@ -137,6 +130,17 @@ void test_op_9xkk(void)
 
   execute_op_9xy0(&machine, opcode);
   assert(machine.program_counter == 0);
+}
+
+void test_op_Annn(void)
+{
+  Chip8_Machine machine = {};
+  uint16_t opcode = 0xA333;
+
+  machine.index_register = 0;
+
+  execute_op_Annn(&machine, opcode);
+  assert(machine.index_register == 0x333);
 }
 
 /**
@@ -157,6 +161,7 @@ int main(void)
   test_op_6xkk();
   test_op_7xkk();
   test_op_9xkk();
+  test_op_Annn();
 
   return EXIT_SUCCESS;
 }

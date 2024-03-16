@@ -275,6 +275,17 @@ void execute_op_9xy0(Chip8_Machine *chip8_machine, uint16_t opcode)
   }
 }
 
+/**
+ * @brief Load I, addr -  Set I - nnn (I = Memory Index Register)
+ * 
+ * @param chip8_machine 
+ * @param opcode 
+ */
+void execute_op_Annn(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  chip8_machine->index_register = (opcode & 0x0FFFu);
+}
+
 void decode_0_index_opcode(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
   // Eventualmente talvez vou usar essa função pra fazer algum tipo de assert?
@@ -314,6 +325,7 @@ void init_jump_table()
   // @todo João, montar decode table 8
   // base_instruction_jump_table[0x8] = decode_8_index_opcode;
   base_instruction_jump_table[0x9] = execute_op_9xy0;
+  base_instruction_jump_table[0xA] = execute_op_Annn;
   
 
   // Segunda nível
