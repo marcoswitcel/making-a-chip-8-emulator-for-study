@@ -333,6 +333,52 @@ void execute_op_Cxkk(Chip8_Machine *chip8_machine, uint16_t opcode)
   chip8_machine->registers[r_index] = rand_byte & byte_value;
 }
 
+/**
+ * @brief Draw Vx, Vy, nibble - Display n-byte sprite starting at memory location I at (Vx, Vy), set VF = collision
+ * 
+ * @todo Adicionar testes... quando for interessante
+ * 
+ * @param chip8_machine 
+ * @param opcode 
+ */
+void execute_op_Dxyn(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  uint8_t x_index = (opcode & 0x0F00u) >> 8u;
+  uint8_t y_index = (opcode & 0x00F0u) >> 4u;
+  uint8_t height_nibble = (opcode & 0x000Fu);
+
+  // decidi implementar o 'wrap-around'
+  uint8_t x_pos = chip8_machine->registers[x_index] % CHIP8_SCREEN_WIDTH;
+  uint8_t y_pos = chip8_machine->registers[y_index] % CHIP8_SCREEN_HEIGHT;
+
+  // return register
+  chip8_machine->registers[0xF] = 0;
+
+  for (uint16_t row = 0; row < height_nibble; row++)
+  {
+    uint8_t sprite_byte = chip8_machine->memory[chip8_machine->index_register + row];
+
+    for (unsigned col = 0; col < 8; col++)
+    {
+      uint8_t pixel_on = sprite_byte & (0x80 >> col);
+      uint32_t &pixel = chip8_machine->screen_buffer[(y_pos + row) * CHIP8_SCREEN_WIDTH + (x_pos + col)];
+      
+      if (pixel_on)
+      {
+        // @note João, considerar usar um byte pra memória de vídeo ou um bitarray
+        // e converter pra uint32_t na hora de exibir. O motivo seria, não acredito que
+        // manipular diversas cores nesse buffer seja uma boa ideia, precisaria ficar ajustando nesses ifs
+        if (pixel == 0xFFFFFFFFu)
+        {
+          chip8_machine->registers[0xF] = 1;
+        }
+
+        pixel ^= 0xFFFFFFFFu;
+      }
+    }
+  }
+}
+
 void decode_0_index_opcode(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
   // Eventualmente talvez vou usar essa função pra fazer algum tipo de assert?
@@ -375,6 +421,7 @@ void init_jump_table()
   base_instruction_jump_table[0xA] = execute_op_Annn;
   base_instruction_jump_table[0xB] = execute_op_Bnnn;
   base_instruction_jump_table[0xC] = execute_op_Cxkk;
+  base_instruction_jump_table[0xD] = execute_op_Dxyn;
   
 
   // Segunda nível
