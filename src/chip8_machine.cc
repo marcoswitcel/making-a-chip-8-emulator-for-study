@@ -143,6 +143,7 @@ typedef void (*Chip8_Instruction_Execution_Code)(Chip8_Machine *chip8_machine, u
 static bool jump_table_inited = false;
 static Chip8_Instruction_Execution_Code base_instruction_jump_table[16] = {};
 static Chip8_Instruction_Execution_Code index_0_instruction_jump_table[16] = {};
+static Chip8_Instruction_Execution_Code index_8_instruction_jump_table[16] = {};
 
 /**
  * @brief CLS - Clear de display
@@ -388,6 +389,15 @@ void decode_0_index_opcode(Chip8_Machine *chip8_machine, uint16_t opcode)
   index_0_instruction_jump_table[index](chip8_machine, opcode);
 }
 
+void decode_8_index_opcode(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  // Eventualmente talvez vou usar essa função pra fazer algum tipo de assert?
+  uint8_t index = opcode & 0x000Fu; // @note Testar e revisar
+  printf("decoding 8, index: %d\n", index);
+
+  index_8_instruction_jump_table[index](chip8_machine, opcode);
+}
+
 void noop(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
   UNUSED(chip8_machine);
@@ -404,6 +414,7 @@ void init_jump_table()
   {
     base_instruction_jump_table[i] = noop;
     index_0_instruction_jump_table[i] = noop;
+    index_8_instruction_jump_table[i] = noop;
   }
 
   // Primeiro nível
@@ -415,8 +426,7 @@ void init_jump_table()
   base_instruction_jump_table[0x5] = execute_op_5xy0;
   base_instruction_jump_table[0x6] = execute_op_6xkk;
   base_instruction_jump_table[0x7] = execute_op_7xkk;
-  // @todo João, montar decode table 8
-  // base_instruction_jump_table[0x8] = decode_8_index_opcode;
+  base_instruction_jump_table[0x8] = decode_8_index_opcode;
   base_instruction_jump_table[0x9] = execute_op_9xy0;
   base_instruction_jump_table[0xA] = execute_op_Annn;
   base_instruction_jump_table[0xB] = execute_op_Bnnn;
