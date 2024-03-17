@@ -280,6 +280,34 @@ void execute_op_7xkk(Chip8_Machine *chip8_machine, uint16_t opcode)
 }
 
 /**
+ * @brief Load Vx, Vy - Set Vx = Vy
+ * 
+ * @param chip8_machine 
+ * @param opcode 
+ */
+void execute_op_8xy0(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  uint8_t x_index = (opcode & 0x0F00u) >> 8u;
+  uint8_t y_index = (opcode & 0x00F0u) >> 4u;
+
+  chip8_machine->registers[x_index] = chip8_machine->registers[y_index];
+}
+
+/**
+ * @brief OR Vx, Vy - Set Vx = Vx OR Vy
+ * 
+ * @param chip8_machine 
+ * @param opcode 
+ */
+void execute_op_8xy1(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  uint8_t x_index = (opcode & 0x0F00u) >> 8u;
+  uint8_t y_index = (opcode & 0x00F0u) >> 4u;
+
+  chip8_machine->registers[x_index] |= chip8_machine->registers[y_index];
+}
+
+/**
  * @brief Skip Not Equals Vx, Vy - Skip next instruction if Vx != Vy
  * 
  * @param chip8_machine 
@@ -432,11 +460,17 @@ void init_jump_table()
   base_instruction_jump_table[0xB] = execute_op_Bnnn;
   base_instruction_jump_table[0xC] = execute_op_Cxkk;
   base_instruction_jump_table[0xD] = execute_op_Dxyn;
+  // @todo João, table E
+  // @todo João, table F
   
 
-  // Segunda nível
+  // Segunda nível (tablea 0)
   index_0_instruction_jump_table[0x0] = execute_op_00E0;
   index_0_instruction_jump_table[0xE] = execute_op_00EE;
+
+  // Segunda nível (tablea 2)
+  index_8_instruction_jump_table[0x0] = execute_op_8xy0;
+  index_8_instruction_jump_table[0x1] = execute_op_8xy1;
 
   jump_table_inited = true;
 }
