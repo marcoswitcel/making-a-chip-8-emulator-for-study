@@ -15,6 +15,19 @@ void test_op_00E0(void)
   assert(machine.memory[0] == 0);
 }
 
+void test_op_1nnn(void)
+{
+  Chip8_Machine machine = {};
+
+  machine.program_counter = 0;
+  execute_op_1nnn(&machine, 0x10FFu);
+  assert(machine.program_counter == 0x0FFu);
+
+  machine.program_counter = 0;
+  execute_op_1nnn(&machine, 0x1AF3u);
+  assert(machine.program_counter == 0xAF3u);
+}
+
 void test_op_3xkk(void)
 {
   Chip8_Machine machine = {};
@@ -194,6 +207,7 @@ int main(void)
   UNUSED(load_rom);
 
   test_op_00E0();
+  test_op_1nnn();
   test_op_3xkk();
   test_op_4xkk();
   test_op_5xy0();
