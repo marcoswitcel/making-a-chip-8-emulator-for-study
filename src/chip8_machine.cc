@@ -308,6 +308,20 @@ void execute_op_8xy1(Chip8_Machine *chip8_machine, uint16_t opcode)
 }
 
 /**
+ * @brief AND Vx, Vy - Set Vx = Vx AND Vy
+ * 
+ * @param chip8_machine 
+ * @param opcode 
+ */
+void execute_op_8xy2(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  uint8_t x_index = (opcode & 0x0F00u) >> 8u;
+  uint8_t y_index = (opcode & 0x00F0u) >> 4u;
+
+  chip8_machine->registers[x_index] &= chip8_machine->registers[y_index];
+}
+
+/**
  * @brief Skip Not Equals Vx, Vy - Skip next instruction if Vx != Vy
  * 
  * @param chip8_machine 
