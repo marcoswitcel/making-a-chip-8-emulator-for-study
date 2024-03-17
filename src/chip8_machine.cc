@@ -335,6 +335,16 @@ void execute_op_8xy3(Chip8_Machine *chip8_machine, uint16_t opcode)
   chip8_machine->registers[x_index] ^= chip8_machine->registers[y_index];
 }
 
+// @todo implementar opcode 8xy4 e respectivos testes
+
+// @todo implementar opcode 8xy5 e respectivos testes
+
+// @todo implementar opcode 8xy6 e respectivos testes
+
+// @todo implementar opcode 8xy7 e respectivos testes
+
+// @todo implementar opcode 8xyE e respectivos testes
+
 /**
  * @brief Skip Not Equals Vx, Vy - Skip next instruction if Vx != Vy
  * 
@@ -435,6 +445,28 @@ void execute_op_Dxyn(Chip8_Machine *chip8_machine, uint16_t opcode)
     }
   }
 }
+
+// @todo implementar opcode Ex9E e respectivos testes
+
+// @todo implementar opcode ExA1 e respectivos testes
+
+// @todo implementar opcode Fx07 e respectivos testes
+
+// @todo implementar opcode Fx0A e respectivos testes
+
+// @todo implementar opcode Fx15 e respectivos testes
+
+// @todo implementar opcode Fx18 e respectivos testes
+
+// @todo implementar opcode Fx1E e respectivos testes
+
+// @todo implementar opcode Fx29 e respectivos testes
+
+// @todo implementar opcode Fx33 e respectivos testes
+
+// @todo implementar opcode Fx55 e respectivos testes
+
+// @todo implementar opcode Fx65 e respectivos testes
 
 void decode_0_index_opcode(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
