@@ -335,7 +335,24 @@ void execute_op_8xy3(Chip8_Machine *chip8_machine, uint16_t opcode)
   chip8_machine->registers[x_index] ^= chip8_machine->registers[y_index];
 }
 
-// @todo implementar opcode 8xy4 e respectivos testes
+/**
+ * @brief ADD Vx, Vy - Set Vx = Vx + Vy, set VF = carry
+ * 
+ * @param chip8_machine 
+ * @param opcode 
+ */
+void execute_op_8xy4(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  uint8_t x_index = (opcode & 0x0F00u) >> 8u;
+  uint8_t y_index = (opcode & 0x00F0u) >> 4u;
+
+  uint16_t result = chip8_machine->registers[x_index] + chip8_machine->registers[y_index];
+
+  chip8_machine->registers[x_index] = result & 0x00FFu;
+  // carry
+  chip8_machine->registers[0xF] = (result & 0xFF00u) > 0;
+  assert(chip8_machine->registers[0xF] == 1 || chip8_machine->registers[0xF] == 0);
+}
 
 // @todo implementar opcode 8xy5 e respectivos testes
 
@@ -533,6 +550,7 @@ void init_jump_table()
   index_8_instruction_jump_table[0x1] = execute_op_8xy1;
   index_8_instruction_jump_table[0x2] = execute_op_8xy2;
   index_8_instruction_jump_table[0x3] = execute_op_8xy3;
+  index_8_instruction_jump_table[0x4] = execute_op_8xy4;
 
   jump_table_inited = true;
 }
