@@ -485,6 +485,7 @@ void init_jump_table()
   // Segunda nível (tablea 2)
   index_8_instruction_jump_table[0x0] = execute_op_8xy0;
   index_8_instruction_jump_table[0x1] = execute_op_8xy1;
+  index_8_instruction_jump_table[0x2] = execute_op_8xy2;
 
   jump_table_inited = true;
 }
