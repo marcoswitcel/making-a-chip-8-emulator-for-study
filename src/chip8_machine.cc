@@ -322,6 +322,20 @@ void execute_op_8xy2(Chip8_Machine *chip8_machine, uint16_t opcode)
 }
 
 /**
+ * @brief XOR Vx, Vy - Set Vx = Vx XOR Vy
+ * 
+ * @param chip8_machine 
+ * @param opcode 
+ */
+void execute_op_8xy3(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  uint8_t x_index = (opcode & 0x0F00u) >> 8u;
+  uint8_t y_index = (opcode & 0x00F0u) >> 4u;
+
+  chip8_machine->registers[x_index] ^= chip8_machine->registers[y_index];
+}
+
+/**
  * @brief Skip Not Equals Vx, Vy - Skip next instruction if Vx != Vy
  * 
  * @param chip8_machine 
@@ -486,6 +500,7 @@ void init_jump_table()
   index_8_instruction_jump_table[0x0] = execute_op_8xy0;
   index_8_instruction_jump_table[0x1] = execute_op_8xy1;
   index_8_instruction_jump_table[0x2] = execute_op_8xy2;
+  index_8_instruction_jump_table[0x3] = execute_op_8xy3;
 
   jump_table_inited = true;
 }
