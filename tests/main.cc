@@ -225,6 +225,33 @@ void test_op_8xy4(void)
   assert(machine.registers[0xF] == 1);
 }
 
+void test_op_8xy5(void)
+{
+  Chip8_Machine machine = {};
+
+  machine.registers[0x2] = 5;
+  machine.registers[0x4] = 6;
+  execute_op_8xy5(&machine, 0x8245);
+  /**
+   * @note Não é dito claramente, mas quando se subtrai dois uint8_t acredito
+   * que se espere o comportamento de 'wrap-around'
+   */
+  assert(machine.registers[0x2] == UINT8_MAX);
+  assert(machine.registers[0xF] == 0);
+
+  machine.registers[0x3] = UINT8_MAX;
+  machine.registers[0x8] = 55;
+  execute_op_8xy5(&machine, 0x8385);
+  assert(machine.registers[0x3] == (UINT8_MAX - 55));
+  assert(machine.registers[0xF] == 1);
+
+  machine.registers[0x3] = 233;
+  machine.registers[0x8] = 55;
+  execute_op_8xy5(&machine, 0x8385);
+  assert(machine.registers[0x3] == (233 - 55));
+  assert(machine.registers[0xF] == 1);
+}
+
 void test_op_9xkk(void)
 {
   Chip8_Machine machine = {};
@@ -319,6 +346,7 @@ int main(void)
   test_op_8xy2();
   test_op_8xy3();
   test_op_8xy4();
+  test_op_8xy5();
   test_op_9xkk();
   test_op_Annn();
   test_op_Bnnn();

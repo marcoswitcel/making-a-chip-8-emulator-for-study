@@ -354,7 +354,26 @@ void execute_op_8xy4(Chip8_Machine *chip8_machine, uint16_t opcode)
   assert(chip8_machine->registers[0xF] == 1 || chip8_machine->registers[0xF] == 0);
 }
 
-// @todo implementar opcode 8xy5 e respectivos testes
+/**
+ * @brief SUB Vx, Vy - Set Vx = Vx - Vy, set VF = NOT borrow
+ * 
+ * @param chip8_machine 
+ * @param opcode 
+ */
+void execute_op_8xy5(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  uint8_t x_index = (opcode & 0x0F00u) >> 8u;
+  uint8_t y_index = (opcode & 0x00F0u) >> 4u;
+
+  // @note João, aqui não deveria incluir Vx == Vy como 'not borrow?
+  // Parece que realmente não é um 'borrow' quando Vx == Vy.
+  // @reference https://www.reddit.com/r/EmuDev/comments/kgy70l/chip8_8xy7_8xy5_behavior/
+  // NOT borrow
+  chip8_machine->registers[0xF] = chip8_machine->registers[x_index] > chip8_machine->registers[y_index];
+  assert(chip8_machine->registers[0xF] == 1 || chip8_machine->registers[0xF] == 0);
+
+  chip8_machine->registers[x_index] = chip8_machine->registers[x_index] - chip8_machine->registers[y_index];
+}
 
 // @todo implementar opcode 8xy6 e respectivos testes
 
@@ -551,6 +570,7 @@ void init_jump_table()
   index_8_instruction_jump_table[0x2] = execute_op_8xy2;
   index_8_instruction_jump_table[0x3] = execute_op_8xy3;
   index_8_instruction_jump_table[0x4] = execute_op_8xy4;
+  index_8_instruction_jump_table[0x5] = execute_op_8xy5;
 
   jump_table_inited = true;
 }
