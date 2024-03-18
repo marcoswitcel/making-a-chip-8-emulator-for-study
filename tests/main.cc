@@ -252,6 +252,31 @@ void test_op_8xy5(void)
   assert(machine.registers[0xF] == 1);
 }
 
+void test_op_8xy6(void)
+{
+  Chip8_Machine machine = {};
+
+  machine.registers[0x5] = 4;
+  execute_op_8xy6(&machine, 0x8556);
+  assert(machine.registers[0x5] == 2);
+  assert(machine.registers[0xF] == 0);
+
+  machine.registers[0x5] = 33;
+  execute_op_8xy6(&machine, 0x8556);
+  assert(machine.registers[0x5] == 16);
+  assert(machine.registers[0xF] == 1);
+
+  machine.registers[0x5] = 32;
+  execute_op_8xy6(&machine, 0x8556);
+  assert(machine.registers[0x5] == 16);
+  assert(machine.registers[0xF] == 0);
+
+  machine.registers[0x5] = 35;
+  execute_op_8xy6(&machine, 0x8556);
+  assert(machine.registers[0x5] == 17);
+  assert(machine.registers[0xF] == 1);
+}
+
 void test_op_9xkk(void)
 {
   Chip8_Machine machine = {};
@@ -347,6 +372,7 @@ int main(void)
   test_op_8xy3();
   test_op_8xy4();
   test_op_8xy5();
+  test_op_8xy6();
   test_op_9xkk();
   test_op_Annn();
   test_op_Bnnn();

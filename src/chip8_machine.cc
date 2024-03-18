@@ -375,7 +375,22 @@ void execute_op_8xy5(Chip8_Machine *chip8_machine, uint16_t opcode)
   chip8_machine->registers[x_index] = chip8_machine->registers[x_index] - chip8_machine->registers[y_index];
 }
 
-// @todo implementar opcode 8xy6 e respectivos testes
+/**
+ * @brief SHR Vx {, Vy} - Set Vx = Vx SHR 1
+ * Vy não é usado
+ * 
+ * @param chip8_machine 
+ * @param opcode 
+ */
+void execute_op_8xy6(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  uint8_t x_index = (opcode & 0x0F00u) >> 8u;
+
+  // salvando/retornando bit menos significativo
+  chip8_machine->registers[0xF] = (chip8_machine->registers[x_index] & 0x01u);
+
+  chip8_machine->registers[x_index] >>= 1;
+}
 
 // @todo implementar opcode 8xy7 e respectivos testes
 
@@ -571,6 +586,7 @@ void init_jump_table()
   index_8_instruction_jump_table[0x3] = execute_op_8xy3;
   index_8_instruction_jump_table[0x4] = execute_op_8xy4;
   index_8_instruction_jump_table[0x5] = execute_op_8xy5;
+  index_8_instruction_jump_table[0x6] = execute_op_8xy6;
 
   jump_table_inited = true;
 }
