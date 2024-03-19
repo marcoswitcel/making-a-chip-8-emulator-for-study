@@ -304,6 +304,8 @@ void test_op_8xy7(void)
   assert(machine.registers[0xF] == 1);
 }
 
+// @todo implementar teste da função execute_op_8xyE
+
 void test_op_9xkk(void)
 {
   Chip8_Machine machine = {};
