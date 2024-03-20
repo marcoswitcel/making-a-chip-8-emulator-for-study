@@ -28,6 +28,28 @@ void test_op_1nnn(void)
   assert(machine.program_counter == 0xAF3u);
 }
 
+// @todo João, fazer um teste especial do opcode CALL e RET
+void test_op_2nnn(void)
+{
+  Chip8_Machine machine = {};
+
+  machine.program_counter = 0xCE;
+  machine.stack_pointer = 0;
+  machine.stack[0] = 0;
+  execute_op_2nnn(&machine, 0x20FFu);
+  assert(machine.program_counter == 0x0FFu);
+  assert(machine.stack_pointer == 1);
+  assert(machine.stack[0] == 0xCE);
+
+  machine.program_counter = 0xCE;
+  machine.stack_pointer = 0;
+  machine.stack[0] = 0;
+  execute_op_2nnn(&machine, 0x2AF3u);
+  assert(machine.program_counter == 0xAF3u);
+  assert(machine.stack_pointer == 1);
+  assert(machine.stack[0] == 0xCE);
+}
+
 void test_op_3xkk(void)
 {
   Chip8_Machine machine = {};
@@ -304,7 +326,40 @@ void test_op_8xy7(void)
   assert(machine.registers[0xF] == 1);
 }
 
-// @todo implementar teste da função execute_op_8xyE
+void test_op_8xyE(void)
+{
+  Chip8_Machine machine = {};
+
+  machine.registers[0x5] = 4;
+  execute_op_8xyE(&machine, 0x855E);
+  assert(machine.registers[0x5] == 8);
+  assert(machine.registers[0xF] == 0);
+
+  machine.registers[0x5] = 33;
+  execute_op_8xyE(&machine, 0x855E);
+  assert(machine.registers[0x5] == 66);
+  assert(machine.registers[0xF] == 0);
+
+  machine.registers[0x5] = 32;
+  execute_op_8xyE(&machine, 0x855E);
+  assert(machine.registers[0x5] == 64);
+  assert(machine.registers[0xF] == 0);
+
+  machine.registers[0x5] = 35;
+  execute_op_8xyE(&machine, 0x855E);
+  assert(machine.registers[0x5] == 70);
+  assert(machine.registers[0xF] == 0);
+
+  machine.registers[0x5] = 0x80;
+  execute_op_8xyE(&machine, 0x855E);
+  assert(machine.registers[0x5] == 0);
+  assert(machine.registers[0xF] == 1);
+
+  machine.registers[0x5] = 0xC0;
+  execute_op_8xyE(&machine, 0x855E);
+  assert(machine.registers[0x5] == 0x80);
+  assert(machine.registers[0xF] == 1);
+}
 
 void test_op_9xkk(void)
 {
@@ -390,6 +445,7 @@ int main(void)
 
   test_op_00E0();
   test_op_1nnn();
+  test_op_2nnn();
   test_op_3xkk();
   test_op_4xkk();
   test_op_5xy0();
@@ -403,6 +459,7 @@ int main(void)
   test_op_8xy5();
   test_op_8xy6();
   test_op_8xy7();
+  test_op_8xyE();
   test_op_9xkk();
   test_op_Annn();
   test_op_Bnnn();
