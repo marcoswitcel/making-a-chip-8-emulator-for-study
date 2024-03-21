@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <assert.h>
 #include <time.h>
 #include <fstream>
@@ -42,6 +43,11 @@ typedef struct Chip8_Machine {
 
   // Memória de vídeo, estou usando cores 'rgba', um byte por canal, apesar de ser monocromático na prática
   uint32_t screen_buffer[CHIP8_SCREEN_BUFFER_SIZE];
+
+  // Lista de 'keys' e estado de cada 'key', 'true' para pressionado e 'false' para quando não estiver pressionado
+  // @todo João, a ordem precisa ser documentada
+  bool keypadState[16];
+
   // outras coisas
 } Chip8_Machine;
 
@@ -531,7 +537,24 @@ void execute_op_Dxyn(Chip8_Machine *chip8_machine, uint16_t opcode)
   }
 }
 
-// @todo implementar opcode Ex9E e respectivos testes
+/**
+ * @brief Skip key[Vx] pressed - Skip next instruction if key with value of Vx is pressed 
+ * 
+ * @param chip8_machine 
+ * @param opcode 
+ */
+void execute_op_Ex9E(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  uint8_t x_index = (opcode & 0x0F00u) >> 8u;
+  // @todo Ajustar o possível @out-of-boundary abaixo, pensar em como lidar e pesquisar como outros emuladores garantem isso 
+  uint8_t key_value =  chip8_machine->registers[x_index]; 
+  assert(key_value < 16);
+
+  if (chip8_machine->keypadState[key_value])
+  {
+    chip8_machine->program_counter += 2;
+  }
+}
 
 // @todo implementar opcode ExA1 e respectivos testes
 

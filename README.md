@@ -12,3 +12,4 @@ Esboço inicial da descrição.
 * [https://google.github.io/styleguide/cppguide.html](https://google.github.io/styleguide/cppguide.html)
 * [https://github.com/corax89/chip8-test-rom](https://github.com/corax89/chip8-test-rom)
 * [https://stackoverflow.com/questions/822323/how-to-generate-a-random-int-in-c](https://stackoverflow.com/questions/822323/how-to-generate-a-random-int-in-c)
+* [https://multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/](https://multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/)
