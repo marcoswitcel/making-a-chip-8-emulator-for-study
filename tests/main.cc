@@ -449,6 +449,23 @@ void test_op_Ex9E(void)
   assert(machine.program_counter == 0);
 }
 
+void test_op_ExA1(void)
+{
+  Chip8_Machine machine = {};
+
+  machine.program_counter = 0;
+  machine.registers[2] = 5;
+  machine.keypadState[5] = true;
+  execute_op_ExA1(&machine, 0xE2A1);
+  assert(machine.program_counter == 0);
+
+  machine.program_counter = 0;
+  machine.registers[2] = 5;
+  machine.keypadState[5] = false;
+  execute_op_ExA1(&machine, 0xE2A1);
+  assert(machine.program_counter == 2);
+}
+
 /**
  * @brief ponto de entrada dos testes
  * @todo João, considerar trazer a interface gráfica e as melhorias dos outros projetos para esse
@@ -482,6 +499,7 @@ int main(void)
   test_op_Bnnn();
   test_op_Cxkk();
   test_op_Ex9E();
+  test_op_ExA1();
 
   return EXIT_SUCCESS;
 }

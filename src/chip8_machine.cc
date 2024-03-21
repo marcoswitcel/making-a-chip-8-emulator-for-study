@@ -538,7 +538,7 @@ void execute_op_Dxyn(Chip8_Machine *chip8_machine, uint16_t opcode)
 }
 
 /**
- * @brief Skip key[Vx] pressed - Skip next instruction if key with value of Vx is pressed 
+ * @brief Skip Key[Vx] Pressed - Skip next instruction if key with value of Vx is pressed 
  * 
  * @param chip8_machine 
  * @param opcode 
@@ -556,7 +556,24 @@ void execute_op_Ex9E(Chip8_Machine *chip8_machine, uint16_t opcode)
   }
 }
 
-// @todo implementar opcode ExA1 e respectivos testes
+/**
+ * @brief Skip Not Key[Vx] Pressed - Skip next instruction if key with value of Vx is not pressed 
+ * 
+ * @param chip8_machine 
+ * @param opcode 
+ */
+void execute_op_ExA1(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  uint8_t x_index = (opcode & 0x0F00u) >> 8u;
+  // @todo Ajustar o possível @out-of-boundary abaixo, pensar em como lidar e pesquisar como outros emuladores garantem isso 
+  uint8_t key_value =  chip8_machine->registers[x_index]; 
+  assert(key_value < 16);
+
+  if (!chip8_machine->keypadState[key_value])
+  {
+    chip8_machine->program_counter += 2;
+  }
+}
 
 // @todo implementar opcode Fx07 e respectivos testes
 
