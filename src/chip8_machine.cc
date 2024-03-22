@@ -150,6 +150,7 @@ static bool jump_table_inited = false;
 static Chip8_Instruction_Execution_Code base_instruction_jump_table[16] = {};
 static Chip8_Instruction_Execution_Code index_0_instruction_jump_table[16] = {};
 static Chip8_Instruction_Execution_Code index_8_instruction_jump_table[16] = {};
+static Chip8_Instruction_Execution_Code index_E_instruction_jump_table[16] = {};
 
 /**
  * @brief CLS - Clear de display
@@ -611,6 +612,15 @@ void decode_8_index_opcode(Chip8_Machine *chip8_machine, uint16_t opcode)
   index_8_instruction_jump_table[index](chip8_machine, opcode);
 }
 
+void decode_E_index_opcode(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  // Eventualmente talvez vou usar essa função pra fazer algum tipo de assert?
+  uint8_t index = opcode & 0x000Fu; // @note Testar e revisar
+  printf("decoding E, index: %d\n", index);
+
+  index_E_instruction_jump_table[index](chip8_machine, opcode);
+}
+
 void noop(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
   UNUSED(chip8_machine);
@@ -628,6 +638,7 @@ void init_jump_table()
     base_instruction_jump_table[i] = noop;
     index_0_instruction_jump_table[i] = noop;
     index_8_instruction_jump_table[i] = noop;
+    index_E_instruction_jump_table[i] = noop;
   }
 
   // Primeiro nível
@@ -645,15 +656,15 @@ void init_jump_table()
   base_instruction_jump_table[0xB] = execute_op_Bnnn;
   base_instruction_jump_table[0xC] = execute_op_Cxkk;
   base_instruction_jump_table[0xD] = execute_op_Dxyn;
-  // @todo João, table E
+  base_instruction_jump_table[0xE] = decode_E_index_opcode;
   // @todo João, table F
   
 
-  // Segunda nível (tablea 0)
+  // Segunda nível (tabela 0)
   index_0_instruction_jump_table[0x0] = execute_op_00E0;
   index_0_instruction_jump_table[0xE] = execute_op_00EE;
 
-  // Segunda nível (tablea 2)
+  // Segunda nível (tabela 8)
   index_8_instruction_jump_table[0x0] = execute_op_8xy0;
   index_8_instruction_jump_table[0x1] = execute_op_8xy1;
   index_8_instruction_jump_table[0x2] = execute_op_8xy2;
@@ -663,6 +674,10 @@ void init_jump_table()
   index_8_instruction_jump_table[0x6] = execute_op_8xy6;
   index_8_instruction_jump_table[0x7] = execute_op_8xy7;
   index_8_instruction_jump_table[0xE] = execute_op_8xyE;
+
+  // Segunda nível (tabela E)
+  index_E_instruction_jump_table[0x1] = execute_op_ExA1;
+  index_E_instruction_jump_table[0xE] = execute_op_Ex9E;
 
   jump_table_inited = true;
 }
