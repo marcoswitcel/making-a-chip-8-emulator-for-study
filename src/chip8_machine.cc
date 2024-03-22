@@ -147,10 +147,11 @@ static bool load_rom(Chip8_Machine &chip8_machine, const char *filename)
 typedef void (*Chip8_Instruction_Execution_Code)(Chip8_Machine *chip8_machine, uint16_t opcode);
 
 static bool jump_table_inited = false;
-static Chip8_Instruction_Execution_Code base_instruction_jump_table[16] = {};
-static Chip8_Instruction_Execution_Code index_0_instruction_jump_table[16] = {};
-static Chip8_Instruction_Execution_Code index_8_instruction_jump_table[16] = {};
-static Chip8_Instruction_Execution_Code index_E_instruction_jump_table[16] = {};
+static Chip8_Instruction_Execution_Code base_instruction_jump_table[0x0F + 1] = {};
+static Chip8_Instruction_Execution_Code index_0_instruction_jump_table[0x0F + 1] = {};
+static Chip8_Instruction_Execution_Code index_8_instruction_jump_table[0x0F + 1] = {};
+static Chip8_Instruction_Execution_Code index_E_instruction_jump_table[0x0F + 1] = {};
+static Chip8_Instruction_Execution_Code index_F_instruction_jump_table[0x65 + 1] = {};
 
 /**
  * @brief CLS - Clear de display
@@ -621,6 +622,15 @@ void decode_E_index_opcode(Chip8_Machine *chip8_machine, uint16_t opcode)
   index_E_instruction_jump_table[index](chip8_machine, opcode);
 }
 
+void decode_F_index_opcode(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  // Eventualmente talvez vou usar essa função pra fazer algum tipo de assert?
+  uint8_t index = opcode & 0x000Fu; // @note Testar e revisar
+  printf("decoding F, index: %d\n", index);
+
+  index_F_instruction_jump_table[index](chip8_machine, opcode);
+}
+
 void noop(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
   UNUSED(chip8_machine);
@@ -633,12 +643,17 @@ void init_jump_table()
 {
   if (jump_table_inited) return;
 
-  for (unsigned i = 0; i < 16; i++)
+  for (unsigned i = 0; i <= 0xF; i++)
   {
     base_instruction_jump_table[i] = noop;
     index_0_instruction_jump_table[i] = noop;
     index_8_instruction_jump_table[i] = noop;
     index_E_instruction_jump_table[i] = noop;
+  }
+
+  for (unsigned i = 0; i <= 0x65; i++)
+  {
+    index_F_instruction_jump_table[i] = noop;
   }
 
   // Primeiro nível
@@ -657,9 +672,8 @@ void init_jump_table()
   base_instruction_jump_table[0xC] = execute_op_Cxkk;
   base_instruction_jump_table[0xD] = execute_op_Dxyn;
   base_instruction_jump_table[0xE] = decode_E_index_opcode;
-  // @todo João, table F
+  base_instruction_jump_table[0xF] = decode_F_index_opcode;
   
-
   // Segunda nível (tabela 0)
   index_0_instruction_jump_table[0x0] = execute_op_00E0;
   index_0_instruction_jump_table[0xE] = execute_op_00EE;
@@ -678,6 +692,9 @@ void init_jump_table()
   // Segunda nível (tabela E)
   index_E_instruction_jump_table[0x1] = execute_op_ExA1;
   index_E_instruction_jump_table[0xE] = execute_op_Ex9E;
+
+  // Segunda nível (tabela F)
+  // @todo Adicionar aqui
 
   jump_table_inited = true;
 }
