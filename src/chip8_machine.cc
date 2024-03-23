@@ -577,7 +577,18 @@ void execute_op_ExA1(Chip8_Machine *chip8_machine, uint16_t opcode)
   }
 }
 
-// @todo implementar opcode Fx07 e respectivos testes
+/**
+ * @brief Load Vx, DT - Set Vx = delay timer value
+ * 
+ * @param chip8_machine 
+ * @param opcode 
+ */
+void execute_op_Fx07(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  uint8_t x_index = (opcode & 0x0F00u) >> 8u;
+
+  chip8_machine->registers[x_index] = chip8_machine->delay_timer;
+}
 
 // @todo implementar opcode Fx0A e respectivos testes
 
@@ -625,7 +636,7 @@ void decode_E_index_opcode(Chip8_Machine *chip8_machine, uint16_t opcode)
 void decode_F_index_opcode(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
   // Eventualmente talvez vou usar essa função pra fazer algum tipo de assert?
-  uint8_t index = opcode & 0x000Fu; // @note Testar e revisar
+  uint8_t index = opcode & 0x00FFu; // @note Testar e revisar
   printf("decoding F, index: %d\n", index);
 
   index_F_instruction_jump_table[index](chip8_machine, opcode);
@@ -694,7 +705,7 @@ void init_jump_table()
   index_E_instruction_jump_table[0xE] = execute_op_Ex9E;
 
   // Segunda nível (tabela F)
-  // @todo Adicionar aqui
+  index_F_instruction_jump_table[0x07] = execute_op_Fx07;
 
   jump_table_inited = true;
 }

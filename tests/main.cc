@@ -466,6 +466,21 @@ void test_op_ExA1(void)
   assert(machine.program_counter == 2);
 }
 
+void test_op_Fx07(void)
+{
+  Chip8_Machine machine = {};
+
+  machine.delay_timer = 55;
+  machine.registers[3] = 0;
+  execute_op_Fx07(&machine, 0xF307);
+  assert(machine.registers[3] == 55);
+
+  machine.delay_timer = 28;
+  machine.registers[5] = 0;
+  execute_op_Fx07(&machine, 0xF507);
+  assert(machine.registers[5] == 28);
+}
+
 /**
  * @brief ponto de entrada dos testes
  * @todo João, considerar trazer a interface gráfica e as melhorias dos outros projetos para esse
@@ -500,6 +515,7 @@ int main(void)
   test_op_Cxkk();
   test_op_Ex9E();
   test_op_ExA1();
+  test_op_Fx07();
 
   return EXIT_SUCCESS;
 }
