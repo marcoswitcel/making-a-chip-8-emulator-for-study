@@ -592,7 +592,18 @@ void execute_op_Fx07(Chip8_Machine *chip8_machine, uint16_t opcode)
 
 // @todo implementar opcode Fx0A e respectivos testes
 
-// @todo implementar opcode Fx15 e respectivos testes
+/**
+ * @brief Load DT, Vx - Set delay timer = Vx
+ * 
+ * @param chip8_machine 
+ * @param opcode 
+ */
+void execute_op_Fx15(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  uint8_t x_index = (opcode & 0x0F00u) >> 8u;
+
+  chip8_machine->delay_timer = chip8_machine->registers[x_index];
+}
 
 // @todo implementar opcode Fx18 e respectivos testes
 
@@ -706,6 +717,8 @@ void init_jump_table()
 
   // Segunda nível (tabela F)
   index_F_instruction_jump_table[0x07] = execute_op_Fx07;
+  // @todo imeplementar Fx0A sem precisar ficar em loop?
+  index_F_instruction_jump_table[0x15] = execute_op_Fx15;
 
   jump_table_inited = true;
 }

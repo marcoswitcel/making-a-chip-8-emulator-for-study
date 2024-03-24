@@ -481,6 +481,21 @@ void test_op_Fx07(void)
   assert(machine.registers[5] == 28);
 }
 
+void test_op_Fx15(void)
+{
+  Chip8_Machine machine = {};
+
+  machine.delay_timer = 0;
+  machine.registers[3] = 55;
+  execute_op_Fx15(&machine, 0xF315);
+  assert(machine.delay_timer == 55);
+
+  machine.delay_timer = 0;
+  machine.registers[5] = 28;
+  execute_op_Fx15(&machine, 0xF515);
+  assert(machine.delay_timer == 28);
+}
+
 /**
  * @brief ponto de entrada dos testes
  * @todo João, considerar trazer a interface gráfica e as melhorias dos outros projetos para esse
@@ -516,6 +531,7 @@ int main(void)
   test_op_Ex9E();
   test_op_ExA1();
   test_op_Fx07();
+  test_op_Fx15();
 
   return EXIT_SUCCESS;
 }
