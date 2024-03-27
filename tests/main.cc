@@ -511,6 +511,21 @@ void test_op_Fx18(void)
   assert(machine.sound_timer == 28);
 }
 
+void test_op_Fx1E(void)
+{
+  Chip8_Machine machine = {};
+
+  machine.index_register = 0;
+  machine.registers[3] = 55;
+  execute_op_Fx1E(&machine, 0xF31E);
+  assert(machine.index_register == 55);
+
+  machine.index_register = 3;
+  machine.registers[3] = 55;
+  execute_op_Fx1E(&machine, 0xF31E);
+  assert(machine.index_register == 58);
+}
+
 /**
  * @brief ponto de entrada dos testes
  * @todo João, considerar trazer a interface gráfica e as melhorias dos outros projetos para esse
@@ -548,6 +563,7 @@ int main(void)
   test_op_Fx07();
   test_op_Fx15();
   test_op_Fx18();
+  test_op_Fx1E();
 
   return EXIT_SUCCESS;
 }

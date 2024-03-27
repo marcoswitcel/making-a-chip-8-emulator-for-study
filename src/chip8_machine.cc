@@ -25,7 +25,7 @@ constexpr unsigned CHIP8_MEMORY_SIZE = 4096;
 typedef struct Chip8_Machine {
   // 16 registradores de 8 bits, sendo que o 16º é usado para armazenar o resultados de operaçẽos
   uint8_t registers[16];
-  // Registrador de índice
+  // Registrador de índice (I)
   uint16_t index_register;
   // Contador PC
   uint16_t program_counter;
@@ -618,7 +618,18 @@ void execute_op_Fx18(Chip8_Machine *chip8_machine, uint16_t opcode)
   chip8_machine->sound_timer = chip8_machine->registers[x_index];
 }
 
-// @todo implementar opcode Fx1E e respectivos testes
+/**
+ * @brief Add I, Vx - Set I = I + Vx
+ * 
+ * @param chip8_machine 
+ * @param opcode 
+ */
+void execute_op_Fx1E(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  uint8_t x_index = (opcode & 0x0F00u) >> 8u;
+
+  chip8_machine->index_register += chip8_machine->registers[x_index];
+}
 
 // @todo implementar opcode Fx29 e respectivos testes
 
@@ -731,6 +742,7 @@ void init_jump_table()
   // @todo imeplementar Fx0A sem precisar ficar em loop?
   index_F_instruction_jump_table[0x15] = execute_op_Fx15;
   index_F_instruction_jump_table[0x18] = execute_op_Fx18;
+  index_F_instruction_jump_table[0x1E] = execute_op_Fx1E;
 
   jump_table_inited = true;
 }
