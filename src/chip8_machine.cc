@@ -605,7 +605,18 @@ void execute_op_Fx15(Chip8_Machine *chip8_machine, uint16_t opcode)
   chip8_machine->delay_timer = chip8_machine->registers[x_index];
 }
 
-// @todo implementar opcode Fx18 e respectivos testes
+/**
+ * @brief Load ST, Vx - Set sound timer = Vx
+ * 
+ * @param chip8_machine 
+ * @param opcode 
+ */
+void execute_op_Fx18(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  uint8_t x_index = (opcode & 0x0F00u) >> 8u;
+
+  chip8_machine->sound_timer = chip8_machine->registers[x_index];
+}
 
 // @todo implementar opcode Fx1E e respectivos testes
 
@@ -719,6 +730,7 @@ void init_jump_table()
   index_F_instruction_jump_table[0x07] = execute_op_Fx07;
   // @todo imeplementar Fx0A sem precisar ficar em loop?
   index_F_instruction_jump_table[0x15] = execute_op_Fx15;
+  index_F_instruction_jump_table[0x18] = execute_op_Fx18;
 
   jump_table_inited = true;
 }
