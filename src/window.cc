@@ -110,7 +110,7 @@ int open_window(void)
   }
 
   window = SDL_CreateWindow(
-    "Chip-8: Emulando",
+    "Chip-8 Emulador: Executando",
     SDL_WINDOWPOS_CENTERED,
     SDL_WINDOWPOS_CENTERED,
     WIDTH,
