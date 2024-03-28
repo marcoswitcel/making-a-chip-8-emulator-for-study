@@ -631,7 +631,20 @@ void execute_op_Fx1E(Chip8_Machine *chip8_machine, uint16_t opcode)
   chip8_machine->index_register += chip8_machine->registers[x_index];
 }
 
-// @todo implementar opcode Fx29 e respectivos testes
+/**
+ * @brief Load Font, Vx - Set I = location of sprite for digit Vx
+ * 
+ * @param chip8_machine 
+ * @param opcode 
+ */
+void execute_op_Fx29(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  uint8_t x_index = (opcode & 0x0F00u) >> 8u;
+  uint8_t digit_value = chip8_machine->registers[x_index];
+  assert(digit_value < 17); // @todo João, avaliar se precisa tratar
+
+  chip8_machine->index_register = FONT_START_ADDRESS + (5 * digit_value);
+}
 
 // @todo implementar opcode Fx33 e respectivos testes
 
@@ -743,6 +756,7 @@ void init_jump_table()
   index_F_instruction_jump_table[0x15] = execute_op_Fx15;
   index_F_instruction_jump_table[0x18] = execute_op_Fx18;
   index_F_instruction_jump_table[0x1E] = execute_op_Fx1E;
+  index_F_instruction_jump_table[0x29] = execute_op_Fx29;
 
   jump_table_inited = true;
 }

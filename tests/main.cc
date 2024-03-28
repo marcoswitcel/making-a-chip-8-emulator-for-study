@@ -526,6 +526,26 @@ void test_op_Fx1E(void)
   assert(machine.index_register == 58);
 }
 
+void test_op_Fx29(void)
+{
+  Chip8_Machine machine = {};
+
+  machine.index_register = 0;
+  machine.registers[3] = 0;
+  execute_op_Fx29(&machine, 0xF329);
+  assert(machine.index_register == FONT_START_ADDRESS);
+
+  machine.index_register = 0;
+  machine.registers[3] = 1;
+  execute_op_Fx29(&machine, 0xF329);
+  assert(machine.index_register == (FONT_START_ADDRESS + 5));
+
+  machine.index_register = 0;
+  machine.registers[4] = 4;
+  execute_op_Fx29(&machine, 0xF429);
+  assert(machine.index_register == (FONT_START_ADDRESS + 20));
+}
+
 /**
  * @brief ponto de entrada dos testes
  * @todo João, considerar trazer a interface gráfica e as melhorias dos outros projetos para esse
@@ -564,6 +584,7 @@ int main(void)
   test_op_Fx15();
   test_op_Fx18();
   test_op_Fx1E();
+  test_op_Fx29();
 
   return EXIT_SUCCESS;
 }
