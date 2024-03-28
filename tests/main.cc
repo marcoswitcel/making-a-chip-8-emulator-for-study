@@ -546,6 +546,39 @@ void test_op_Fx29(void)
   assert(machine.index_register == (FONT_START_ADDRESS + 20));
 }
 
+void test_op_Fx33(void)
+{
+  Chip8_Machine machine = {};
+
+  machine.index_register = 0;
+  machine.registers[3] = 251;
+  execute_op_Fx33(&machine, 0xF333);
+  assert(machine.memory[machine.index_register + 0] == 2);
+  assert(machine.memory[machine.index_register + 1] == 5);
+  assert(machine.memory[machine.index_register + 2] == 1);
+
+  machine.index_register = 10;
+  machine.registers[5] = 251;
+  execute_op_Fx33(&machine, 0xF533);
+  assert(machine.memory[machine.index_register + 0] == 2);
+  assert(machine.memory[machine.index_register + 1] == 5);
+  assert(machine.memory[machine.index_register + 2] == 1);
+
+  machine.index_register = 0;
+  machine.registers[3] = 134;
+  execute_op_Fx33(&machine, 0xF333);
+  assert(machine.memory[machine.index_register + 0] == 1);
+  assert(machine.memory[machine.index_register + 1] == 3);
+  assert(machine.memory[machine.index_register + 2] == 4);
+
+  machine.index_register = 10;
+  machine.registers[5] = 134;
+  execute_op_Fx33(&machine, 0xF533);
+  assert(machine.memory[machine.index_register + 0] == 1);
+  assert(machine.memory[machine.index_register + 1] == 3);
+  assert(machine.memory[machine.index_register + 2] == 4);
+}
+
 /**
  * @brief ponto de entrada dos testes
  * @todo João, considerar trazer a interface gráfica e as melhorias dos outros projetos para esse
@@ -585,6 +618,7 @@ int main(void)
   test_op_Fx18();
   test_op_Fx1E();
   test_op_Fx29();
-
+  test_op_Fx33();
+  
   return EXIT_SUCCESS;
 }

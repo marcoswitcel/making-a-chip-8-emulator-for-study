@@ -646,7 +646,28 @@ void execute_op_Fx29(Chip8_Machine *chip8_machine, uint16_t opcode)
   chip8_machine->index_register = FONT_START_ADDRESS + (5 * digit_value);
 }
 
-// @todo implementar opcode Fx33 e respectivos testes
+/**
+ * @brief Load BCD, Vx - Store BCD representatio of Vx in memory locations I, I+1, I+2 
+ * 
+ * @param chip8_machine 
+ * @param opcode 
+ */
+void execute_op_Fx33(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  uint8_t x_index = (opcode & 0x0F00u) >> 8u;
+  uint8_t value = chip8_machine->registers[x_index];
+  
+  // unide
+  chip8_machine->memory[chip8_machine->index_register + 2] = value % 10;
+
+  // decimal
+  value /= 10;  
+  chip8_machine->memory[chip8_machine->index_register + 1] = value % 10;
+  
+  // centena
+  value /= 10;
+  chip8_machine->memory[chip8_machine->index_register + 0] = value % 10;
+}
 
 // @todo implementar opcode Fx55 e respectivos testes
 
@@ -757,6 +778,7 @@ void init_jump_table()
   index_F_instruction_jump_table[0x18] = execute_op_Fx18;
   index_F_instruction_jump_table[0x1E] = execute_op_Fx1E;
   index_F_instruction_jump_table[0x29] = execute_op_Fx29;
+  index_F_instruction_jump_table[0x33] = execute_op_Fx33;
 
   jump_table_inited = true;
 }
