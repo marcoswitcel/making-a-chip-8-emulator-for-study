@@ -9,7 +9,7 @@
 
 static constexpr int WIDTH = 1024;
 static constexpr int HEIGHT = 728;
-static unsigned UI_TICKS_PER_SECOND = 24;
+static unsigned UI_TICKS_PER_SECOND = 60;
 
 typedef struct Context_Data {
   bool clicked;
