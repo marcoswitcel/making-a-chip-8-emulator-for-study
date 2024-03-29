@@ -439,13 +439,13 @@ void test_op_Ex9E(void)
 
   machine.program_counter = 0;
   machine.registers[2] = 5;
-  machine.keypadState[5] = true;
+  machine.keypad_state[5] = true;
   execute_op_Ex9E(&machine, 0xE29E);
   assert(machine.program_counter == 2);
 
   machine.program_counter = 0;
   machine.registers[2] = 5;
-  machine.keypadState[5] = false;
+  machine.keypad_state[5] = false;
   execute_op_Ex9E(&machine, 0xE29E);
   assert(machine.program_counter == 0);
 }
@@ -456,13 +456,13 @@ void test_op_ExA1(void)
 
   machine.program_counter = 0;
   machine.registers[2] = 5;
-  machine.keypadState[5] = true;
+  machine.keypad_state[5] = true;
   execute_op_ExA1(&machine, 0xE2A1);
   assert(machine.program_counter == 0);
 
   machine.program_counter = 0;
   machine.registers[2] = 5;
-  machine.keypadState[5] = false;
+  machine.keypad_state[5] = false;
   execute_op_ExA1(&machine, 0xE2A1);
   assert(machine.program_counter == 2);
 }
@@ -488,23 +488,23 @@ void test_op_Fx0A(void)
 
   machine.program_counter = 2;
   machine.registers[3] = 0;
-  memset(machine.keypadState, 0, sizeof(uint8_t) * 8);
+  memset(machine.keypad_state, 0, sizeof(uint8_t) * 8);
   execute_op_Fx0A(&machine, 0xF30A);
   assert(machine.program_counter == 0);
   assert(machine.registers[3] == 0);
 
   machine.program_counter = 2;
   machine.registers[4] = 0;
-  memset(machine.keypadState, 0, sizeof(uint8_t) * 8);
-  machine.keypadState[5] = true;
+  memset(machine.keypad_state, 0, sizeof(uint8_t) * 8);
+  machine.keypad_state[5] = true;
   execute_op_Fx0A(&machine, 0xF40A);
   assert(machine.program_counter == 2);
   assert(machine.registers[4] == 5);
 
   machine.program_counter = 4;
   machine.registers[6] = 0;
-  memset(machine.keypadState, 0, sizeof(uint8_t) * 8);
-  machine.keypadState[7] = true;
+  memset(machine.keypad_state, 0, sizeof(uint8_t) * 8);
+  machine.keypad_state[7] = true;
   execute_op_Fx0A(&machine, 0xF60A);
   assert(machine.program_counter == 4);
   assert(machine.registers[6] == 7);

@@ -46,7 +46,7 @@ typedef struct Chip8_Machine {
 
   // Lista de 'keys' e estado de cada 'key', 'true' para pressionado e 'false' para quando não estiver pressionado
   // @todo João, a ordem precisa ser documentada
-  bool keypadState[16];
+  bool keypad_state[16];
 
   // outras coisas
 } Chip8_Machine;
@@ -552,7 +552,7 @@ void execute_op_Ex9E(Chip8_Machine *chip8_machine, uint16_t opcode)
   uint8_t key_value =  chip8_machine->registers[x_index]; 
   assert(key_value < 16);
 
-  if (chip8_machine->keypadState[key_value])
+  if (chip8_machine->keypad_state[key_value])
   {
     chip8_machine->program_counter += 2;
   }
@@ -571,7 +571,7 @@ void execute_op_ExA1(Chip8_Machine *chip8_machine, uint16_t opcode)
   uint8_t key_value =  chip8_machine->registers[x_index]; 
   assert(key_value < 16);
 
-  if (!chip8_machine->keypadState[key_value])
+  if (!chip8_machine->keypad_state[key_value])
   {
     chip8_machine->program_counter += 2;
   }
@@ -600,67 +600,67 @@ void execute_op_Fx0A(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
   uint8_t x_index = (opcode & 0x0F00u) >> 8u;
 
-  if (chip8_machine->keypadState[0])
+  if (chip8_machine->keypad_state[0])
   {
     chip8_machine->registers[x_index] = 0;
   }
-  else if (chip8_machine->keypadState[1])
+  else if (chip8_machine->keypad_state[1])
   {
     chip8_machine->registers[x_index] = 1;
   }
-  else if (chip8_machine->keypadState[2])
+  else if (chip8_machine->keypad_state[2])
   {
     chip8_machine->registers[x_index] = 2;
   }
-  else if (chip8_machine->keypadState[3])
+  else if (chip8_machine->keypad_state[3])
   {
     chip8_machine->registers[x_index] = 3;
   }
-  else if (chip8_machine->keypadState[4])
+  else if (chip8_machine->keypad_state[4])
   {
     chip8_machine->registers[x_index] = 4;
   }
-  else if (chip8_machine->keypadState[5])
+  else if (chip8_machine->keypad_state[5])
   {
     chip8_machine->registers[x_index] = 5;
   }
-  else if (chip8_machine->keypadState[6])
+  else if (chip8_machine->keypad_state[6])
   {
     chip8_machine->registers[x_index] = 6;
   }
-  else if (chip8_machine->keypadState[7])
+  else if (chip8_machine->keypad_state[7])
   {
     chip8_machine->registers[x_index] = 7;
   }
-  else if (chip8_machine->keypadState[8])
+  else if (chip8_machine->keypad_state[8])
   {
     chip8_machine->registers[x_index] = 8;
   }
-  else if (chip8_machine->keypadState[9])
+  else if (chip8_machine->keypad_state[9])
   {
     chip8_machine->registers[x_index] = 9;
   }
-  else if (chip8_machine->keypadState[10])
+  else if (chip8_machine->keypad_state[10])
   {
     chip8_machine->registers[x_index] = 10;
   }
-  else if (chip8_machine->keypadState[11])
+  else if (chip8_machine->keypad_state[11])
   {
     chip8_machine->registers[x_index] = 11;
   }
-  else if (chip8_machine->keypadState[12])
+  else if (chip8_machine->keypad_state[12])
   {
     chip8_machine->registers[x_index] = 12;
   }
-  else if (chip8_machine->keypadState[13])
+  else if (chip8_machine->keypad_state[13])
   {
     chip8_machine->registers[x_index] = 13;
   }
-  else if (chip8_machine->keypadState[14])
+  else if (chip8_machine->keypad_state[14])
   {
     chip8_machine->registers[x_index] = 14;
   }
-  else if (chip8_machine->keypadState[15])
+  else if (chip8_machine->keypad_state[15])
   {
     chip8_machine->registers[x_index] = 15;
   }
