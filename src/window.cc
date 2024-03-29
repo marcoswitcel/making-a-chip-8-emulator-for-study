@@ -172,6 +172,10 @@ int open_window(void)
     // Atualiza aqui
     last_timestamp = current_timestamp;
 
+    // @todo João, definir como será feito a passagem de input
+    // - Uma ideia seria usar um método que atualiza o input para o frame ou a nível de ciclo
+    // - Criar um método de faz o submit do 'evento' de 'press down' e 'released'?
+
     execute_a_cycle(chip8_machine);
 
     // Renderiza
