@@ -590,7 +590,93 @@ void execute_op_Fx07(Chip8_Machine *chip8_machine, uint16_t opcode)
   chip8_machine->registers[x_index] = chip8_machine->delay_timer;
 }
 
-// @todo implementar opcode Fx0A e respectivos testes
+/**
+ * @brief Load Vx, Key - Wait for a key press, store the value of the key in Vx
+ * 
+ * @param chip8_machine 
+ * @param opcode 
+ */
+void execute_op_Fx0A(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  uint8_t x_index = (opcode & 0x0F00u) >> 8u;
+
+  if (chip8_machine->keypadState[0])
+  {
+    chip8_machine->registers[x_index] = 0;
+  }
+  else if (chip8_machine->keypadState[1])
+  {
+    chip8_machine->registers[x_index] = 1;
+  }
+  else if (chip8_machine->keypadState[2])
+  {
+    chip8_machine->registers[x_index] = 2;
+  }
+  else if (chip8_machine->keypadState[3])
+  {
+    chip8_machine->registers[x_index] = 3;
+  }
+  else if (chip8_machine->keypadState[4])
+  {
+    chip8_machine->registers[x_index] = 4;
+  }
+  else if (chip8_machine->keypadState[5])
+  {
+    chip8_machine->registers[x_index] = 5;
+  }
+  else if (chip8_machine->keypadState[6])
+  {
+    chip8_machine->registers[x_index] = 6;
+  }
+  else if (chip8_machine->keypadState[7])
+  {
+    chip8_machine->registers[x_index] = 7;
+  }
+  else if (chip8_machine->keypadState[8])
+  {
+    chip8_machine->registers[x_index] = 8;
+  }
+  else if (chip8_machine->keypadState[9])
+  {
+    chip8_machine->registers[x_index] = 9;
+  }
+  else if (chip8_machine->keypadState[10])
+  {
+    chip8_machine->registers[x_index] = 10;
+  }
+  else if (chip8_machine->keypadState[11])
+  {
+    chip8_machine->registers[x_index] = 11;
+  }
+  else if (chip8_machine->keypadState[12])
+  {
+    chip8_machine->registers[x_index] = 12;
+  }
+  else if (chip8_machine->keypadState[13])
+  {
+    chip8_machine->registers[x_index] = 13;
+  }
+  else if (chip8_machine->keypadState[14])
+  {
+    chip8_machine->registers[x_index] = 14;
+  }
+  else if (chip8_machine->keypadState[15])
+  {
+    chip8_machine->registers[x_index] = 15;
+  }
+  else
+  {
+    // @note considerando que o 'PC' foi incrementado antes de chamar essa
+    // função, o que é o comportamento atual da função `execute_a_cycle`,
+    // o ato de decrementar o 'PC' aqui fará com que não haja progresso e a instrução
+    // de 'wait key' seja executada novamente, isso até haver algum input.
+    // Acho que seria interessante retornar algum sinal da função `execute_a_cycle`
+    // para indicar a espera de input e organizar o código para simplesmente não
+    // executar `execute_a_cycle` até ter algum input. Isso salvaria ciclos da CPU
+    chip8_machine->program_counter -= 2;
+  }
+  
+}
 
 /**
  * @brief Load DT, Vx - Set delay timer = Vx
@@ -780,11 +866,11 @@ void init_jump_table()
   base_instruction_jump_table[0xE] = decode_E_index_opcode;
   base_instruction_jump_table[0xF] = decode_F_index_opcode;
   
-  // Segunda nível (tabela 0)
+  // Segundo nível (tabela 0)
   index_0_instruction_jump_table[0x0] = execute_op_00E0;
   index_0_instruction_jump_table[0xE] = execute_op_00EE;
 
-  // Segunda nível (tabela 8)
+  // Segundo nível (tabela 8)
   index_8_instruction_jump_table[0x0] = execute_op_8xy0;
   index_8_instruction_jump_table[0x1] = execute_op_8xy1;
   index_8_instruction_jump_table[0x2] = execute_op_8xy2;
@@ -795,13 +881,13 @@ void init_jump_table()
   index_8_instruction_jump_table[0x7] = execute_op_8xy7;
   index_8_instruction_jump_table[0xE] = execute_op_8xyE;
 
-  // Segunda nível (tabela E)
+  // Segundo nível (tabela E)
   index_E_instruction_jump_table[0x1] = execute_op_ExA1;
   index_E_instruction_jump_table[0xE] = execute_op_Ex9E;
 
-  // Segunda nível (tabela F)
+  // Segundo nível (tabela F)
   index_F_instruction_jump_table[0x07] = execute_op_Fx07;
-  // @todo imeplementar Fx0A sem precisar ficar em loop?
+  index_F_instruction_jump_table[0x0A] = execute_op_Fx0A;
   index_F_instruction_jump_table[0x15] = execute_op_Fx15;
   index_F_instruction_jump_table[0x18] = execute_op_Fx18;
   index_F_instruction_jump_table[0x1E] = execute_op_Fx1E;

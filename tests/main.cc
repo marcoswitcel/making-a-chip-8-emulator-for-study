@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <assert.h>
 
 #include "../src/chip8_machine.cc"
@@ -481,6 +482,34 @@ void test_op_Fx07(void)
   assert(machine.registers[5] == 28);
 }
 
+void test_op_Fx0A(void)
+{
+  Chip8_Machine machine = {};
+
+  machine.program_counter = 2;
+  machine.registers[3] = 0;
+  memset(machine.keypadState, 0, sizeof(uint8_t) * 8);
+  execute_op_Fx0A(&machine, 0xF30A);
+  assert(machine.program_counter == 0);
+  assert(machine.registers[3] == 0);
+
+  machine.program_counter = 2;
+  machine.registers[4] = 0;
+  memset(machine.keypadState, 0, sizeof(uint8_t) * 8);
+  machine.keypadState[5] = true;
+  execute_op_Fx0A(&machine, 0xF40A);
+  assert(machine.program_counter == 2);
+  assert(machine.registers[4] == 5);
+
+  machine.program_counter = 4;
+  machine.registers[6] = 0;
+  memset(machine.keypadState, 0, sizeof(uint8_t) * 8);
+  machine.keypadState[7] = true;
+  execute_op_Fx0A(&machine, 0xF60A);
+  assert(machine.program_counter == 4);
+  assert(machine.registers[6] == 7);
+}
+
 void test_op_Fx15(void)
 {
   Chip8_Machine machine = {};
@@ -722,6 +751,7 @@ int main(void)
   test_op_Ex9E();
   test_op_ExA1();
   test_op_Fx07();
+  test_op_Fx0A();
   test_op_Fx15();
   test_op_Fx18();
   test_op_Fx1E();
