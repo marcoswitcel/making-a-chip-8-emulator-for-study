@@ -633,6 +633,60 @@ void test_op_Fx55(void)
   assert(machine.memory[machine.index_register + 6] == 0);
 }
 
+void test_op_Fx65(void)
+{
+  Chip8_Machine machine = {};
+
+  machine.index_register = 0;
+
+  machine.registers[0] = 0;
+  machine.registers[1] = 0;
+  machine.registers[2] = 0;
+  machine.registers[4] = 0;
+  machine.registers[5] = 0;
+  machine.registers[6] = 0;
+  
+  machine.memory[machine.index_register + 0] = 37;
+  machine.memory[machine.index_register + 1] = 37;
+  machine.memory[machine.index_register + 2] = 37;
+  machine.memory[machine.index_register + 4] = 37;
+  machine.memory[machine.index_register + 5] = 37;
+  machine.memory[machine.index_register + 6] = 37;
+
+  execute_op_Fx65(&machine, 0xF565);
+  assert(machine.registers[0] == 37);
+  assert(machine.registers[1] == 37);
+  assert(machine.registers[2] == 37);
+  assert(machine.registers[4] == 37);
+  assert(machine.registers[5] == 37);
+  assert(machine.registers[6] == 0);
+
+  // index alterado
+  machine.index_register = 21;
+
+  machine.registers[0] = 0;
+  machine.registers[1] = 0;
+  machine.registers[2] = 0;
+  machine.registers[4] = 0;
+  machine.registers[5] = 0;
+  machine.registers[6] = 0;
+  
+  machine.memory[machine.index_register + 0] = 38;
+  machine.memory[machine.index_register + 1] = 38;
+  machine.memory[machine.index_register + 2] = 38;
+  machine.memory[machine.index_register + 4] = 38;
+  machine.memory[machine.index_register + 5] = 38;
+  machine.memory[machine.index_register + 6] = 38;
+
+  execute_op_Fx65(&machine, 0xF465);
+  assert(machine.registers[0] == 38);
+  assert(machine.registers[1] == 38);
+  assert(machine.registers[2] == 38);
+  assert(machine.registers[4] == 38);
+  assert(machine.registers[5] == 0);
+  assert(machine.registers[6] == 0);
+}
+
 /**
  * @brief ponto de entrada dos testes
  * @todo João, considerar trazer a interface gráfica e as melhorias dos outros projetos para esse
@@ -674,6 +728,7 @@ int main(void)
   test_op_Fx29();
   test_op_Fx33();
   test_op_Fx55();
+  test_op_Fx65();
   
   return EXIT_SUCCESS;
 }
