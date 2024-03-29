@@ -685,7 +685,21 @@ void execute_op_Fx55(Chip8_Machine *chip8_machine, uint16_t opcode)
   }
 }
 
-// @todo implementar opcode Fx65 e respectivos testes
+/**
+ * @brief Load Vx, [I] - Read registers V0 through Vx in memory starting at location I
+ * 
+ * @param chip8_machine 
+ * @param opcode 
+ */
+void execute_op_Fx65(Chip8_Machine *chip8_machine, uint16_t opcode)
+{
+  uint8_t x_index = (opcode & 0x0F00u) >> 8u;
+
+  for (uint8_t i_index = 0; i_index <= x_index; i_index++)
+  {
+    chip8_machine->registers[i_index] = chip8_machine->memory[chip8_machine->index_register + i_index];
+  }
+}
 
 void decode_0_index_opcode(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
@@ -794,6 +808,7 @@ void init_jump_table()
   index_F_instruction_jump_table[0x29] = execute_op_Fx29;
   index_F_instruction_jump_table[0x33] = execute_op_Fx33;
   index_F_instruction_jump_table[0x55] = execute_op_Fx55;
+  index_F_instruction_jump_table[0x65] = execute_op_Fx65;
 
   jump_table_inited = true;
 }
