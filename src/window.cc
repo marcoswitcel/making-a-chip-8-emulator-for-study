@@ -210,6 +210,31 @@ static void handle_events_and_inputs(SDL_Window *window, Context_Data *context, 
 
 int open_window(const char *filename)
 {
+  Chip8_Machine chip8_machine;
+  
+  reset_machine(chip8_machine);
+  clearing_screen_buffer(chip8_machine);
+
+  // @note testando visualmente como fica o pixel scalonado
+  chip8_machine.screen_buffer[0] = 0xFF0000FF;
+  chip8_machine.screen_buffer[1] = 0x00FF00FF;
+  chip8_machine.screen_buffer[2] = 0xFF00FFFF;
+
+  /**
+   * @brief usando ROM de teste
+   * @reference
+   * - https://github.com/corax89/chip8-test-rom/tree/master
+   * - https://github.com/corax89/chip8-test-rom/blob/master/test_opcode.ch8
+   */
+  bool is_loaded = load_rom(chip8_machine, filename);
+  printf("is loaded: %d\n", is_loaded);
+
+  if (!is_loaded)
+  {
+    printf("Erro ao carregar o arquivo '%s'\nEncerrando...\n", filename);
+    return EXIT_FAILURE;
+  }
+
   Context_Data context = {
     .clicked = false,
     .last_clicked_x = 0,
@@ -252,31 +277,6 @@ int open_window(const char *filename)
 
   bool should_quit = false;
   uint32_t last_timestamp = 0;
-
-  Chip8_Machine chip8_machine;
-  
-  reset_machine(chip8_machine);
-  clearing_screen_buffer(chip8_machine);
-
-  // @note testando visualmente como fica o pixel scalonado
-  chip8_machine.screen_buffer[0] = 0xFF0000FF;
-  chip8_machine.screen_buffer[1] = 0x00FF00FF;
-  chip8_machine.screen_buffer[2] = 0xFF00FFFF;
-
-  /**
-   * @brief usando ROM de teste
-   * @reference
-   * - https://github.com/corax89/chip8-test-rom/tree/master
-   * - https://github.com/corax89/chip8-test-rom/blob/master/test_opcode.ch8
-   */
-  bool is_loaded = load_rom(chip8_machine, filename);
-  printf("is loaded: %d\n", is_loaded);
-
-  if (!is_loaded)
-  {
-    printf("Erro ao carregar o arquivo '%s'\nEncerrando...\n", filename);
-    return EXIT_FAILURE;
-  }
 
   while (!should_quit)
   {
