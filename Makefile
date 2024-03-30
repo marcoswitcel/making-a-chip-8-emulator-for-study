@@ -10,6 +10,9 @@ BUILD_FOLDER_NAME=target
 SOURCE_FOLDER_NAME=src
 TESTS_FOLDER_NAME=tests
 
+# Argumento do comando 'run'
+VM_FILENAME_ARG = test_opcode.ch8
+
 build-folder-setup:
 	@ mkdir -p $(BUILD_FOLDER_NAME)
 
@@ -21,9 +24,9 @@ test: build-folder-setup  $(TESTS_FOLDER_NAME)/main.cc
 
 run: main
 	@echo "cd ./$(BUILD_FOLDER_NAME)"
-	@echo ./main
+	@echo ./main "$(VM_FILENAME_ARG)"
 	@echo "================"
-	@cd ./$(BUILD_FOLDER_NAME) && ./main
+	@cd ./$(BUILD_FOLDER_NAME) && ./main "$(VM_FILENAME_ARG)"
 	@echo "\n================\n"
 
 run-test: test
