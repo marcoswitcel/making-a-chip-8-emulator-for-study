@@ -526,11 +526,13 @@ void execute_op_Dxyn(Chip8_Machine *chip8_machine, uint16_t opcode)
 
   for (uint16_t row = 0; row < height_nibble; row++)
   {
+    assert(chip8_machine->index_register + row < CHIP8_MEMORY_SIZE);
     uint8_t sprite_byte = chip8_machine->memory[chip8_machine->index_register + row];
 
     for (unsigned col = 0; col < 8; col++)
     {
       uint8_t pixel_on = sprite_byte & (0x80 >> col);
+      assert((y_pos + row) * CHIP8_SCREEN_WIDTH + (x_pos + col) < CHIP8_SCREEN_BUFFER_SIZE);
       uint32_t &pixel = chip8_machine->screen_buffer[(y_pos + row) * CHIP8_SCREEN_WIDTH + (x_pos + col)];
       
       if (pixel_on)
