@@ -56,7 +56,7 @@ static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, C
 }
 
 
-static void handle_events_and_inputs(SDL_Window *window, Context_Data *context, bool *should_quit)
+static void handle_events_and_inputs(SDL_Window *window, Context_Data *context, bool *should_quit, Chip8_Machine *chip8_machine)
 {
   UNUSED(window);
   SDL_Event event;
@@ -80,6 +80,122 @@ static void handle_events_and_inputs(SDL_Window *window, Context_Data *context, 
           context->clicked = true;
           context->last_clicked_x = event.button.x;
           context->last_clicked_y = event.button.y;
+        }
+      } break;
+      case SDL_KEYDOWN: {
+        assert(event.key.state == SDL_PRESSED);
+        if (!event.key.repeat)
+        {
+          switch (event.key.keysym.sym)
+          {
+            case SDLK_ESCAPE: {
+              *should_quit = true;
+            } break;
+            case SDLK_x: {
+              chip8_machine->keypad_state[0] = 1;
+            } break;
+            case SDLK_1: {
+              chip8_machine->keypad_state[1] = 1;
+            } break;
+            case SDLK_2: {
+              chip8_machine->keypad_state[2] = 1;
+            } break;
+            case SDLK_3: {
+              chip8_machine->keypad_state[3] = 1;
+            } break;
+            case SDLK_q: {
+              chip8_machine->keypad_state[4] = 1;
+            } break;
+            case SDLK_w: {
+              chip8_machine->keypad_state[5] = 1;
+            } break;
+            case SDLK_e: {
+              chip8_machine->keypad_state[6] = 1;
+            } break;
+            case SDLK_a: {
+              chip8_machine->keypad_state[7] = 1;
+            } break;
+            case SDLK_s: {
+              chip8_machine->keypad_state[8] = 1;
+            } break;
+            case SDLK_d: {
+              chip8_machine->keypad_state[9] = 1;
+            } break;
+            case SDLK_z: {
+              chip8_machine->keypad_state[0xA] = 1;
+            } break;
+            case SDLK_c: {
+              chip8_machine->keypad_state[0xB] = 1;
+            } break;
+            case SDLK_4: {
+              chip8_machine->keypad_state[0xC] = 1;
+            } break;
+            case SDLK_r: {
+              chip8_machine->keypad_state[0xD] = 1;
+            } break;
+            case SDLK_f: {
+              chip8_machine->keypad_state[0xE] = 1;
+            } break;
+            case SDLK_v: {
+              chip8_machine->keypad_state[0xF] = 1;
+            } break;
+          }
+        }
+      } break;
+      case SDL_KEYUP: {
+        if (!event.key.repeat)
+        {
+          switch (event.key.keysym.sym)
+          {
+            case SDLK_x: {
+              chip8_machine->keypad_state[0] = 0;
+            } break;
+            case SDLK_1: {
+              chip8_machine->keypad_state[1] = 0;
+            } break;
+            case SDLK_2: {
+              chip8_machine->keypad_state[2] = 0;
+            } break;
+            case SDLK_3: {
+              chip8_machine->keypad_state[3] = 0;
+            } break;
+            case SDLK_q: {
+              chip8_machine->keypad_state[4] = 0;
+            } break;
+            case SDLK_w: {
+              chip8_machine->keypad_state[5] = 0;
+            } break;
+            case SDLK_e: {
+              chip8_machine->keypad_state[6] = 0;
+            } break;
+            case SDLK_a: {
+              chip8_machine->keypad_state[7] = 0;
+            } break;
+            case SDLK_s: {
+              chip8_machine->keypad_state[8] = 0;
+            } break;
+            case SDLK_d: {
+              chip8_machine->keypad_state[9] = 0;
+            } break;
+            case SDLK_z: {
+              chip8_machine->keypad_state[0xA] = 0;
+            } break;
+            case SDLK_c: {
+              chip8_machine->keypad_state[0xB] = 0;
+            } break;
+            case SDLK_4: {
+              chip8_machine->keypad_state[0xC] = 0;
+            } break;
+            case SDLK_r: {
+              chip8_machine->keypad_state[0xD] = 0;
+            } break;
+            case SDLK_f: {
+              chip8_machine->keypad_state[0xE] = 0;
+            } break;
+            case SDLK_v: {
+              chip8_machine->keypad_state[0xF] = 0;
+            } break;
+          }
         }
       } break;
       case SDL_MOUSEMOTION: {
@@ -167,7 +283,7 @@ int open_window(void)
     // printf("delta_time: %f\n", delta_time);
 
     // Processa eventos e inputs aqui
-    handle_events_and_inputs(window, &context, &should_quit);
+    handle_events_and_inputs(window, &context, &should_quit, &chip8_machine);
 
     // Atualiza aqui
     last_timestamp = current_timestamp;
