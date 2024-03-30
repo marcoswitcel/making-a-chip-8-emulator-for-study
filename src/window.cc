@@ -208,7 +208,7 @@ static void handle_events_and_inputs(SDL_Window *window, Context_Data *context, 
 #pragma GCC diagnostic pop
 }
 
-int open_window(void)
+int open_window(const char *filename)
 {
   Context_Data context = {
     .clicked = false,
@@ -269,8 +269,14 @@ int open_window(void)
    * - https://github.com/corax89/chip8-test-rom/tree/master
    * - https://github.com/corax89/chip8-test-rom/blob/master/test_opcode.ch8
    */
-  bool is_loaded = load_rom(chip8_machine, "test_opcode.ch8");
+  bool is_loaded = load_rom(chip8_machine, filename);
   printf("is loaded: %d\n", is_loaded);
+
+  if (!is_loaded)
+  {
+    printf("Erro ao carregar o arquivo '%s'\nEncerrando...\n", filename);
+    return EXIT_FAILURE;
+  }
 
   while (!should_quit)
   {
