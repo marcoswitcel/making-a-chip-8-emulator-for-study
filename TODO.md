@@ -16,6 +16,7 @@ subtítulo: 'The Instructions' da página: [https://austinmorlan.com/posts/chip8
 * implementar instruções e fluxo de input e ouput
 * definir como parametrizar o conceito de ciclos antes de buscar mais input
 * pesquisa como saber quando deve ser feito o flush pra tela
+* testar com o programa 'tetris', ainda há diversas falhas, apesar dos testes passarem
 
 # Ideias
 
