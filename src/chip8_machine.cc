@@ -44,8 +44,15 @@ typedef struct Chip8_Machine {
   // Memória de vídeo, estou usando cores 'rgba', um byte por canal, apesar de ser monocromático na prática
   uint32_t screen_buffer[CHIP8_SCREEN_BUFFER_SIZE];
 
-  // Lista de 'keys' e estado de cada 'key', 'true' para pressionado e 'false' para quando não estiver pressionado
-  // @todo João, a ordem precisa ser documentada
+  /**
+   * Lista de 'keys' e estado de cada 'key', 'true' para pressionado e 'false' para quando não estiver pressionado.
+   * A tecla '0' é representada pelo índice '0' no vetor, e assim por diante, cada tecla mapeando para um índice.
+   * O layout do teclado do 'COSMAC VIP' é o seguinte:
+   * |1|2|3|C|
+   * |4|5|6|D|
+   * |7|8|9|E|
+   * |A|0|B|F|
+   */
   bool keypad_state[16];
 
   // outras coisas
