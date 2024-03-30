@@ -276,29 +276,26 @@ int open_window(const char *filename)
   SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
   bool should_quit = false;
-  uint32_t last_timestamp = 0;
 
   while (!should_quit)
   {
-    // @note João, não achei a versão 64 bits na minha instalação
-    // https://wiki.libsdl.org/SDL2/SDL_GetTicks
-    uint32_t current_timestamp = SDL_GetTicks();
-    float delta_time = (current_timestamp - last_timestamp) / 1000.0f;
-    UNUSED(delta_time);
+    constexpr uint8_t CYCLES_PER_FRAME = 30;
+    /**
+     * @note Por hora decidi executa 30 instruções (30 ciclos), antes de fazer o flush para a tela.
+     * Mas seria interessante analisar se tem alguma orientação geral sobre isso. Também decidi buscar e 
+     * atualizar input a cada ciclo, caso tenha algum dado novo de input, mas uma otimização que poderia ser feita,
+     * é só buscar atualizar os dados de input se for usada alguma das instruções que leem o estado do 'keypad'.
+     */
+    for (uint8_t i = 0; i < CYCLES_PER_FRAME; i++)
+    {
+      // Processa eventos e inputs aqui
+      handle_events_and_inputs(window, &context, &should_quit, &chip8_machine);
 
-    // printf("delta_time: %f\n", delta_time);
-
-    // Processa eventos e inputs aqui
-    handle_events_and_inputs(window, &context, &should_quit, &chip8_machine);
-
-    // Atualiza aqui
-    last_timestamp = current_timestamp;
-
-    // @todo João, definir como será feito a passagem de input
-    // - Uma ideia seria usar um método que atualiza o input para o frame ou a nível de ciclo
-    // - Criar um método de faz o submit do 'evento' de 'press down' e 'released'?
-
-    execute_a_cycle(chip8_machine);
+      // @todo João, definir como será feito a passagem de input
+      // - Uma ideia seria usar um método que atualiza o input para o frame ou a nível de ciclo
+      // - Criar um método de faz o submit do 'evento' de 'press down' e 'released'?
+      execute_a_cycle(chip8_machine);
+    }
 
     // Renderiza
     render_scene(renderer, &chip8_machine, &context);
