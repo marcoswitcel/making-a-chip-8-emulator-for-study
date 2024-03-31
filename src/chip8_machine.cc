@@ -532,6 +532,10 @@ void execute_op_Dxyn(Chip8_Machine *chip8_machine, uint16_t opcode)
     for (unsigned col = 0; col < 8; col++)
     {
       uint8_t pixel_on = sprite_byte & (0x80 >> col);
+      
+      // @note João, sem 'warp-around' de cima pra baixo e de baixo pra cima
+      if (y_pos + row >= CHIP8_SCREEN_HEIGHT) continue;
+
       assert((y_pos + row) * CHIP8_SCREEN_WIDTH + (x_pos + col) < CHIP8_SCREEN_BUFFER_SIZE);
       uint32_t &pixel = chip8_machine->screen_buffer[(y_pos + row) * CHIP8_SCREEN_WIDTH + (x_pos + col)];
       
