@@ -503,9 +503,6 @@ void execute_op_Cxkk(Chip8_Machine *chip8_machine, uint16_t opcode)
  * @brief Draw Vx, Vy, nibble - Display n-byte sprite starting at memory location I at (Vx, Vy), set VF = collision
  * 
  * @todo Adicionar testes... quando for interessante
- * @todo João, um 'segmantation fault' ocorre quando tenta desenhar um sprite abaixo da borda inferior,
- * provavelmente o mesmo ocorre se desenhar muito pra cima, implementar a correção para evitar o erro.
- * Simulado ao executar o programa 'tetris' e deixando o bloco cair até após a tela.
  * 
  * @param chip8_machine 
  * @param opcode 
@@ -758,7 +755,7 @@ void execute_op_Fx33(Chip8_Machine *chip8_machine, uint16_t opcode)
   uint8_t x_index = (opcode & 0x0F00u) >> 8u;
   uint8_t value = chip8_machine->registers[x_index];
   
-  // unide
+  // unidade
   chip8_machine->memory[chip8_machine->index_register + 2] = value % 10;
 
   // decimal
