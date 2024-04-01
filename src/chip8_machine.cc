@@ -941,5 +941,5 @@ void execute_a_cycle(Chip8_Machine &chip8_machine)
    * ter salto diretos.
    */
 
-  printf("opcode: 0x%X, index: %d, pc: %d\n", opcode, index, chip8_machine.program_counter); // apenas para visualização
+  printf("opcode: 0x%X, i: %d, pc: %d, sp: %d\n", opcode, chip8_machine.index_register, chip8_machine.program_counter, chip8_machine.stack_pointer); // apenas para visualização
 }
