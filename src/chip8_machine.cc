@@ -193,7 +193,6 @@ void execute_op_00EE(Chip8_Machine *chip8_machine, uint16_t opcode)
  */
 void execute_op_1nnn(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
-  // @todo João, tá estranho, parece estar em loop
   chip8_machine->program_counter = opcode & 0x0FFFu;
 }
 
