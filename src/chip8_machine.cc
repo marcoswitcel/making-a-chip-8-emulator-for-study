@@ -745,7 +745,7 @@ void execute_op_Fx29(Chip8_Machine *chip8_machine, uint16_t opcode)
 }
 
 /**
- * @brief Load BCD, Vx - Store BCD representatio of Vx in memory locations I, I+1, I+2 
+ * @brief Load BCD, Vx - Store BCD representation of Vx in memory locations I, I+1, I+2 
  * 
  * @param chip8_machine 
  * @param opcode 
@@ -931,6 +931,16 @@ void execute_a_cycle(Chip8_Machine &chip8_machine)
   assert(index < 17);
 
   base_instruction_jump_table[index](&chip8_machine, opcode);
+
+  if (chip8_machine.delay_timer > 0)
+  {
+    chip8_machine.delay_timer--;
+  }
+
+  if (chip8_machine.sound_timer > 0)
+  {
+    chip8_machine.sound_timer--;
+  }
 
   /**
    * @note Pelo que entendi vou precisar ajustar minha jump table para apontar para instruções

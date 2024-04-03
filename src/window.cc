@@ -13,6 +13,7 @@ static unsigned UI_TICKS_PER_SECOND = 60;
 
 static bool is_debugging = false;
 static bool run_next_step = false;
+static int run_n_steps = 0;
 
 typedef struct Context_Data {
   bool clicked;
@@ -209,6 +210,13 @@ static void handle_events_and_inputs(SDL_Window *window, Context_Data *context, 
                 run_next_step = true;
               }
             } break;
+            // avança 10 instruções se estiver debugando
+            case SDLK_m: {
+              if (is_debugging)
+              {
+                run_n_steps = 10;
+              }
+            } break;
           }
         }
       } break;
@@ -300,6 +308,11 @@ int open_window(const char *filename)
       {
         execute_n_cycles = 1;
         run_next_step = false;
+      }
+      else if (run_n_steps > 0)
+      {
+        execute_n_cycles = 10;
+        run_n_steps = 0;
       }
       else
       {
