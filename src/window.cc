@@ -11,6 +11,9 @@ static constexpr int WIDTH = 1024;
 static constexpr int HEIGHT = 728;
 static unsigned UI_TICKS_PER_SECOND = 60;
 
+static bool is_debugging = false;
+static bool run_next_step = false;
+
 typedef struct Context_Data {
   bool clicked;
   int32_t last_clicked_x;
@@ -195,6 +198,17 @@ static void handle_events_and_inputs(SDL_Window *window, Context_Data *context, 
             case SDLK_v: {
               chip8_machine->keypad_state[0xF] = 0;
             } break;
+            // toggle modo depuração
+            case SDLK_b: {
+              is_debugging = !is_debugging;
+            } break;
+            // avança uma instrução se estiver debugando
+            case SDLK_n: {
+              if (is_debugging)
+              {
+                run_next_step = true;
+              }
+            } break;
           }
         }
       } break;
@@ -274,14 +288,36 @@ int open_window(const char *filename)
 
   while (!should_quit)
   {
-    constexpr uint8_t CYCLES_PER_FRAME = 30;
     /**
      * @note Por hora decidi executa 30 instruções (30 ciclos), antes de fazer o flush para a tela.
-     * Mas seria interessante analisar se tem alguma orientação geral sobre isso. Também decidi buscar e 
-     * atualizar input a cada ciclo, caso tenha algum dado novo de input, mas uma otimização que poderia ser feita,
-     * é só buscar atualizar os dados de input se for usada alguma das instruções que leem o estado do 'keypad'.
+     * Mas seria interessante analisar se tem alguma orientação geral sobre isso.
      */
-    for (uint8_t i = 0; i < CYCLES_PER_FRAME; i++)
+    uint8_t execute_n_cycles = 30;
+
+    if (is_debugging)
+    {
+      if (run_next_step)
+      {
+        execute_n_cycles = 1;
+        run_next_step = false;
+      }
+      else
+      {
+        /**
+         * @todo Por hora executo toda a rotina de processamento de input, porém, seria interessante
+         * separar o input da UI do input do interpretador.
+         */
+        handle_events_and_inputs(window, &context, &should_quit, &chip8_machine);
+        execute_n_cycles = 0;
+      }
+    }
+
+    /**
+     * @note Decidi buscar e atualizar input a cada ciclo, caso tenha algum dado novo de input,
+     * mas uma otimização que poderia ser feita, é só buscar atualizar os dados de input se for usada
+     * alguma das instruções que leem o estado do 'keypad'.
+     */
+    for (uint8_t i = 0; i < execute_n_cycles; i++)
     {
       // Processa eventos e inputs aqui
       handle_events_and_inputs(window, &context, &should_quit, &chip8_machine);
