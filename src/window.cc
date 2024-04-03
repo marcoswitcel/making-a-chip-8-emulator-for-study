@@ -215,11 +215,6 @@ int open_window(const char *filename)
   reset_machine(chip8_machine);
   clearing_screen_buffer(chip8_machine);
 
-  // @note testando visualmente como fica o pixel scalonado
-  chip8_machine.screen_buffer[0] = 0xFF0000FF;
-  chip8_machine.screen_buffer[1] = 0x00FF00FF;
-  chip8_machine.screen_buffer[2] = 0xFF00FFFF;
-
   /**
    * @brief usando ROM de teste
    * @reference
