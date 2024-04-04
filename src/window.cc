@@ -143,6 +143,24 @@ static void handle_events_and_inputs(SDL_Window *window, Context_Data *context, 
             case SDLK_v: {
               chip8_machine->keypad_state[0xF] = 1;
             } break;
+            // toggle modo depuração
+            case SDLK_b: {
+              is_debugging = !is_debugging;
+            } break;
+            // avança uma instrução se estiver debugando
+            case SDLK_n: {
+              if (is_debugging)
+              {
+                run_next_step = true;
+              }
+            } break;
+            // avança 10 instruções se estiver debugando
+            case SDLK_m: {
+              if (is_debugging)
+              {
+                run_n_steps = 10;
+              }
+            } break;
           }
         }
       } break;
@@ -198,24 +216,6 @@ static void handle_events_and_inputs(SDL_Window *window, Context_Data *context, 
             } break;
             case SDLK_v: {
               chip8_machine->keypad_state[0xF] = 0;
-            } break;
-            // toggle modo depuração
-            case SDLK_b: {
-              is_debugging = !is_debugging;
-            } break;
-            // avança uma instrução se estiver debugando
-            case SDLK_n: {
-              if (is_debugging)
-              {
-                run_next_step = true;
-              }
-            } break;
-            // avança 10 instruções se estiver debugando
-            case SDLK_m: {
-              if (is_debugging)
-              {
-                run_n_steps = 10;
-              }
             } break;
           }
         }
