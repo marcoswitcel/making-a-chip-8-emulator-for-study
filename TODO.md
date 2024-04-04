@@ -17,6 +17,7 @@ subtítulo: 'The Instructions' da página: [https://austinmorlan.com/posts/chip8
 * definir como parametrizar o conceito de ciclos antes de buscar mais input
 * pesquisa como saber quando deve ser feito o flush pra tela
 * testar com o programa 'tetris', ainda há diversas falhas, apesar dos testes passarem
+* implementar alguma forma de renderizar texto
 * implementar um debugador simples, step a step (talvez com contador e breakpoint condicional)
 * implementar um keypad viewer
 * implementar algum tipo de sistema de mapeamento de teclas do keypad

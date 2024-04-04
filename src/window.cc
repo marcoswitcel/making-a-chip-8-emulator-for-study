@@ -7,10 +7,11 @@
 #include "./chip8_machine.cc"
 #include "./utils.macro.h"
 
-static constexpr int WIDTH = 1024;
-static constexpr int HEIGHT = 728;
+static constexpr int WINDOW_WIDTH = 1024;
+static constexpr int WINDOW_HEIGHT = 728;
 static unsigned UI_TICKS_PER_SECOND = 60;
 
+static bool is_paused = false;
 static bool is_debugging = false;
 static bool run_next_step = false;
 static int run_n_steps = 0;
@@ -33,8 +34,8 @@ static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, C
   SDL_Rect area = {
     .x = 0,
     .y = 0,
-    .w = WIDTH,
-    .h = HEIGHT,
+    .w = WINDOW_WIDTH,
+    .h = WINDOW_HEIGHT,
   };
 
   SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
@@ -48,13 +49,24 @@ static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, C
   int pitch;
   SDL_LockTexture(chip8_screen_memory, NULL, &pixels, &pitch);
 
-  memcpy(pixels, chip8_machine->screen_buffer, 64 * 32 * 4);
+  memcpy(pixels, chip8_machine->screen_buffer, CHIP8_SCREEN_WIDTH * CHIP8_SCREEN_HEIGHT * 4);
 
   SDL_UnlockTexture(chip8_screen_memory);
 
   constexpr int scale_factor = 14; // temporário?
-  SDL_Rect dest = { 10, 10, 64 * scale_factor, 32 * scale_factor };
+  SDL_Rect dest = {
+    .x = (WINDOW_WIDTH / 2) - (CHIP8_SCREEN_WIDTH * scale_factor / 2),
+    .y = 10, .w = CHIP8_SCREEN_WIDTH * scale_factor, .h = CHIP8_SCREEN_HEIGHT * scale_factor
+  };
   SDL_RenderCopy(renderer, chip8_screen_memory, NULL, &dest);
+
+  if (is_paused)
+  {
+    SDL_Rect overlay = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
+    SDL_Color overlay_color = { 0, 0, 0, 160 };
+    SDL_SetRenderDrawColor(renderer, overlay_color.r, overlay_color.g, overlay_color.b, overlay_color.a);
+    SDL_RenderFillRect(renderer, &overlay);
+  }
 
   SDL_RenderPresent(renderer);
 }
@@ -142,6 +154,10 @@ static void handle_events_and_inputs(SDL_Window *window, Context_Data *context, 
             } break;
             case SDLK_v: {
               chip8_machine->keypad_state[0xF] = 1;
+            } break;
+            // toggle pausa
+            case SDLK_p: {
+              is_paused = !is_paused;
             } break;
             // toggle modo depuração
             case SDLK_b: {
@@ -271,8 +287,8 @@ int open_window(const char *filename)
     "Chip-8 Emulador: Executando",
     SDL_WINDOWPOS_CENTERED,
     SDL_WINDOWPOS_CENTERED,
-    WIDTH,
-    HEIGHT,
+    WINDOW_WIDTH,
+    WINDOW_HEIGHT,
     0
   );
 
@@ -316,21 +332,22 @@ int open_window(const char *filename)
       }
       else
       {
-        /**
-         * @todo Por hora executo toda a rotina de processamento de input, porém, seria interessante
-         * separar o input da UI do input do interpretador.
-         */
-        handle_events_and_inputs(window, &context, &should_quit, &chip8_machine);
         execute_n_cycles = 0;
       }
     }
+
+    /**
+     * @todo Por hora executo toda a rotina de processamento de input, porém, seria interessante
+     * separar o input da UI do input do interpretador.
+     */
+    handle_events_and_inputs(window, &context, &should_quit, &chip8_machine);
 
     /**
      * @note Decidi buscar e atualizar input a cada ciclo, caso tenha algum dado novo de input,
      * mas uma otimização que poderia ser feita, é só buscar atualizar os dados de input se for usada
      * alguma das instruções que leem o estado do 'keypad'.
      */
-    for (uint8_t i = 0; i < execute_n_cycles; i++)
+    if (!is_paused) for (uint8_t i = 0; i < execute_n_cycles; i++)
     {
       // Processa eventos e inputs aqui
       handle_events_and_inputs(window, &context, &should_quit, &chip8_machine);
