@@ -63,7 +63,7 @@ static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, C
   if (is_paused)
   {
     SDL_Rect overlay = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
-    SDL_Color overlay_color = { 0, 0, 0, 160 };
+    SDL_Color overlay_color = { 0, 0, 0, 200 };
     SDL_SetRenderDrawColor(renderer, overlay_color.r, overlay_color.g, overlay_color.b, overlay_color.a);
     SDL_RenderFillRect(renderer, &overlay);
   }
