@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdlib.h>
+#include <string.h>
 
 #include <SDL2/SDL.h>
 
@@ -23,6 +24,35 @@ typedef struct Context_Data {
   int32_t mouse_x;
   int32_t mouse_y;
 } Context_Data;
+
+static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_machine)
+{
+  SDL_Texture *debug_panel_view = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, 64, 32);
+  void *pixels = NULL;
+  int pitch;
+  SDL_LockTexture(debug_panel_view, NULL, &pixels, &pitch);
+
+  for (int i = 0; i < CHIP8_SCREEN_WIDTH * CHIP8_SCREEN_HEIGHT; i++)
+  {
+    uint32_t *pixel = &((uint32_t*) pixels)[i];
+    *pixel = 0xCCCCCCFF;
+  }
+
+  SDL_UnlockTexture(debug_panel_view);
+
+  // copia pro buffer visível
+  SDL_Rect dest = {
+    .x = 0, .y = WINDOW_HEIGHT - (WINDOW_HEIGHT / 3),
+    .w = WINDOW_WIDTH, .h = WINDOW_HEIGHT / 3
+  };
+  SDL_RenderCopy(renderer, debug_panel_view, NULL, &dest);
+  
+  // linha vermelha no rodapé
+  SDL_Rect overlay = { 0, WINDOW_HEIGHT - 10, WINDOW_WIDTH, 10 };
+  SDL_Color overlay_color = { 255, 0, 0, 255 };
+  SDL_SetRenderDrawColor(renderer, overlay_color.r, overlay_color.g, overlay_color.b, overlay_color.a);
+  SDL_RenderFillRect(renderer, &overlay);
+}
 
 static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, Context_Data *context)
 {
@@ -66,6 +96,11 @@ static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, C
     SDL_Color overlay_color = { 0, 0, 0, 200 };
     SDL_SetRenderDrawColor(renderer, overlay_color.r, overlay_color.g, overlay_color.b, overlay_color.a);
     SDL_RenderFillRect(renderer, &overlay);
+  }
+
+  if (is_debugging)
+  {
+    render_debug_panel(renderer, chip8_machine);
   }
 
   SDL_RenderPresent(renderer);
