@@ -25,9 +25,21 @@ typedef struct Context_Data {
   int32_t mouse_y;
 } Context_Data;
 
+/**
+ * @brief 
+ * 
+ * @todo João, implementar um charset com letras, no estilo do charset padrão usado no interpretador
+ * 
+ * @param digit 
+ * @param buffer 
+ * @param buffer_width 
+ * @param buffer_height 
+ * @param x 
+ * @param y 
+ */
 static void render_char(int digit, uint32_t *buffer, uint32_t buffer_width, uint32_t buffer_height, uint32_t x, uint32_t y)
 {
-  assert(digit > -1 && digit < 10);
+  assert(digit > -1 && digit < 10); // @note precisa de um charset maior
 
   for (int row = 0; row < 5; row++)
   {
@@ -41,7 +53,11 @@ static void render_char(int digit, uint32_t *buffer, uint32_t buffer_width, uint
       {
         uint32_t index = (y + row) * buffer_width + (col + x);
         assert(index < buffer_width * buffer_height);
-        buffer[index] = 0xFF0000FF;
+        
+        if (index < buffer_width * buffer_height)
+        {
+          buffer[index] = 0xFF0000FF;
+        }
       }
     }
   }
@@ -49,21 +65,25 @@ static void render_char(int digit, uint32_t *buffer, uint32_t buffer_width, uint
 
 static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_machine)
 {
-  SDL_Texture *debug_panel_view = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, 64, 32);
+  SDL_Texture *debug_panel_view = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, 128, 64);
   void *pixels = NULL;
   int pitch;
   SDL_LockTexture(debug_panel_view, NULL, &pixels, &pitch);
 
-  for (unsigned i = 0; i < CHIP8_SCREEN_WIDTH * CHIP8_SCREEN_HEIGHT; i++)
+  for (unsigned i = 0; i < CHIP8_SCREEN_WIDTH * CHIP8_SCREEN_HEIGHT * 4; i++)
   {
     uint32_t *pixel = &((uint32_t*) pixels)[i];
     *pixel = 0xCCCCCCFF;
   }
 
-  render_char(0, (uint32_t *) pixels, 64, 32, 0, 0);
-  render_char(1, (uint32_t *) pixels, 64, 32, 0, 8);
-  render_char(2, (uint32_t *) pixels, 64, 32, 0, 16);
-  render_char(9, (uint32_t *) pixels, 64, 32, 0, 24);
+  render_char(0, (uint32_t *) pixels, 128, 64, 0, 0);
+  render_char(1, (uint32_t *) pixels, 128, 64, 0, 5);
+  render_char(2, (uint32_t *) pixels, 128, 64, 0, 10);
+  render_char(9, (uint32_t *) pixels, 128, 64, 0, 15);
+  render_char(1, (uint32_t *) pixels, 128, 64, 0, 20);
+  render_char(0, (uint32_t *) pixels, 128, 64, 8, 20);
+
+  render_char(chip8_machine->stack_pointer, (uint32_t *) pixels, 128, 64, 0, 25);
 
   SDL_UnlockTexture(debug_panel_view);
 
