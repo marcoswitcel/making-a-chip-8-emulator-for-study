@@ -28,16 +28,14 @@ typedef struct Context_Data {
 static void render_char(int digit, uint32_t *buffer, uint32_t buffer_width, uint32_t buffer_height, uint32_t x, uint32_t y)
 {
   assert(digit > -1 && digit < 10);
-printf("%d\n", digit);
 
-  for (int row = 0; row < 8; row++)
+  for (int row = 0; row < 5; row++)
   {
-    const uint8_t sprite_byte = fontset[digit * 8 + row];
+    const uint8_t sprite_byte = fontset[digit * 5 + row];
 
     for (int col = 0; col < 8; col++)
     {
       uint8_t pixel_on = sprite_byte & (0x80 >> col);
-      printf("%d", pixel_on > 0);
   
       if (pixel_on)
       {
@@ -45,8 +43,7 @@ printf("%d\n", digit);
         assert(index < buffer_width * buffer_height);
         buffer[index] = 0xFF0000FF;
       }
-    } 
-    printf("\n");
+    }
   }
 }
 
@@ -64,8 +61,9 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
   }
 
   render_char(0, (uint32_t *) pixels, 64, 32, 0, 0);
-  render_char(0, (uint32_t *) pixels, 64, 32, 0, 8);
-  render_char(1, (uint32_t *) pixels, 64, 32, 16, 16);
+  render_char(1, (uint32_t *) pixels, 64, 32, 0, 8);
+  render_char(2, (uint32_t *) pixels, 64, 32, 0, 16);
+  render_char(9, (uint32_t *) pixels, 64, 32, 0, 24);
 
   SDL_UnlockTexture(debug_panel_view);
 
