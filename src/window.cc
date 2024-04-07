@@ -16,6 +16,7 @@ static unsigned UI_TICKS_PER_SECOND = 60;
 
 static bool is_paused = false;
 static bool is_debugging = false;
+static bool show_debug_view = false;
 static bool run_next_step = false;
 static int run_n_steps = 0;
 
@@ -166,7 +167,7 @@ static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, C
     SDL_RenderFillRect(renderer, &overlay);
   }
 
-  if (is_debugging || true)
+  if (is_debugging || show_debug_view)
   {
     render_debug_panel(renderer, chip8_machine);
   }
@@ -265,6 +266,10 @@ static void handle_events_and_inputs(SDL_Window *window, Context_Data *context, 
             // toggle modo depuração
             case SDLK_b: {
               is_debugging = !is_debugging;
+            } break;
+            // toggle painel de debug
+            case SDLK_COMMA: {
+              show_debug_view = !show_debug_view;
             } break;
             // avança uma instrução se estiver debugando
             case SDLK_n: {
