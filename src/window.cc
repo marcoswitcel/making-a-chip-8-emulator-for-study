@@ -7,6 +7,7 @@
 
 #include "./debugger_fontset.cc"
 #include "./chip8_machine.cc"
+#include "./utils.cc"
 #include "./utils.macro.h"
 
 static constexpr int WINDOW_WIDTH = 1024;
@@ -31,20 +32,20 @@ typedef struct Context_Data {
  * 
  * @todo João, implementar um charset com letras, no estilo do charset padrão usado no interpretador
  * 
- * @param digit 
+ * @param char_index 
  * @param buffer 
  * @param buffer_width 
  * @param buffer_height 
  * @param x 
  * @param y 
  */
-static void render_char(int digit, uint32_t *buffer, uint32_t buffer_width, uint32_t buffer_height, uint32_t x, uint32_t y)
+static void render_char(char char_index, uint32_t *buffer, uint32_t buffer_width, uint32_t buffer_height, uint32_t x, uint32_t y)
 {
-  assert(digit > -1 && digit < 128); // @note precisa de um charset maior
+  assert(char_index > -1 && char_index < 128); // @note precisa de um charset maior
 
   for (int row = 0; row < 5; row++)
   {
-    const uint8_t sprite_byte = debbuger_fontset[digit * 5 + row];
+    const uint8_t sprite_byte = debbuger_fontset[char_index * 5 + row];
 
     for (int col = 0; col < 8; col++)
     {
@@ -64,6 +65,17 @@ static void render_char(int digit, uint32_t *buffer, uint32_t buffer_width, uint
   }
 }
 
+static void render_line(const char *cstring, uint32_t *buffer, uint32_t buffer_width, uint32_t buffer_height, uint32_t x, uint32_t y)
+{
+  int length = strlen(cstring);
+
+  for (int i = 0; i < length; i++)
+  {
+    int offset = i * 8;
+    render_char(cstring[i], (uint32_t *) buffer, buffer_width, buffer_height, x + offset, y);
+  }
+}
+
 static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_machine)
 {
   SDL_Texture *debug_panel_view = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, 128, 64);
@@ -77,14 +89,23 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
     *pixel = 0xCCCCCCFF;
   }
 
-  render_char(chip8_machine->stack_pointer + '0', (uint32_t *) pixels, 128, 64, 0, 0);
+  char label_sp[] = {'s', 'p', ':', chip8_machine->stack_pointer + '0', '\0'};
+  render_line(label_sp, (uint32_t *) pixels, 128, 64, 0, 0);
+
+  char *label_i = "i:";
+  render_line(label_i, (uint32_t *) pixels, 128, 64, 0, 5);
+  label_i = int_to_cstring(chip8_machine->index_register);
+  render_line(label_i, (uint32_t *) pixels, 128, 64, 16, 5);
+  delete label_i; // @todo João, não tenho certeza se dá pra fazer assim
+  
 
   SDL_UnlockTexture(debug_panel_view);
 
   // copia pro buffer visível
   SDL_Rect dest = {
     .x = 0, .y = WINDOW_HEIGHT - (WINDOW_HEIGHT / 3),
-    .w = WINDOW_WIDTH, .h = WINDOW_HEIGHT / 3
+    // .w = WINDOW_WIDTH, .h = WINDOW_HEIGHT / 3
+    .w = 256 * 2, .h = 128 * 2
   };
   SDL_RenderCopy(renderer, debug_panel_view, NULL, &dest);
   
