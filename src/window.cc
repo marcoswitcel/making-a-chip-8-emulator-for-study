@@ -5,6 +5,7 @@
 
 #include <SDL2/SDL.h>
 
+#include "./debugger_fontset.cc"
 #include "./chip8_machine.cc"
 #include "./utils.macro.h"
 
@@ -39,11 +40,11 @@ typedef struct Context_Data {
  */
 static void render_char(int digit, uint32_t *buffer, uint32_t buffer_width, uint32_t buffer_height, uint32_t x, uint32_t y)
 {
-  assert(digit > -1 && digit < 10); // @note precisa de um charset maior
+  assert(digit > -1 && digit < 128); // @note precisa de um charset maior
 
   for (int row = 0; row < 5; row++)
   {
-    const uint8_t sprite_byte = fontset[digit * 5 + row];
+    const uint8_t sprite_byte = debbuger_fontset[digit * 5 + row];
 
     for (int col = 0; col < 8; col++)
     {
@@ -76,14 +77,7 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
     *pixel = 0xCCCCCCFF;
   }
 
-  render_char(0, (uint32_t *) pixels, 128, 64, 0, 0);
-  render_char(1, (uint32_t *) pixels, 128, 64, 0, 5);
-  render_char(2, (uint32_t *) pixels, 128, 64, 0, 10);
-  render_char(9, (uint32_t *) pixels, 128, 64, 0, 15);
-  render_char(1, (uint32_t *) pixels, 128, 64, 0, 20);
-  render_char(0, (uint32_t *) pixels, 128, 64, 8, 20);
-
-  render_char(chip8_machine->stack_pointer, (uint32_t *) pixels, 128, 64, 0, 25);
+  render_char(chip8_machine->stack_pointer + '0', (uint32_t *) pixels, 128, 64, 0, 0);
 
   SDL_UnlockTexture(debug_panel_view);
 
