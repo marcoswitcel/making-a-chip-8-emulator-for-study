@@ -104,6 +104,13 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
   pc = int_to_cstring(chip8_machine->program_counter);
   render_line(pc, (uint32_t *) pixels, 128, 64, 24, 12);
   delete pc; // @todo João, não tenho certeza se dá pra fazer assim
+
+  for (int i = 0; i < 6; i++) // @incomplete
+  {
+    char *number = int_to_cstring(chip8_machine->registers[i]);
+    render_line(pc, (uint32_t *) pixels, 128, 64, 56, 5 * i + i);
+    delete number;
+  }
   
 
   SDL_UnlockTexture(debug_panel_view);
