@@ -93,10 +93,16 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
   render_line(label_sp, (uint32_t *) pixels, 128, 64, 0, 0);
 
   char *label_i = "i:";
-  render_line(label_i, (uint32_t *) pixels, 128, 64, 0, 5);
+  render_line(label_i, (uint32_t *) pixels, 128, 64, 0, 6);
   label_i = int_to_cstring(chip8_machine->index_register);
-  render_line(label_i, (uint32_t *) pixels, 128, 64, 16, 5);
+  render_line(label_i, (uint32_t *) pixels, 128, 64, 16, 6);
   delete label_i; // @todo João, não tenho certeza se dá pra fazer assim
+
+  char *pc = "pc:";
+  render_line(pc, (uint32_t *) pixels, 128, 64, 0, 12);
+  pc = int_to_cstring(chip8_machine->program_counter);
+  render_line(pc, (uint32_t *) pixels, 128, 64, 24, 12);
+  delete pc; // @todo João, não tenho certeza se dá pra fazer assim
   
 
   SDL_UnlockTexture(debug_panel_view);
@@ -160,7 +166,7 @@ static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, C
     SDL_RenderFillRect(renderer, &overlay);
   }
 
-  if (is_debugging)
+  if (is_debugging || true)
   {
     render_debug_panel(renderer, chip8_machine);
   }
