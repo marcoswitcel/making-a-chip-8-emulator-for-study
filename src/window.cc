@@ -173,8 +173,7 @@ static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, C
     SDL_SetRenderDrawColor(renderer, overlay_color.r, overlay_color.g, overlay_color.b, overlay_color.a);
     SDL_RenderFillRect(renderer, &overlay);
   }
-
-  if (is_debugging || show_debug_view)
+  else if (is_debugging || show_debug_view)
   {
     render_debug_panel(renderer, chip8_machine);
   }
