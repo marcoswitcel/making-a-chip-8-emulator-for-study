@@ -105,10 +105,21 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
   render_line(pc, (uint32_t *) pixels, 128, 64, 24, 12);
   delete pc; // @todo João, não tenho certeza se dá pra fazer assim
 
-  for (int i = 0; i < 6; i++) // @incomplete
+  /**
+   * @note Acho que o melhor seria ter o painel de debug separado em diferentes 'viewers',
+   * por exemplo, um visualizador de registradores, um visualizador de dados como PC, I e SP.
+   * Um 'memory viewer'
+   */
+  for (int i = 0; i < 6; i++)
   {
     char *number = int_to_cstring(chip8_machine->registers[i]);
     render_line(pc, (uint32_t *) pixels, 128, 64, 56, 5 * i + i);
+    delete number;
+  }
+  for (int i = 0; i < 6; i++)
+  {
+    char *number = int_to_cstring(chip8_machine->registers[i + 6]);
+    render_line(pc, (uint32_t *) pixels, 128, 64, 77, 5 * i + i);
     delete number;
   }
   
