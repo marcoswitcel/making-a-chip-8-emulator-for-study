@@ -77,8 +77,18 @@ static void render_line(const char *cstring, uint32_t *buffer, uint32_t buffer_w
   }
 }
 
+static inline void render_full_overlay(SDL_Renderer *renderer)
+{
+  SDL_Rect overlay = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
+  SDL_Color overlay_color = { 0, 0, 0, 200 };
+  SDL_SetRenderDrawColor(renderer, overlay_color.r, overlay_color.g, overlay_color.b, overlay_color.a);
+  SDL_RenderFillRect(renderer, &overlay);
+} 
+
 static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_machine)
 {
+  render_full_overlay(renderer);
+
   SDL_Texture *debug_panel_view = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, 128, 64);
   void *pixels = NULL;
   int pitch;
@@ -87,7 +97,7 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
   for (unsigned i = 0; i < CHIP8_SCREEN_WIDTH * CHIP8_SCREEN_HEIGHT * 4; i++)
   {
     uint32_t *pixel = &((uint32_t*) pixels)[i];
-    *pixel = 0xCCCCCCFF;
+    *pixel = 0x00000000;
   }
 
   char label_sp[] = {'s', 'p', ':', chip8_machine->stack_pointer + '0', '\0'};
@@ -128,10 +138,16 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
 
   // copia pro buffer visível
   SDL_Rect dest = {
-    .x = 0, .y = WINDOW_HEIGHT - (WINDOW_HEIGHT / 3),
+    .x = 0, .y = 0,
+    // .x = 0, .y = WINDOW_HEIGHT - (WINDOW_HEIGHT / 3),
     // .w = WINDOW_WIDTH, .h = WINDOW_HEIGHT / 3
     .w = 256 * 2, .h = 128 * 2
   };
+
+  // @note para manter o canal alfa 
+  // @reference https://stackoverflow.com/questions/29807872/sdl2-texture-render-target-doesnt-have-alpha-transparency
+  SDL_SetTextureBlendMode(debug_panel_view, SDL_BLENDMODE_BLEND);
+
   SDL_RenderCopy(renderer, debug_panel_view, NULL, &dest);
   
   // linha vermelha no rodapé
@@ -179,10 +195,7 @@ static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, C
 
   if (is_paused)
   {
-    SDL_Rect overlay = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
-    SDL_Color overlay_color = { 0, 0, 0, 200 };
-    SDL_SetRenderDrawColor(renderer, overlay_color.r, overlay_color.g, overlay_color.b, overlay_color.a);
-    SDL_RenderFillRect(renderer, &overlay);
+    render_full_overlay(renderer);
   }
   else if (is_debugging || show_debug_view)
   {
