@@ -11,7 +11,7 @@
 #include "./utils.macro.h"
 
 static constexpr int WINDOW_WIDTH = 1024;
-static constexpr int WINDOW_HEIGHT = 728;
+static constexpr int WINDOW_HEIGHT = 512;
 static unsigned UI_TICKS_PER_SECOND = 60;
 
 static bool is_paused = false;
@@ -89,30 +89,30 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
 {
   render_full_overlay(renderer);
 
-  SDL_Texture *debug_panel_view = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, 128, 64);
+  SDL_Texture *debug_panel_view = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, 256, 256);
   void *pixels = NULL;
   int pitch;
   SDL_LockTexture(debug_panel_view, NULL, &pixels, &pitch);
 
-  for (unsigned i = 0; i < CHIP8_SCREEN_WIDTH * CHIP8_SCREEN_HEIGHT * 4; i++)
+  for (unsigned i = 0; i < 256 * 256; i++)
   {
     uint32_t *pixel = &((uint32_t*) pixels)[i];
     *pixel = 0x00000000;
   }
 
   char label_sp[] = {'s', 'p', ':', chip8_machine->stack_pointer + '0', '\0'};
-  render_line(label_sp, (uint32_t *) pixels, 128, 64, 0, 0);
+  render_line(label_sp, (uint32_t *) pixels, 256, 256, 0, 0);
 
   char *label_i = "i:";
-  render_line(label_i, (uint32_t *) pixels, 128, 64, 0, 6);
+  render_line(label_i, (uint32_t *) pixels, 256, 256, 0, 6);
   label_i = int_to_cstring(chip8_machine->index_register);
-  render_line(label_i, (uint32_t *) pixels, 128, 64, 16, 6);
+  render_line(label_i, (uint32_t *) pixels, 256, 256, 16, 6);
   delete label_i; // @todo João, não tenho certeza se dá pra fazer assim
 
   char *pc = "pc:";
-  render_line(pc, (uint32_t *) pixels, 128, 64, 0, 12);
+  render_line(pc, (uint32_t *) pixels, 256, 256, 0, 12);
   pc = int_to_cstring(chip8_machine->program_counter);
-  render_line(pc, (uint32_t *) pixels, 128, 64, 24, 12);
+  render_line(pc, (uint32_t *) pixels, 256, 256, 24, 12);
   delete pc; // @todo João, não tenho certeza se dá pra fazer assim
 
   /**
@@ -120,16 +120,10 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
    * por exemplo, um visualizador de registradores, um visualizador de dados como PC, I e SP.
    * Um 'memory viewer'
    */
-  for (int i = 0; i < 6; i++)
+  for (int i = 0; i < 16; i++)
   {
     char *number = int_to_cstring(chip8_machine->registers[i]);
-    render_line(pc, (uint32_t *) pixels, 128, 64, 56, 5 * i + i);
-    delete number;
-  }
-  for (int i = 0; i < 6; i++)
-  {
-    char *number = int_to_cstring(chip8_machine->registers[i + 6]);
-    render_line(pc, (uint32_t *) pixels, 128, 64, 77, 5 * i + i);
+    render_line(number, (uint32_t *) pixels, 256, 256, 56, 5 * i + i);
     delete number;
   }
   
@@ -138,10 +132,10 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
 
   // copia pro buffer visível
   SDL_Rect dest = {
-    .x = 0, .y = 0,
+    .x = 10, .y = 10,
     // .x = 0, .y = WINDOW_HEIGHT - (WINDOW_HEIGHT / 3),
     // .w = WINDOW_WIDTH, .h = WINDOW_HEIGHT / 3
-    .w = 256 * 2, .h = 128 * 2
+    .w = 256 * 4, .h = 256 * 4
   };
 
   // @note para manter o canal alfa 
@@ -149,12 +143,6 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
   SDL_SetTextureBlendMode(debug_panel_view, SDL_BLENDMODE_BLEND);
 
   SDL_RenderCopy(renderer, debug_panel_view, NULL, &dest);
-  
-  // linha vermelha no rodapé
-  SDL_Rect overlay = { 0, WINDOW_HEIGHT - 10, WINDOW_WIDTH, 10 };
-  SDL_Color overlay_color = { 255, 0, 0, 255 };
-  SDL_SetRenderDrawColor(renderer, overlay_color.r, overlay_color.g, overlay_color.b, overlay_color.a);
-  SDL_RenderFillRect(renderer, &overlay);
 }
 
 static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, Context_Data *context)
@@ -186,10 +174,11 @@ static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, C
 
   SDL_UnlockTexture(chip8_screen_memory);
 
-  constexpr int scale_factor = 14; // temporário?
+  constexpr int scale_factor = 15; // temporário?
   SDL_Rect dest = {
     .x = (WINDOW_WIDTH / 2) - (CHIP8_SCREEN_WIDTH * scale_factor / 2),
-    .y = 10, .w = CHIP8_SCREEN_WIDTH * scale_factor, .h = CHIP8_SCREEN_HEIGHT * scale_factor
+    .y = (WINDOW_HEIGHT / 2) - (CHIP8_SCREEN_HEIGHT * scale_factor / 2),
+    .w = CHIP8_SCREEN_WIDTH * scale_factor, .h = CHIP8_SCREEN_HEIGHT * scale_factor
   };
   SDL_RenderCopy(renderer, chip8_screen_memory, NULL, &dest);
 
@@ -200,6 +189,15 @@ static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, C
   else if (is_debugging || show_debug_view)
   {
     render_debug_panel(renderer, chip8_machine);
+
+    if (is_debugging)
+    {
+      // linha vermelha no rodapé
+      SDL_Rect overlay = { 0, WINDOW_HEIGHT - 10, WINDOW_WIDTH, 10 };
+      SDL_Color overlay_color = { 255, 0, 0, 255 };
+      SDL_SetRenderDrawColor(renderer, overlay_color.r, overlay_color.g, overlay_color.b, overlay_color.a);
+      SDL_RenderFillRect(renderer, &overlay);
+    }
   }
 
   SDL_RenderPresent(renderer);
