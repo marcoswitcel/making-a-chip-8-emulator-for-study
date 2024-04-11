@@ -220,6 +220,7 @@ void execute_a_cycle(Chip8_Machine &chip8_machine)
   
   // fetch opcode, como possuem dois bytes é necessário fazer o SHIFT e o OR
   uint16_t opcode = (memory[chip8_machine.program_counter] << 8u) | memory[chip8_machine.program_counter + 1];
+  chip8_machine.last_opcode_executed = opcode;
 
   // incrementando o program counter
   chip8_machine.program_counter += 2;

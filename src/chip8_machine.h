@@ -50,6 +50,8 @@ typedef struct Chip8_Machine {
   bool keypad_state[16];
 
   // outras coisas
+  uint16_t last_opcode_executed;
+  
 } Chip8_Machine;
 
 #endif // _CHIP8_MACHINE_H_

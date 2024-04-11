@@ -129,7 +129,7 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
 
   char *opcode = "op:";
   render_line(opcode, (uint32_t *) pixels, 256, 256, 0, 100);
-  opcode = int_to_cstring_in_base(0xFE2A, HEXADECIMAL);
+  opcode = int_to_cstring_in_base(chip8_machine->last_opcode_executed, HEXADECIMAL);
   render_line(opcode, (uint32_t *) pixels, 256, 256, 32, 100);
   delete opcode;
   
