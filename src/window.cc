@@ -126,6 +126,12 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
     render_line(number, (uint32_t *) pixels, 256, 256, 56, 5 * i + i);
     delete number;
   }
+
+  char *opcode = "op:";
+  render_line(opcode, (uint32_t *) pixels, 256, 256, 0, 100);
+  opcode = int_to_cstring_in_base(0xFE2A, HEXADECIMAL);
+  render_line(opcode, (uint32_t *) pixels, 256, 256, 32, 100);
+  delete opcode;
   
 
   SDL_UnlockTexture(debug_panel_view);
