@@ -21,6 +21,7 @@ subtítulo: 'The Instructions' da página: [https://austinmorlan.com/posts/chip8
 * implementar um debugador simples, step a step (talvez com contador e breakpoint condicional)
 * implementar um keypad viewer
 * implementar algum tipo de sistema de mapeamento de teclas do keypad
+* no momento o código possui defeitos que causam a terminação do processo, suponho que seja pelo uso de memória, deve haver muitos 'memory leaks'.
 
 # Ideias
 
