@@ -66,6 +66,32 @@ static void render_char(char char_index, uint32_t *buffer, uint32_t buffer_width
   }
 }
 
+static void render_char_coloful(char char_index, uint32_t *buffer, uint32_t buffer_width, uint32_t buffer_height, uint32_t x, uint32_t y, uint32_t color)
+{
+  assert(char_index > -1 && char_index < 128); // @note precisa de um charset maior
+
+  for (int row = 0; row < 5; row++)
+  {
+    const uint8_t sprite_byte = debbuger_fontset[char_index * 5 + row];
+
+    for (int col = 0; col < 8; col++)
+    {
+      uint8_t pixel_on = sprite_byte & (0x80 >> col);
+  
+      if (pixel_on)
+      {
+        uint32_t index = (y + row) * buffer_width + (col + x);
+        assert(index < buffer_width * buffer_height);
+        
+        if (index < buffer_width * buffer_height)
+        {
+          buffer[index] = color;
+        }
+      }
+    }
+  }
+}
+
 static void render_line(const char *cstring, uint32_t *buffer, uint32_t buffer_width, uint32_t buffer_height, uint32_t x, uint32_t y)
 {
   int length = strlen(cstring);
@@ -146,6 +172,32 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
   render_line(opcode, (uint32_t *) pixels, 256, 256, 32, 100);
   delete opcode;
   
+  /**
+   * render keypad
+   * 
+   * |1|2|3|C|
+   * |4|5|6|D|
+   * |7|8|9|E|
+   * |A|0|B|F|
+   * 
+   */
+  {
+    const char digits_in_order[] = "123C456D789EA0BF";
+    const int length = sizeof(digits_in_order) / sizeof(char) - 1;
+
+    for (int i = 0; i < length; i++)
+    {
+      const int offset_x = 200;
+      const int offset_y = 70;
+      const int pos_x = offset_x + (i % 4) * 8;
+      const int pos_y = offset_y + (i / 4) * 8;
+      const char digit = digits_in_order[i];
+      const int key_index = (digit < 'A') ? digit - '0' : digit - 'A' + 10;
+
+      uint32_t color = (chip8_machine->keypad_state[key_index]) ? 0x00FF00FF : 0xFF0000FF;
+      render_char_coloful(digits_in_order[i], (uint32_t *) pixels, 256, 256, pos_x, pos_y, color);
+    }
+  }
 
   SDL_UnlockTexture(debug_panel_view);
 

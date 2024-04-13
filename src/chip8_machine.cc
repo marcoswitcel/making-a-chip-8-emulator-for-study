@@ -47,6 +47,11 @@ static inline void reset_machine(Chip8_Machine &chip8_machine)
   {
     chip8_machine.memory[FONT_SET_SIZE + i] = fontset[i];
   }
+
+  for (unsigned i = 0; i < 16; i++)
+  {
+    chip8_machine.keypad_state[i] = false;
+  }
 }
 
 static inline void clearing_screen_buffer(Chip8_Machine &chip8_machine)
