@@ -115,6 +115,10 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
   render_line(pc, (uint32_t *) pixels, 256, 256, 24, 12);
   delete pc; // @todo João, não tenho certeza se dá pra fazer assim
 
+  // @todo João, printar delay timer
+
+  // @todo João, printar sound timer
+
   /**
    * @note Acho que o melhor seria ter o painel de debug separado em diferentes 'viewers',
    * por exemplo, um visualizador de registradores, um visualizador de dados como PC, I e SP.
