@@ -115,9 +115,17 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
   render_line(pc, (uint32_t *) pixels, 256, 256, 24, 12);
   delete pc; // @todo João, não tenho certeza se dá pra fazer assim
 
-  // @todo João, printar delay timer
+  char *label_dt = "dt:";
+  render_line(label_dt, (uint32_t *) pixels, 256, 256, 0, 18);
+  label_dt = int_to_cstring(chip8_machine->delay_timer);
+  render_line(label_dt, (uint32_t *) pixels, 256, 256, 24, 18);
+  delete label_dt; // @todo João, não tenho certeza se dá pra fazer assim
 
-  // @todo João, printar sound timer
+  char *label_st = "st:";
+  render_line(label_st, (uint32_t *) pixels, 256, 256, 0, 24);
+  label_st = int_to_cstring(chip8_machine->sound_timer);
+  render_line(label_st, (uint32_t *) pixels, 256, 256, 24, 24);
+  delete label_st; // @todo João, não tenho certeza se dá pra fazer assim
 
   /**
    * @note Acho que o melhor seria ter o painel de debug separado em diferentes 'viewers',
