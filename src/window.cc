@@ -150,6 +150,8 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
   SDL_SetTextureBlendMode(debug_panel_view, SDL_BLENDMODE_BLEND);
 
   SDL_RenderCopy(renderer, debug_panel_view, NULL, &dest);
+
+  SDL_DestroyTexture(debug_panel_view);
 }
 
 static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, Context_Data *context)
@@ -188,6 +190,8 @@ static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, C
     .w = CHIP8_SCREEN_WIDTH * scale_factor, .h = CHIP8_SCREEN_HEIGHT * scale_factor
   };
   SDL_RenderCopy(renderer, chip8_screen_memory, NULL, &dest);
+
+  SDL_DestroyTexture(chip8_screen_memory);
 
   if (is_paused)
   {
