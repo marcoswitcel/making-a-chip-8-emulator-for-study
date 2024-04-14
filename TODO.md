@@ -19,7 +19,7 @@ subtítulo: 'The Instructions' da página: [https://austinmorlan.com/posts/chip8
 * testar com o programa 'tetris', ainda há diversas falhas, apesar dos testes passarem
 * implementar alguma forma de renderizar texto
 * implementar um debugador simples, step a step (talvez com contador e breakpoint condicional)
-* implementar um keypad viewer
+* implementar um keypad viewer -- ok
 * implementar algum tipo de sistema de mapeamento de teclas do keypad
 * no momento o código possui defeitos que causam a terminação do processo, suponho que seja pelo uso de memória, deve haver muitos 'memory leaks'. (havia leak de duas texturas, deve haver mais algum perdido, mas por hora nada crítico) -- OK
 

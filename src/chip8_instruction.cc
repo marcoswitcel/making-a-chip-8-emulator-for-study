@@ -415,7 +415,8 @@ void execute_op_Dxyn(Chip8_Machine *chip8_machine, uint16_t opcode)
           chip8_machine->registers[0xF] = 1;
         }
 
-        pixel ^= 0xFFFFFFFFu;
+        // @note aqui é necessário fazer um XOR sem apagar os dados do canal alfa
+        pixel ^= 0xFFFFFF00u;
       }
     }
   }
