@@ -13,3 +13,4 @@ Esboço inicial da descrição.
 * [https://github.com/corax89/chip8-test-rom](https://github.com/corax89/chip8-test-rom)
 * [https://stackoverflow.com/questions/822323/how-to-generate-a-random-int-in-c](https://stackoverflow.com/questions/822323/how-to-generate-a-random-int-in-c)
 * [https://multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/](https://multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/)
+* [https://www.reddit.com/r/EmuDev/comments/s940xd/collision_isnt_working_in_my_chip8_emulator_where/](https://www.reddit.com/r/EmuDev/comments/s940xd/collision_isnt_working_in_my_chip8_emulator_where/)
