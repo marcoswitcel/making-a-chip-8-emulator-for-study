@@ -235,6 +235,13 @@ void execute_a_cycle(Chip8_Machine &chip8_machine)
 
   base_instruction_jump_table[index](&chip8_machine, opcode);
 
+  /**
+   * @todo João, avaliar se não preciso sincronizar o decréscimo desses contadores considerando alguma taxa por segundo,
+   * pois os jogos estão com a temporização meio imprecisa.
+   * @todo João, avaliar por que as instruções que envolvem a rotação e a translação no programa de teste são tão lentas.
+   * Geralmente envolvem a adição e decréscimo da stack.
+   */
+
   if (chip8_machine.delay_timer > 0)
   {
     chip8_machine.delay_timer--;
