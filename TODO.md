@@ -22,6 +22,9 @@ subtítulo: 'The Instructions' da página: [https://austinmorlan.com/posts/chip8
 * implementar um keypad viewer -- ok
 * implementar algum tipo de sistema de mapeamento de teclas do keypad
 * no momento o código possui defeitos que causam a terminação do processo, suponho que seja pelo uso de memória, deve haver muitos 'memory leaks'. (havia leak de duas texturas, deve haver mais algum perdido, mas por hora nada crítico) -- OK
+* ajustar delay timer para decrementar em uma frequência mais próxima da original
+* implementar sistema de som que use o 'sound timer'
+* implementar suporte a renderizar o painel monocromático com outras cores que não sejam preto e branco
 
 # Ideias
 

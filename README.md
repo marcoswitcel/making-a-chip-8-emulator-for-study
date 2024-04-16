@@ -14,3 +14,4 @@ Esboço inicial da descrição.
 * [https://stackoverflow.com/questions/822323/how-to-generate-a-random-int-in-c](https://stackoverflow.com/questions/822323/how-to-generate-a-random-int-in-c)
 * [https://multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/](https://multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/)
 * [https://www.reddit.com/r/EmuDev/comments/s940xd/collision_isnt_working_in_my_chip8_emulator_where/](https://www.reddit.com/r/EmuDev/comments/s940xd/collision_isnt_working_in_my_chip8_emulator_where/)
+* [https://www.reddit.com/r/EmuDev/comments/vizxme/whats_a_good_way_to_handle_timing_when_you_have_a/](https://www.reddit.com/r/EmuDev/comments/vizxme/whats_a_good_way_to_handle_timing_when_you_have_a/)
