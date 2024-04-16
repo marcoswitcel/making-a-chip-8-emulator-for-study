@@ -51,6 +51,9 @@ typedef struct Chip8_Machine {
 
   // outras coisas
   uint16_t last_opcode_executed;
+
+  // acumulador
+  uint16_t delay_timer_hertz_accumulator;
   
 } Chip8_Machine;
 

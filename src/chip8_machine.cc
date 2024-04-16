@@ -52,6 +52,8 @@ static inline void reset_machine(Chip8_Machine &chip8_machine)
   {
     chip8_machine.keypad_state[i] = false;
   }
+
+  chip8_machine.delay_timer_hertz_accumulator = 0;
 }
 
 static inline void clearing_screen_buffer(Chip8_Machine &chip8_machine)
@@ -235,6 +237,9 @@ void execute_a_cycle(Chip8_Machine &chip8_machine)
 
   base_instruction_jump_table[index](&chip8_machine, opcode);
 
+  // manter o registro de quantos ciclos se passaram para poder acionar o decréscimo dos 'timers'
+  chip8_machine.delay_timer_hertz_accumulator += 1;
+
   /**
    * @todo João, avaliar se não preciso sincronizar o decréscimo desses contadores considerando alguma taxa por segundo,
    * pois os jogos estão com a temporização meio imprecisa.
@@ -242,14 +247,20 @@ void execute_a_cycle(Chip8_Machine &chip8_machine)
    * Geralmente envolvem a adição e decréscimo da stack.
    */
 
-  if (chip8_machine.delay_timer > 0)
+  // a cada 10 ciclos reseto o acumulador e tento decrementar os timers
+  if (chip8_machine.delay_timer_hertz_accumulator == 10)
   {
-    chip8_machine.delay_timer--;
-  }
+    chip8_machine.delay_timer_hertz_accumulator = 0;
 
-  if (chip8_machine.sound_timer > 0)
-  {
-    chip8_machine.sound_timer--;
+    if (chip8_machine.delay_timer > 0)
+    {
+      chip8_machine.delay_timer--;
+    }
+
+    if (chip8_machine.sound_timer > 0)
+    {
+      chip8_machine.sound_timer--;
+    }
   }
 
   /**

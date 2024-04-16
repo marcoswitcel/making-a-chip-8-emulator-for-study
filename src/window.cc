@@ -524,10 +524,10 @@ int open_window(const char *filename)
   while (!should_quit)
   {
     /**
-     * @note Por hora decidi executa 6 instruções (6 ciclos), antes de fazer o flush para a tela.
+     * @note Por hora decidi executa 10 instruções (10 ciclos), antes de fazer o flush para a tela.
      * Mas seria interessante analisar se tem alguma orientação geral sobre isso.
      */
-    uint8_t execute_n_cycles = 6;
+    uint8_t execute_n_cycles = 10;
 
     if (is_debugging)
     {
