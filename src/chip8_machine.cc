@@ -51,6 +51,7 @@ static inline void reset_machine(Chip8_Machine &chip8_machine)
   for (unsigned i = 0; i < 16; i++)
   {
     chip8_machine.keypad_state[i] = false;
+    chip8_machine.registers[i] = 0;
   }
 
   chip8_machine.delay_timer_hertz_accumulator = 0;

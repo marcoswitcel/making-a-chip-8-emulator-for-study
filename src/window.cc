@@ -366,6 +366,12 @@ static void handle_events_and_inputs(SDL_Window *window, Context_Data *context, 
             case SDLK_p: {
               is_paused = !is_paused;
             } break;
+            // restart emulação
+            case SDLK_o: {
+              // @todo João, avaliar como lidar com o recarregamento da ROM
+              reset_machine(*chip8_machine);
+              clearing_screen_buffer(*chip8_machine);
+            } break;
             // toggle modo depuração
             case SDLK_b: {
               is_debugging = !is_debugging;
