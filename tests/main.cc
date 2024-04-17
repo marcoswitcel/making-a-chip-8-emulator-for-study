@@ -760,5 +760,7 @@ int main(void)
   test_op_Fx55();
   test_op_Fx65();
   
+  printf("Sucesso! 100%% dos testes passaram.");
+
   return EXIT_SUCCESS;
 }
