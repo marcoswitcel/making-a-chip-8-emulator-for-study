@@ -171,9 +171,14 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
    */
   for (int i = 0; i < 16; i++)
   {
-    render_line("r:", (uint32_t *) pixels, 256, 256, 56, 5 * i + i);
+    char label_rx[] = {'r', ' ', ':', '\0'};
+    
+    if (i > 9) label_rx[1] = (i - 10) + 'A';
+    else label_rx[1] = i + '0';
+
+    render_line(label_rx, (uint32_t *) pixels, 256, 256, 56, 5 * i + i);
     char *number = int_to_cstring(chip8_machine->registers[i]);
-    render_line(number, (uint32_t *) pixels, 256, 256, 80, 5 * i + i);
+    render_line(number, (uint32_t *) pixels, 256, 256, 88, 5 * i + i);
     delete number;
   }
 
