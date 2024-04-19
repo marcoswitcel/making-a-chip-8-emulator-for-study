@@ -103,6 +103,17 @@ static void render_line(const char *cstring, uint32_t *buffer, uint32_t buffer_w
   }
 }
 
+static void render_line_colorful(const char *cstring, uint32_t color, uint32_t *buffer, uint32_t buffer_width, uint32_t buffer_height, uint32_t x, uint32_t y)
+{
+  int length = strlen(cstring);
+
+  for (int i = 0; i < length; i++)
+  {
+    int offset = i * 8;
+    render_char_coloful(cstring[i], (uint32_t *) buffer, buffer_width, buffer_height, x + offset, y, color);
+  }
+}
+
 static inline void render_full_overlay(SDL_Renderer *renderer)
 {
   SDL_Rect overlay = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
@@ -218,6 +229,56 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
   SDL_DestroyTexture(debug_panel_view);
 }
 
+/**
+ * @brief Renderiza o texto na posição, com a cor e a escala definida
+ * 
+ * @todo João, ajustar na fonte pelo menos os caracteres de "pausado"
+ * 
+ * @param text 
+ * @param renderer 
+ * @param x 
+ * @param y 
+ * @param scale 
+ * @param color
+ */
+static void render_text_to_screen(const char *text, SDL_Renderer *renderer, int x, int y, int scale, uint32_t color)
+{
+  const int length = strlen(text);
+  const int width = length * 8;
+  const int height = 5; 
+
+  SDL_Texture *text_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, width, height);
+  void *pixels = NULL;
+  int pitch;
+
+  SDL_LockTexture(text_texture, NULL, &pixels, &pitch);
+
+  // @todo João, otimizar isso aqui
+  for (int i = 0; i < width * height; i++)
+  {
+    uint32_t *pixel = &((uint32_t*) pixels)[i];
+    *pixel = 0x00000000;
+  }
+
+  render_line_colorful(text, color, (uint32_t *) pixels, width, height, 0, 0);
+
+  SDL_UnlockTexture(text_texture);
+
+  // copia pro buffer visível
+  SDL_Rect dest = {
+    .x = x - ((width * scale) / 2),
+    .y = y - ((height * scale) / 2),
+    .w = width * scale,
+    .h = height * scale
+  };
+
+  SDL_SetTextureBlendMode(text_texture, SDL_BLENDMODE_BLEND);
+
+  SDL_RenderCopy(renderer, text_texture, NULL, &dest);
+
+  SDL_DestroyTexture(text_texture);
+}
+
 static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, Context_Data *context)
 {
   UNUSED(context);
@@ -260,6 +321,7 @@ static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, C
   if (is_paused)
   {
     render_full_overlay(renderer);
+    render_text_to_screen("Pausado", renderer, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 4, 0xFFFFFFFF);
   }
   else if (is_debugging || show_debug_view)
   {
