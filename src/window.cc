@@ -309,7 +309,10 @@ static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, C
   int pitch;
   SDL_LockTexture(chip8_screen_memory, NULL, &pixels, &pitch);
 
-  memcpy(pixels, chip8_machine->screen_buffer, CHIP8_SCREEN_WIDTH * CHIP8_SCREEN_HEIGHT * 4);
+  for (int i = 0; i < CHIP8_SCREEN_BUFFER_SIZE; i++)
+  {
+    ((uint32_t *) pixels)[i] = chip8_machine->screen_buffer[i] ? WHITE_COLOR : BLACK_COLOR;
+  }
 
   SDL_UnlockTexture(chip8_screen_memory);
 

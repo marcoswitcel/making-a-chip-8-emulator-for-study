@@ -403,20 +403,16 @@ void execute_op_Dxyn(Chip8_Machine *chip8_machine, uint16_t opcode)
       if (y_pos + row >= CHIP8_SCREEN_HEIGHT) continue;
 
       assert((y_pos + row) * CHIP8_SCREEN_WIDTH + (x_pos + col) < CHIP8_SCREEN_BUFFER_SIZE);
-      uint32_t &pixel = chip8_machine->screen_buffer[(y_pos + row) * CHIP8_SCREEN_WIDTH + (x_pos + col)];
+      bool &pixel = chip8_machine->screen_buffer[(y_pos + row) * CHIP8_SCREEN_WIDTH + (x_pos + col)];
       
       if (pixel_on)
       {
-        // @note João, considerar usar um byte pra memória de vídeo ou um bitarray
-        // e converter pra uint32_t na hora de exibir. O motivo seria, não acredito que
-        // manipular diversas cores nesse buffer seja uma boa ideia, precisaria ficar ajustando nesses ifs
-        if (pixel == 0xFFFFFFFFu)
+        if (pixel)
         {
           chip8_machine->registers[0xF] = 1;
         }
 
-        // @note aqui é necessário fazer um XOR sem apagar os dados do canal alfa
-        pixel ^= 0xFFFFFF00u;
+        pixel = !pixel;
       }
     }
   }

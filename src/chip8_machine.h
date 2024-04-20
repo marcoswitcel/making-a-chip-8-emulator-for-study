@@ -10,11 +10,12 @@ constexpr unsigned FONT_START_ADDRESS = 0x50;
 constexpr unsigned CHIP8_SCREEN_WIDTH = 64;
 constexpr unsigned CHIP8_SCREEN_HEIGHT = 32;
 constexpr unsigned CHIP8_SCREEN_BUFFER_SIZE = 64 * 32;
-constexpr unsigned CHIP8_SCREEN_BUFFER_SIZE_IN_BYTES = CHIP8_SCREEN_BUFFER_SIZE * 4;
+constexpr unsigned CHIP8_SCREEN_BUFFER_SIZE_IN_BYTES = CHIP8_SCREEN_BUFFER_SIZE * sizeof(bool);
 
 constexpr unsigned CHIP8_MEMORY_SIZE = 4096;
 
 #define BLACK_COLOR 0x000000FF
+#define WHITE_COLOR 0xFFFFFFFF
 
 typedef struct Chip8_Machine {
   // 16 registradores de 8 bits, sendo que o 16º é usado para armazenar o resultados de operaçẽos
@@ -35,8 +36,9 @@ typedef struct Chip8_Machine {
   // Memória de 4096 bytes, range 0x000-0xFFF
   uint8_t memory[CHIP8_MEMORY_SIZE];
 
-  // Memória de vídeo, estou usando cores 'rgba', um byte por canal, apesar de ser monocromático na prática
-  uint32_t screen_buffer[CHIP8_SCREEN_BUFFER_SIZE];
+  // Memória de vídeo, por ser monocromático preciso de um valor binário para representar um 'pixel',
+  // então estou usando 'true' para a cor 'acessa' e 'false' para cor 'apagada'
+  bool screen_buffer[CHIP8_SCREEN_BUFFER_SIZE];
 
   /**
    * Lista de 'keys' e estado de cada 'key', 'true' para pressionado e 'false' para quando não estiver pressionado.

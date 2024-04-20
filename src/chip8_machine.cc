@@ -62,7 +62,7 @@ static inline void clearing_screen_buffer(Chip8_Machine &chip8_machine)
   // Preenchendo o buffer da tela com a cor preta
   for (unsigned i = 0; i < CHIP8_SCREEN_BUFFER_SIZE; i++)
   {
-    chip8_machine.screen_buffer[i] = BLACK_COLOR; 
+    chip8_machine.screen_buffer[i] = false; 
   }
 }
 
