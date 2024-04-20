@@ -66,7 +66,7 @@ static void render_char(char char_index, uint32_t *buffer, uint32_t buffer_width
   }
 }
 
-static void render_char_coloful(char char_index, uint32_t *buffer, uint32_t buffer_width, uint32_t buffer_height, uint32_t x, uint32_t y, uint32_t color)
+static void render_char_colorful(char char_index, uint32_t *buffer, uint32_t buffer_width, uint32_t buffer_height, uint32_t x, uint32_t y, uint32_t color)
 {
   assert(char_index > -1 && char_index < 128); // @note precisa de um charset maior
 
@@ -110,7 +110,7 @@ static void render_line_colorful(const char *cstring, uint32_t color, uint32_t *
   for (int i = 0; i < length; i++)
   {
     int offset = i * 8;
-    render_char_coloful(cstring[i], (uint32_t *) buffer, buffer_width, buffer_height, x + offset, y, color);
+    render_char_colorful(cstring[i], (uint32_t *) buffer, buffer_width, buffer_height, x + offset, y, color);
   }
 }
 
@@ -211,7 +211,7 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
       const int key_index = (digit < 'A') ? digit - '0' : digit - 'A' + 10;
 
       uint32_t color = (chip8_machine->keypad_state[key_index]) ? 0x00FF00FF : 0xFF0000FF;
-      render_char_coloful(digits_in_order[i], (uint32_t *) pixels, 256, 256, pos_x, pos_y, color);
+      render_char_colorful(digits_in_order[i], (uint32_t *) pixels, 256, 256, pos_x, pos_y, color);
     }
   }
 
