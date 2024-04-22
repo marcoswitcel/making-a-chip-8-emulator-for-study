@@ -21,7 +21,8 @@ subtítulo: 'The Instructions' da página: [https://austinmorlan.com/posts/chip8
 * implementar instruções e fluxo de input e output (parcialmente feito)
 * definir como parametrizar o conceito de ciclos antes de buscar mais input
 * pesquisa como saber quando deve ser feito o flush pra tela
-* testar com o programa 'tetris', ainda há diversas falhas, apesar dos testes passarem
+* testar com o programa 'tetris', ainda há diversas falhas, apesar dos testes passarem (parcialmente)
+* implementar suporte a tela cheia (parcialmente)
 * implementar algum tipo de sistema de mapeamento de teclas do keypad
 * implementar sistema de som que use o 'sound timer'
 * implementar suporte a renderizar o painel monocromático com outras cores que não sejam preto e branco

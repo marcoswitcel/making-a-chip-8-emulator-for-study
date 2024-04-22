@@ -26,6 +26,7 @@ typedef struct Context_Data {
   int32_t last_clicked_y;
   int32_t mouse_x;
   int32_t mouse_y;
+  bool fullscreen;
 } Context_Data;
 
 /**
@@ -349,7 +350,7 @@ static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, C
 }
 
 
-static void handle_events_and_inputs(SDL_Window *window, Context_Data *context, bool *should_quit, Chip8_Machine *chip8_machine)
+static void handle_events_and_inputs(SDL_Window *window, SDL_Renderer *renderer, Context_Data *context, bool *should_quit, Chip8_Machine *chip8_machine)
 {
   UNUSED(window);
   SDL_Event event;
@@ -441,6 +442,31 @@ static void handle_events_and_inputs(SDL_Window *window, Context_Data *context, 
               // @todo João, avaliar como lidar com o recarregamento da ROM
               reset_machine(*chip8_machine);
               clearing_screen_buffer(*chip8_machine);
+            } break;
+            // toggle fullscreen
+            case SDLK_g: {
+              /**
+               * @todo João, revisar e testar mais isso aqui.. usei pouco o modo tela cheia do SDL
+               * @note 'SDL_WINDOW_FULLSCREEN' tem o comportamento de trocar a resolução do monitor, mas não sei se isso é melhor
+               * 
+               * @link https://stackoverflow.com/questions/76623721/sdl-window-fullscreen-on-ubuntu
+               * @link https://stackoverflow.com/questions/34520273/how-do-i-change-the-resolution-of-a-window-in-sdl-everything-is-too-large
+               * @link https://stackoverflow.com/questions/30629106/sdl2-how-to-properly-toggle-fullscreen
+               */
+
+              if (context->fullscreen)
+              {
+                context->fullscreen = false;
+                SDL_SetWindowFullscreen(window, 0);
+              }
+              else
+              {
+                context->fullscreen = true;
+                SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+                // @note João, não precisa restaurar isso aqui? supus que não afetaria o modo 'windowed',
+                // mas não testei tão a fundo
+                SDL_RenderSetLogicalSize(renderer, WINDOW_WIDTH, WINDOW_HEIGHT);
+              }
             } break;
             // toggle modo depuração
             case SDLK_b: {
@@ -561,6 +587,7 @@ int open_window(const char *filename)
     .last_clicked_y = 0,
     .mouse_x = 0,
     .mouse_y = 0,
+    .fullscreen = false,
   };
 
   SDL_Window *window = NULL;
@@ -627,7 +654,7 @@ int open_window(const char *filename)
      * @todo Por hora executo toda a rotina de processamento de input, porém, seria interessante
      * separar o input da UI do input do interpretador.
      */
-    handle_events_and_inputs(window, &context, &should_quit, &chip8_machine);
+    handle_events_and_inputs(window, renderer, &context, &should_quit, &chip8_machine);
 
     /**
      * @note Decidi buscar e atualizar input a cada ciclo, caso tenha algum dado novo de input,
@@ -637,7 +664,7 @@ int open_window(const char *filename)
     if (!is_paused) for (uint8_t i = 0; i < execute_n_cycles; i++)
     {
       // Processa eventos e inputs aqui
-      handle_events_and_inputs(window, &context, &should_quit, &chip8_machine);
+      handle_events_and_inputs(window, renderer, &context, &should_quit, &chip8_machine);
 
       // @todo João, definir como será feito a passagem de input
       // - Uma ideia seria usar um método que atualiza o input para o frame ou a nível de ciclo
