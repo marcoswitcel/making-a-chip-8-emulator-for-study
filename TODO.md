@@ -26,6 +26,7 @@ subtítulo: 'The Instructions' da página: [https://austinmorlan.com/posts/chip8
 * implementar algum tipo de sistema de mapeamento de teclas do keypad
 * implementar sistema de som que use o 'sound timer'
 * implementar suporte a renderizar o painel monocromático com outras cores que não sejam preto e branco
+* testar o sistema de números aleatórios da máquina virtual, jogar tetris várias vezes e tentar avaliar a distribuição de peças, além de fazer algum sistema de teste automatizado, se é que isso é possível
 
 # Ideias
 
