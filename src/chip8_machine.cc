@@ -258,6 +258,14 @@ void execute_a_cycle(Chip8_Machine &chip8_machine)
       chip8_machine.delay_timer--;
     }
 
+    /**
+     * @todo João, pelo que entendi deveria emitir um som de beep enquanto o contador não estiver zerado.
+     * O primeiro passo seria implementar o código necessário para ativar o sistema de som do SDL, depois,
+     * implementar uma função ou mecanismo que permita reproduzir um beep, a partir daí daria pra vincular a
+     * duração do beep ao fato de o valor do 'sound_timer' estar ou não zerado.
+     * @link https://www.reddit.com/r/EmuDev/comments/ws2kfy/how_do_implement_the_chip8_sound_timer/
+     * @link https://www.youtube.com/watch?v=sH7UdYAXjDs
+     */
     if (chip8_machine.sound_timer > 0)
     {
       chip8_machine.sound_timer--;

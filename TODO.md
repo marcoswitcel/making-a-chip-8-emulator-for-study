@@ -19,13 +19,13 @@ subtítulo: 'The Instructions' da página: [https://austinmorlan.com/posts/chip8
 * implementar um debugador simples, step a step (talvez com contador e breakpoint condicional) (parcialmente feito)
 * complementar os testes das instruções com mais casos (parcialmente feito)
 * implementar instruções e fluxo de input e output (parcialmente feito)
+* implementar suporte a tela cheia (parcialmente)
+* testar com o programa 'tetris', ainda há diversas falhas, apesar dos testes passarem (parcialmente)
+* implementar suporte a renderizar o painel monocromático com outras cores que não sejam preto e branco (parcialmente)
 * definir como parametrizar o conceito de ciclos antes de buscar mais input
 * pesquisa como saber quando deve ser feito o flush pra tela
-* testar com o programa 'tetris', ainda há diversas falhas, apesar dos testes passarem (parcialmente)
-* implementar suporte a tela cheia (parcialmente)
 * implementar algum tipo de sistema de mapeamento de teclas do keypad
 * implementar sistema de som que use o 'sound timer'
-* implementar suporte a renderizar o painel monocromático com outras cores que não sejam preto e branco
 * testar o sistema de números aleatórios da máquina virtual, jogar tetris várias vezes e tentar avaliar a distribuição de peças, além de fazer algum sistema de teste automatizado, se é que isso é possível
 
 # Ideias
