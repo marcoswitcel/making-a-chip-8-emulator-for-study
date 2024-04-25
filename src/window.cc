@@ -573,7 +573,6 @@ int open_window(const char *filename)
    * - https://github.com/corax89/chip8-test-rom/blob/master/test_opcode.ch8
    */
   bool is_loaded = load_rom(chip8_machine, filename);
-  printf("is loaded: %d\n", is_loaded);
 
   if (!is_loaded)
   {
@@ -595,10 +594,13 @@ int open_window(const char *filename)
   if (SDL_Init(SDL_INIT_VIDEO) != 0)
   {
     fprintf(stderr, "SDL não pode inicializar corretamente: %s\n", SDL_GetError());
+    return EXIT_FAILURE;
   }
 
   if (SDL_Init(SDL_INIT_AUDIO) != 0)
   {
+    // @todo João, validar o que ocorre se não conseguir inicializar o sistema de som,
+    // checar se precisa encerrar.
     fprintf(stderr, "SDL não pode inicializar o sistema de som corretamente: %s\n", SDL_GetError());
   }
 

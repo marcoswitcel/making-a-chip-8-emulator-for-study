@@ -19,7 +19,7 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  // Agora seria interessante fazer um esboço inicial de como vou separar
+  // @note João, seria interessante fazer um esboço de como vou separar
   // a emulação do código que faz a exibição do output, pra deixar mais abstraído da plataforma.
 
   return open_window(argv[1]);
