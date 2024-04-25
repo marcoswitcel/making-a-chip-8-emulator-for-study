@@ -597,6 +597,11 @@ int open_window(const char *filename)
     fprintf(stderr, "SDL não pode inicializar corretamente: %s\n", SDL_GetError());
   }
 
+  if (SDL_Init(SDL_INIT_AUDIO) != 0)
+  {
+    fprintf(stderr, "SDL não pode inicializar o sistema de som corretamente: %s\n", SDL_GetError());
+  }
+
   window = SDL_CreateWindow(
     "Chip-8 Emulador: Executando",
     SDL_WINDOWPOS_CENTERED,
