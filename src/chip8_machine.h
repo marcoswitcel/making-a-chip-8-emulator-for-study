@@ -14,8 +14,8 @@ constexpr unsigned CHIP8_SCREEN_BUFFER_SIZE_IN_BYTES = CHIP8_SCREEN_BUFFER_SIZE 
 
 constexpr unsigned CHIP8_MEMORY_SIZE = 4096;
 
-#define BLACK_COLOR 0x000000FF
-#define WHITE_COLOR 0xFFFFFFFF
+#define BLACK_COLOR 0x141414FF
+#define WHITE_COLOR 0xC3C3C3FF
 
 typedef struct Chip8_Machine {
   // 16 registradores de 8 bits, sendo que o 16º é usado para armazenar o resultados de operaçẽos
