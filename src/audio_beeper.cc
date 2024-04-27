@@ -47,7 +47,7 @@ void beeper_audio_callback(void * user_data, uint8_t *_audio_stream, int _length
   assert(_audio_stream != NULL);
 
   Audio_Beeper *beeper = (Audio_Beeper *) user_data;
-  // pelo que entendi o formato real dependendo do parâmetro passado ao atributo format do `SDL_AudioSpec`
+  // pelo que entendi o formato real depende do parâmetro passado ao atributo `SDL_AudioSpec::format`
   int16_t *audio_stream = (int16_t *) _audio_stream;
 
   assert(_length % 2 == 0);
