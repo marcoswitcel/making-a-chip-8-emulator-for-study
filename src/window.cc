@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_audio.h>
 
 #include "./debugger_fontset.cc"
 #include "./chip8_machine.cc"
@@ -349,6 +350,10 @@ static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, C
   SDL_RenderPresent(renderer);
 }
 
+void beeper_audio_callback(void * a, uint8_t *b, int c)
+{
+  // @todo João, implementar aqui um código que cheque se uma certa flag está setada e nesse caso emita o som
+}
 
 static void handle_events_and_inputs(SDL_Window *window, SDL_Renderer *renderer, Context_Data *context, bool *should_quit, Chip8_Machine *chip8_machine)
 {
@@ -602,7 +607,29 @@ int open_window(const char *filename)
     // @todo João, validar o que ocorre se não conseguir inicializar o sistema de som,
     // checar se precisa encerrar.
     fprintf(stderr, "SDL não pode inicializar o sistema de som corretamente: %s\n", SDL_GetError());
+
+    // @todo João, por hora vou encerrar porque ainda não vou abstrair e modularizar o sistema de som/beep
+    return EXIT_FAILURE;
   }
+
+  constexpr int AMPLITUDE = 28000;
+  constexpr int FREQUENCY = 44100;
+
+  SDL_AudioSpec intended_spec;
+
+  intended_spec.freq = FREQUENCY;
+  intended_spec.format = AUDIO_S16SYS;
+  intended_spec.channels = 1;
+  intended_spec.samples = 2048;
+  intended_spec.format = AUDIO_S16SYS;
+  intended_spec.userdata = NULL; // passar aqui os dados relevantes
+  intended_spec.callback = beeper_audio_callback;
+
+  SDL_AudioSpec real_spec;
+  SDL_OpenAudio(&intended_spec, &real_spec);
+
+  SDL_PauseAudio(0);
+  
 
   window = SDL_CreateWindow(
     "Chip-8 Emulador: Executando",
@@ -685,6 +712,7 @@ int open_window(const char *filename)
     SDL_Delay(1000 / UI_TICKS_PER_SECOND);
   }
 
+  SDL_CloseAudio();
   SDL_DestroyWindow(window);
   SDL_Quit();
   printf("Aplicação encerrada com sucesso.\n");
