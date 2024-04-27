@@ -29,6 +29,7 @@ subtítulo: 'The Instructions' da página: [https://austinmorlan.com/posts/chip8
  * https://stackoverflow.com/questions/10110905/simple-sound-wave-generator-with-sdl-in-c
  * https://gist.github.com/bashkirtsevich/c0c1992a1cdcc57add02b6c7cc783ab1
  * https://gist.github.com/armornick/3447121
+ * https://web.archive.org/web/20120313055436/http://www.dgames.org/beep-sound-with-sdl/
 * testar o sistema de números aleatórios da máquina virtual, jogar tetris várias vezes e tentar avaliar a distribuição de peças, além de fazer algum sistema de teste automatizado, se é que isso é possível
 * aparentemente algumas rooms deixam o programa em 'loop' quando finalizam, talvez detectar isso como forma de otimização e apresentar ao usuário
 

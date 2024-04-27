@@ -75,6 +75,14 @@ void setup_audio_device_for_beeper(Audio_Beeper *audio_beeper)
   intended_spec.userdata = audio_beeper;
   intended_spec.callback = beeper_audio_callback;
 
+  /**
+   * @note Seria interessante validar em que situações o sistema pode falhar em
+   * criar um dispositivo conforme a especificação e como lidar com isso de forma
+   * graciosa.
+   * @note Enfatizando, não foi testado com sistema que não adere a especificação
+   * descrita acima e também não foi desenvolvido nenhum mecanismo de fallbackm
+   * ou encerramento gracioso.
+   */
   SDL_AudioSpec real_spec;
   assert(SDL_OpenAudio(&intended_spec, &real_spec) == 0);
   assert(real_spec.format == AUDIO_S16SYS);
