@@ -57,3 +57,27 @@ void beeper_audio_callback(void * user_data, uint8_t *_audio_stream, int _length
   generate_beep_samples_on_demand(beeper, audio_stream, length);
 }
 
+
+/**
+ * @brief Configura e inicializa o dispositivo de áudio para o beeper
+ * 
+ * @param audio_beeper 
+ */
+void setup_audio_device_for_beeper(Audio_Beeper *audio_beeper)
+{
+  SDL_AudioSpec intended_spec;
+
+  intended_spec.freq = FREQUENCY;
+  intended_spec.format = AUDIO_S16SYS;
+  intended_spec.channels = 1;
+  intended_spec.samples = 2048;
+  intended_spec.format = AUDIO_S16SYS;
+  intended_spec.userdata = audio_beeper;
+  intended_spec.callback = beeper_audio_callback;
+
+  SDL_AudioSpec real_spec;
+  assert(SDL_OpenAudio(&intended_spec, &real_spec) == 0);
+  assert(real_spec.format == AUDIO_S16SYS);
+
+  SDL_PauseAudio(0);
+}

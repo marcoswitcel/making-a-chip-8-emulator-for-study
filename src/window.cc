@@ -611,21 +611,7 @@ int open_window(const char *filename)
 
   Audio_Beeper audio_beeper = { .is_beeping = false, .frequency = 550, .v = 0, };
 
-  SDL_AudioSpec intended_spec;
-
-  intended_spec.freq = FREQUENCY;
-  intended_spec.format = AUDIO_S16SYS;
-  intended_spec.channels = 1;
-  intended_spec.samples = 2048;
-  intended_spec.format = AUDIO_S16SYS;
-  intended_spec.userdata = &audio_beeper;
-  intended_spec.callback = beeper_audio_callback;
-
-  SDL_AudioSpec real_spec;
-  assert(SDL_OpenAudio(&intended_spec, &real_spec) == 0 );
-  assert(real_spec.format == AUDIO_S16SYS);
-
-  SDL_PauseAudio(0);
+  setup_audio_device_for_beeper(&audio_beeper);
 
   window = SDL_CreateWindow(
     "Chip-8 Emulador: Executando",
