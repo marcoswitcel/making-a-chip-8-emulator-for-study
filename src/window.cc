@@ -143,29 +143,27 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
   char label_sp[] = {'s', 'p', ':', chip8_machine->stack_pointer + '0', '\0'};
   render_line(label_sp, (uint32_t *) pixels, 256, 256, 0, 0);
 
-  char *label_i = "i:";
-  render_line(label_i, (uint32_t *) pixels, 256, 256, 0, 6);
-  label_i = int_to_cstring(chip8_machine->index_register);
-  render_line(label_i, (uint32_t *) pixels, 256, 256, 16, 6);
-  delete label_i; // @todo João, não tenho certeza se dá pra fazer assim
+  char *value = NULL;
 
-  char *pc = "pc:";
-  render_line(pc, (uint32_t *) pixels, 256, 256, 0, 12);
-  pc = int_to_cstring(chip8_machine->program_counter);
-  render_line(pc, (uint32_t *) pixels, 256, 256, 24, 12);
-  delete pc; // @todo João, não tenho certeza se dá pra fazer assim
+  render_line("i:", (uint32_t *) pixels, 256, 256, 0, 6);
+  value = int_to_cstring(chip8_machine->index_register);
+  render_line(value, (uint32_t *) pixels, 256, 256, 16, 6);
+  delete value; // @todo João, não tenho certeza se dá pra fazer assim
 
-  char *label_dt = "dt:";
-  render_line(label_dt, (uint32_t *) pixels, 256, 256, 0, 18);
-  label_dt = int_to_cstring(chip8_machine->delay_timer);
-  render_line(label_dt, (uint32_t *) pixels, 256, 256, 24, 18);
-  delete label_dt; // @todo João, não tenho certeza se dá pra fazer assim
+  render_line("pc:", (uint32_t *) pixels, 256, 256, 0, 12);
+  value = int_to_cstring(chip8_machine->program_counter);
+  render_line(value, (uint32_t *) pixels, 256, 256, 24, 12);
+  delete value; // @todo João, não tenho certeza se dá pra fazer assim
 
-  char *label_st = "st:";
-  render_line(label_st, (uint32_t *) pixels, 256, 256, 0, 24);
-  label_st = int_to_cstring(chip8_machine->sound_timer);
-  render_line(label_st, (uint32_t *) pixels, 256, 256, 24, 24);
-  delete label_st; // @todo João, não tenho certeza se dá pra fazer assim
+  render_line("dt:", (uint32_t *) pixels, 256, 256, 0, 18);
+  value = int_to_cstring(chip8_machine->delay_timer);
+  render_line(value, (uint32_t *) pixels, 256, 256, 24, 18);
+  delete value; // @todo João, não tenho certeza se dá pra fazer assim
+
+  render_line("st:", (uint32_t *) pixels, 256, 256, 0, 24);
+  value = int_to_cstring(chip8_machine->sound_timer);
+  render_line(value, (uint32_t *) pixels, 256, 256, 24, 24);
+  delete value; // @todo João, não tenho certeza se dá pra fazer assim
 
   /**
    * @note Acho que o melhor seria ter o painel de debug separado em diferentes 'viewers',
@@ -185,11 +183,11 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
     delete number;
   }
 
-  char *opcode = "op:";
+  char opcode[] = "op:";
   render_line(opcode, (uint32_t *) pixels, 256, 256, 0, 100);
-  opcode = int_to_cstring_in_base(chip8_machine->last_opcode_executed, HEXADECIMAL);
-  render_line(opcode, (uint32_t *) pixels, 256, 256, 32, 100);
-  delete opcode;
+  value = int_to_cstring_in_base(chip8_machine->last_opcode_executed, HEXADECIMAL);
+  render_line(value, (uint32_t *) pixels, 256, 256, 32, 100);
+  delete value;
   
   /**
    * render keypad
@@ -312,7 +310,7 @@ static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, C
   int pitch;
   SDL_LockTexture(chip8_screen_memory, NULL, &pixels, &pitch);
 
-  for (int i = 0; i < CHIP8_SCREEN_BUFFER_SIZE; i++)
+  for (unsigned i = 0; i < CHIP8_SCREEN_BUFFER_SIZE; i++)
   {
     ((uint32_t *) pixels)[i] = chip8_machine->screen_buffer[i] ? WHITE_COLOR : BLACK_COLOR;
   }
