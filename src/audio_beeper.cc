@@ -12,6 +12,14 @@
 
 #include "./audio_beeper.h"
 
+/**
+ * @brief Função chamada pelo callback do dispositivo de áudio do SDL para gerar os dados de som
+ * e preencher o stream de áudio.
+ * 
+ * @param beeper 
+ * @param audio_stream 
+ * @param length 
+ */
 void generate_beep_samples_on_demand(volatile Audio_Beeper *beeper , int16_t *audio_stream, const int length)
 {
   if (!beeper->is_beeping)
@@ -84,8 +92,8 @@ void setup_audio_device_for_beeper(Audio_Beeper *audio_beeper)
    * @note Seria interessante validar em que situações o sistema pode falhar em
    * criar um dispositivo conforme a especificação e como lidar com isso de forma
    * graciosa.
-   * @note Enfatizando, não foi testado com sistema que não adere a especificação
-   * descrita acima e também não foi desenvolvido nenhum mecanismo de fallbackm
+   * @note Enfatizando, não foi testado com um sistema que não adere a especificação
+   * descrita acima e também não foi desenvolvido nenhum mecanismo de fallback
    * ou encerramento gracioso.
    */
   SDL_AudioSpec real_spec;

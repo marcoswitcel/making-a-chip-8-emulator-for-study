@@ -3,13 +3,9 @@
 
 #include "chip8_machine.cc"
 #include "window.cc"
-#include "utils.macro.h"
 
 int main(int argc, char **argv)
 {
-  UNUSED(argc);
-  UNUSED(argv);
-
   printf("Olá mundo da emulação Chip-8!\n");
 
   if (argc < 2)

@@ -25,7 +25,7 @@ subtítulo: 'The Instructions' da página: [https://austinmorlan.com/posts/chip8
 * definir como parametrizar o conceito de ciclos antes de buscar mais input
 * pesquisa como saber quando deve ser feito o flush pra tela
 * implementar algum tipo de sistema de mapeamento de teclas do keypad
-* implementar sistema de som que use o 'sound timer' (avaliar exemplos abaixo)
+* implementar sistema de som que use o 'sound timer' (avaliar exemplos abaixo) -- OK
  * https://stackoverflow.com/questions/10110905/simple-sound-wave-generator-with-sdl-in-c
  * https://gist.github.com/bashkirtsevich/c0c1992a1cdcc57add02b6c7cc783ab1
  * https://gist.github.com/armornick/3447121
