@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <string.h>
 #include <assert.h>
 #include <cmath>
 
@@ -15,11 +16,7 @@ void generate_beep_samples_on_demand(volatile Audio_Beeper *beeper , int16_t *au
 {
   if (!beeper->is_beeping)
   {
-    // memset aqui, acho que SDL tem um menset cross plataform
-    for (int i = 0; i < length; i++)
-    {
-      audio_stream[i] = 0;
-    }
+    memset(audio_stream, 0, length * sizeof(int16_t));
 
     return;
   }

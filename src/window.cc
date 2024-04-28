@@ -259,12 +259,8 @@ static void render_text_to_screen(const char *text, SDL_Renderer *renderer, int 
 
   SDL_LockTexture(text_texture, NULL, &pixels, &pitch);
 
-  // @todo João, otimizar isso aqui
-  for (int i = 0; i < width * height; i++)
-  {
-    uint32_t *pixel = &((uint32_t*) pixels)[i];
-    *pixel = 0x00000000;
-  }
+  // @note Parece que a textura já vem "limpa", porém por garantir zero todos os canais
+  memset(pixels, 0, width * height * sizeof(uint32_t));
 
   render_line_colorful(text, color, (uint32_t *) pixels, width, height, 0, 0);
 
