@@ -607,7 +607,7 @@ int open_window(const char *filename)
   }
 
 
-  Audio_Beeper audio_beeper = { .is_beeping = false, .frequency = 550, .v = 0, };
+  Audio_Beeper audio_beeper = INITIAL_AUDIO_BEEPER(550);
 
   setup_audio_device_for_beeper(&audio_beeper);
 
