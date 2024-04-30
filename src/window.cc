@@ -607,8 +607,15 @@ int open_window(const char *filename)
 
   setup_audio_device_for_beeper(&audio_beeper);
 
+  const char *title_prefix = "Chip-8:  ";
+  const int title_length = strlen(title_prefix) + strlen(filename);
+  char *window_title = (char *) malloc((title_length + 1) * sizeof(char));
+
+  strcpy(window_title, title_prefix);
+  strcat(window_title, filename);
+
   window = SDL_CreateWindow(
-    "Chip-8 Emulador: Executando",
+    window_title,
     SDL_WINDOWPOS_CENTERED,
     SDL_WINDOWPOS_CENTERED,
     WINDOW_WIDTH,
