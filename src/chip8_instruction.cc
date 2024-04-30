@@ -50,6 +50,8 @@ void execute_op_00EE(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
   UNUSED(opcode);
   // @todo João, analisar se faz sentido colocar um if pra bloquear o o underflow da stack pointer
+  // @note Até faz, porém deveria considerar inserir um sistema para reportar opcodes inválidos, não
+  // apenas por um if aqui e suprimir silenciosamente
 
   chip8_machine->stack_pointer -= 1; // @note validar se está 100% decrementar antes
   chip8_machine->program_counter = chip8_machine->stack[chip8_machine->stack_pointer];

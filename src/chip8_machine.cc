@@ -246,6 +246,8 @@ void execute_a_cycle(Chip8_Machine &chip8_machine)
    * pois os jogos estão com a temporização meio imprecisa.
    * @todo João, avaliar por que as instruções que envolvem a rotação e a translação no programa de teste são tão lentas.
    * Geralmente envolvem a adição e decréscimo da stack.
+   * Análise/Resposta: Aparentemente é lento por que tomas muitos ciclos e excede o limite de 10 ciclos da vm por frame, por isso
+   * é perceptível a lentidão.
    */
 
   // a cada 10 ciclos reseto o acumulador e tento decrementar os timers
@@ -259,10 +261,7 @@ void execute_a_cycle(Chip8_Machine &chip8_machine)
     }
 
     /**
-     * @todo João, pelo que entendi deveria emitir um som de beep enquanto o contador não estiver zerado.
-     * O primeiro passo seria implementar o código necessário para ativar o sistema de som do SDL, depois,
-     * implementar uma função ou mecanismo que permita reproduzir um beep, a partir daí daria pra vincular a
-     * duração do beep ao fato de o valor do 'sound_timer' estar ou não zerado.
+     * @todo João, avaliar e catalogar links abaixo.
      * @link https://www.reddit.com/r/EmuDev/comments/ws2kfy/how_do_implement_the_chip8_sound_timer/
      * @link https://www.youtube.com/watch?v=sH7UdYAXjDs
      */
