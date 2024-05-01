@@ -42,6 +42,9 @@ static inline void reset_machine(Chip8_Machine &chip8_machine)
 
   chip8_machine.program_counter = START_INSTRUCTION_ADDRESS;
 
+  chip8_machine.last_opcode_executed = 0; // por falta de outra opção fica como zero
+  chip8_machine.last_opcode_signal = NONE;
+
   // copiando dados da fonte para memória
   for (unsigned i = 0; i < FONT_SET_SIZE; i++)
   {
@@ -236,6 +239,11 @@ void execute_a_cycle(Chip8_Machine &chip8_machine)
   uint8_t index = (opcode & 0xF000u) >> 12u;
   assert(index < 17);
 
+  // limpando o sinal antigo para saber se a instrução que será executada disparou algum sinal
+  chip8_machine.last_opcode_signal = NONE;
+
+  // executando a função que executa o comportamento do opcode, ou faz um segundo nível de decode
+  // do opcode e aciona o comportamento
   base_instruction_jump_table[index](&chip8_machine, opcode);
 
   // manter o registro de quantos ciclos se passaram para poder acionar o decréscimo dos 'timers'

@@ -49,12 +49,22 @@ void execute_op_00E0(Chip8_Machine *chip8_machine, uint16_t opcode)
 void execute_op_00EE(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
   UNUSED(opcode);
-  // @todo João, analisar se faz sentido colocar um if pra bloquear o o underflow da stack pointer
-  // @note Até faz, porém deveria considerar inserir um sistema para reportar opcodes inválidos, não
-  // apenas por um if aqui e suprimir silenciosamente
 
-  chip8_machine->stack_pointer -= 1; // @note validar se está 100% decrementar antes
-  chip8_machine->program_counter = chip8_machine->stack[chip8_machine->stack_pointer];
+  /**
+   * @note a stack atualmente é representada por um array de 16 inteiros e um índice, é importante
+   * manter o `stack_pointer` com valores de 0 a 15, incluindo ambas extremidades. Isso é importante 
+   * para impedir acesso indevido de memória, até mesmo fora da memória da VM.
+   */
+
+  if (chip8_machine->stack_pointer > 0)
+  {
+    chip8_machine->stack_pointer -= 1;
+    chip8_machine->program_counter = chip8_machine->stack[chip8_machine->stack_pointer];
+  }
+  else
+  {
+    chip8_machine->last_opcode_signal = STACK_UNDERFLOW;
+  }
 }
 
 /**

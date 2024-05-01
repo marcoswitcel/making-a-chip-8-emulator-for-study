@@ -17,6 +17,18 @@ constexpr unsigned CHIP8_MEMORY_SIZE = 4096;
 #define BLACK_COLOR 0x141414FF
 #define WHITE_COLOR 0xC3C3C3FF
 
+typedef enum Chip8_Signal {
+  /**
+   * @brief representa que não houve sinal
+   */
+  NONE = 0,
+  /**
+   * @brief representa uma tentativa de decrementar o stack_pointer quando não
+   * houve incremento.
+   */
+  STACK_UNDERFLOW,
+} Chip8_Signal;
+
 typedef struct Chip8_Machine {
   // 16 registradores de 8 bits, sendo que o 16º é usado para armazenar o resultados de operaçẽos
   uint8_t registers[16];
@@ -53,6 +65,8 @@ typedef struct Chip8_Machine {
 
   // outras coisas
   uint16_t last_opcode_executed;
+
+  Chip8_Signal last_opcode_signal;
 
   // acumulador
   uint16_t delay_timer_hertz_accumulator;
