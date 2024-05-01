@@ -14,6 +14,8 @@ constexpr unsigned CHIP8_SCREEN_BUFFER_SIZE_IN_BYTES = CHIP8_SCREEN_BUFFER_SIZE 
 
 constexpr unsigned CHIP8_MEMORY_SIZE = 4096;
 
+constexpr unsigned CHIP8_STACK_SIZE = 16;
+
 #define BLACK_COLOR 0x141414FF
 #define WHITE_COLOR 0xC3C3C3FF
 
@@ -27,6 +29,15 @@ typedef enum Chip8_Signal {
    * houve incremento.
    */
   STACK_UNDERFLOW,
+  /**
+   * @brief representa uma tentativa de incrementar o stack_pointer quando não
+   * há mais espaço na stack.
+   */
+  STACK_OVERFLOW,
+  /**
+   * @brief Instrução inválida encontrada.
+   */
+  INVALID_INSTRUCTION,
 } Chip8_Signal;
 
 typedef struct Chip8_Machine {
@@ -37,7 +48,7 @@ typedef struct Chip8_Machine {
   // Contador PC
   uint16_t program_counter;
   // stack de 16 níveis
-  uint16_t stack[16];
+  uint16_t stack[CHIP8_STACK_SIZE];
   // stack pointer (stack índice)
   uint8_t stack_pointer;
   // temporizador usado para acompanhar a passagem do tempo

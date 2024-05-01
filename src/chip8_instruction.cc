@@ -86,14 +86,21 @@ void execute_op_1nnn(Chip8_Machine *chip8_machine, uint16_t opcode)
  */
 void execute_op_2nnn(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
-  // program counter aponta para a próxima instrução após o comando CALL,
-  // por isso não precisa incrementar aqui
-  chip8_machine->stack[chip8_machine->stack_pointer] = chip8_machine->program_counter;
-  // meu stack_pointer aponta para o próximo endereço disponível, por isso
-  // pode ser incrementado após
-  chip8_machine->stack_pointer += 1;
+  if (chip8_machine->stack_pointer < CHIP8_STACK_SIZE)
+  {
+    // `program_counter` aponta para a próxima instrução após o comando CALL,
+    // por isso não precisa incrementar aqui
+    chip8_machine->stack[chip8_machine->stack_pointer] = chip8_machine->program_counter;
+    // meu stack_pointer aponta para o próximo endereço disponível, por isso
+    // pode ser incrementado após
+    chip8_machine->stack_pointer += 1;
 
-  chip8_machine->program_counter = opcode & 0x0FFFu;
+    chip8_machine->program_counter = opcode & 0x0FFFu;
+  }
+  else
+  {
+    chip8_machine->last_opcode_signal = STACK_OVERFLOW;
+  }
 }
 
 /**

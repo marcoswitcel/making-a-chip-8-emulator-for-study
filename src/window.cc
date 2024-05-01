@@ -688,6 +688,10 @@ int open_window(const char *filename)
       // - Criar um método de faz o submit do 'evento' de 'press down' e 'released'?
       execute_a_cycle(chip8_machine);
 
+      // @todo João, avaliar se faz sentido setar para ativar o debugador em caso de instrução inválida,
+      // ou talvez exibir um alerta no canto da tela, tipo uma notificação.
+      // assert(chip8_machine.last_opcode_signal == NONE);
+
       // atualizando beeper
       audio_beeper.is_beeping = chip8_machine.sound_timer > 0;
     }

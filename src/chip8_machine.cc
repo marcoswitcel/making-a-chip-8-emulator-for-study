@@ -145,10 +145,12 @@ void decode_F_index_opcode(Chip8_Machine *chip8_machine, uint16_t opcode)
 
 void noop(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
-  UNUSED(chip8_machine);
   UNUSED(opcode);
+
   // Eventualmente talvez vou usar essa função pra fazer algum tipo de assert?
   printf("noop...\n");
+
+  chip8_machine->last_opcode_signal = INVALID_INSTRUCTION;
 }
 
 void init_jump_table()
