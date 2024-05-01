@@ -624,10 +624,21 @@ void execute_op_Fx1E(Chip8_Machine *chip8_machine, uint16_t opcode)
 void execute_op_Fx29(Chip8_Machine *chip8_machine, uint16_t opcode)
 {
   uint8_t x_index = (opcode & 0x0F00u) >> 8u;
+  /**
+   * @note Vx pode conter um valor que não represente um valor de dígito válido,
+   * porém, mesmo no pior cenário, o valor 255, o endereço final não sairia da
+   * área de memória válida para o programar, por isso não vou lançar nenhum
+   * sinal aqui. Apenas vou retornar o endereço que para aquele valor, mesmo
+   * que não caia em um dígito.
+   * @revise Talvez seria interessante permitir escolher o comportamento e
+   * sinalizar esse tipo de situação.
+   */
   uint8_t digit_value = chip8_machine->registers[x_index];
-  assert(digit_value < 17); // @todo João, avaliar se precisa tratar
 
-  chip8_machine->index_register = FONT_START_ADDRESS + (5 * digit_value);
+  uint16_t sprite_location_for_digit = FONT_START_ADDRESS + (5 * digit_value); 
+  assert(sprite_location_for_digit < CHIP8_MEMORY_SIZE);
+
+  chip8_machine->index_register = sprite_location_for_digit;
 }
 
 /**
