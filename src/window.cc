@@ -690,7 +690,12 @@ int open_window(const char *filename)
 
       // @todo João, avaliar se faz sentido setar para ativar o debugador em caso de instrução inválida,
       // ou talvez exibir um alerta no canto da tela, tipo uma notificação.
-      // assert(chip8_machine.last_opcode_signal == NONE);
+      if (chip8_machine.last_opcode_signal != NONE)
+      {
+        // @todo Implementar alguma forma de renderizar sinais no depurador, daí descomentar a linha
+        // abaixo.
+        // is_debugging = true;
+      }
 
       // atualizando beeper
       audio_beeper.is_beeping = chip8_machine.sound_timer > 0;
