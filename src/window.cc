@@ -188,6 +188,14 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
   value = int_to_cstring_in_base(chip8_machine->last_opcode_executed, HEXADECIMAL);
   render_line(value, (uint32_t *) pixels, 256, 256, 32, 100);
   free(value);
+
+  if (chip8_machine->last_opcode_signal != NONE)
+  {
+    char opcode[] = "signal:";
+    render_line_colorful(opcode, 0x0000FFFF,(uint32_t *) pixels, 256, 256, 0, 106);
+    char signal_name[] = "sinal vai aqui"; // @todo João, trocar pelo nome do sinal
+    render_line_colorful(signal_name, 0x0000FFFF, (uint32_t *) pixels, 256, 256, 57, 106);
+  }
   
   /**
    * render keypad
@@ -694,7 +702,7 @@ int open_window(const char *filename)
       {
         // @todo Implementar alguma forma de renderizar sinais no depurador, daí descomentar a linha
         // abaixo.
-        // is_debugging = true;
+        is_debugging = true;
       }
 
       // atualizando beeper
