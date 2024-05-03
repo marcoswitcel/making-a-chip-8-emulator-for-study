@@ -148,22 +148,22 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
   render_line("i:", (uint32_t *) pixels, 256, 256, 0, 6);
   value = int_to_cstring(chip8_machine->index_register);
   render_line(value, (uint32_t *) pixels, 256, 256, 16, 6);
-  delete value; // @todo João, não tenho certeza se dá pra fazer assim
+  free(value);
 
   render_line("pc:", (uint32_t *) pixels, 256, 256, 0, 12);
   value = int_to_cstring(chip8_machine->program_counter);
   render_line(value, (uint32_t *) pixels, 256, 256, 24, 12);
-  delete value; // @todo João, não tenho certeza se dá pra fazer assim
+  free(value);
 
   render_line("dt:", (uint32_t *) pixels, 256, 256, 0, 18);
   value = int_to_cstring(chip8_machine->delay_timer);
   render_line(value, (uint32_t *) pixels, 256, 256, 24, 18);
-  delete value; // @todo João, não tenho certeza se dá pra fazer assim
+  free(value);
 
   render_line("st:", (uint32_t *) pixels, 256, 256, 0, 24);
   value = int_to_cstring(chip8_machine->sound_timer);
   render_line(value, (uint32_t *) pixels, 256, 256, 24, 24);
-  delete value; // @todo João, não tenho certeza se dá pra fazer assim
+  free(value);
 
   /**
    * @note Acho que o melhor seria ter o painel de debug separado em diferentes 'viewers',
@@ -180,14 +180,14 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
     render_line(label_rx, (uint32_t *) pixels, 256, 256, 56, 5 * i + i);
     char *number = int_to_cstring(chip8_machine->registers[i]);
     render_line(number, (uint32_t *) pixels, 256, 256, 88, 5 * i + i);
-    delete number;
+    free(number);
   }
 
   char opcode[] = "op:";
   render_line(opcode, (uint32_t *) pixels, 256, 256, 0, 100);
   value = int_to_cstring_in_base(chip8_machine->last_opcode_executed, HEXADECIMAL);
   render_line(value, (uint32_t *) pixels, 256, 256, 32, 100);
-  delete value;
+  free(value);
   
   /**
    * render keypad
