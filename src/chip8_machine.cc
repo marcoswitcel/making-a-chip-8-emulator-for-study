@@ -33,6 +33,18 @@ static const uint8_t fontset[FONT_SET_SIZE] = {
   0xF0, 0x80, 0xF0, 0x80, 0x80  // F
 };
 
+static const char *get_chip8_signal_name(Chip8_Signal signal)
+{
+  switch (signal)
+  {
+    case NONE: return "NONE";
+    case STACK_UNDERFLOW: return "STACK_UNDERFLOW";
+    case STACK_OVERFLOW: return "STACK_OVERFLOW";
+    case INVALID_INSTRUCTION: return "INVALID_INSTRUCTION";
+    default: assert(false);
+  }
+}
+
 void init_jump_table(); // por hora fica aqui em cima
 
 static inline void reset_machine(Chip8_Machine &chip8_machine)

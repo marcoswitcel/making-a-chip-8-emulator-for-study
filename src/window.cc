@@ -193,7 +193,7 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
   {
     char opcode[] = "signal:";
     render_line_colorful(opcode, 0x0000FFFF,(uint32_t *) pixels, 256, 256, 0, 106);
-    char signal_name[] = "sinal vai aqui"; // @todo João, trocar pelo nome do sinal
+    const char *signal_name = get_chip8_signal_name(chip8_machine->last_opcode_signal);
     render_line_colorful(signal_name, 0x0000FFFF, (uint32_t *) pixels, 256, 256, 57, 106);
   }
   
@@ -696,12 +696,10 @@ int open_window(const char *filename)
       // - Criar um método de faz o submit do 'evento' de 'press down' e 'released'?
       execute_a_cycle(chip8_machine);
 
-      // @todo João, avaliar se faz sentido setar para ativar o debugador em caso de instrução inválida,
-      // ou talvez exibir um alerta no canto da tela, tipo uma notificação.
+      // @todo João, considerar se faz sentido ter níveis de gravidade nos sinais e talvez
+      // exibir alguns como alertas no canto da tela ao invés de exibir no depurador.
       if (chip8_machine.last_opcode_signal != NONE)
       {
-        // @todo Implementar alguma forma de renderizar sinais no depurador, daí descomentar a linha
-        // abaixo.
         is_debugging = true;
       }
 
