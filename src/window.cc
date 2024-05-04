@@ -682,9 +682,9 @@ int open_window(const char *filename)
     handle_events_and_inputs(window, renderer, &context, &should_quit, &chip8_machine);
 
     /**
-     * @note Decidi buscar e atualizar input a cada ciclo, caso tenha algum dado novo de input,
-     * mas uma otimização que poderia ser feita, é só buscar atualizar os dados de input se for usada
-     * alguma das instruções que leem o estado do 'keypad'.
+     * @note Decidi buscar e atualizar os dados de input a cada ciclo, mas uma otimização que
+     * poderia ser feita, é só buscar atualizar os dados de input se for usada alguma das
+     * instruções que fazem a leitura do estado do 'keypad'.
      */
     if (!is_paused) for (uint8_t i = 0; i < execute_n_cycles; i++)
     {
