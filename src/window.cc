@@ -696,15 +696,18 @@ int open_window(const char *filename)
       // - Criar um método de faz o submit do 'evento' de 'press down' e 'released'?
       execute_a_cycle(chip8_machine);
 
+      // atualizando beeper
+      audio_beeper.is_beeping = chip8_machine.sound_timer > 0;
+
       // @todo João, considerar se faz sentido ter níveis de gravidade nos sinais e talvez
       // exibir alguns como alertas no canto da tela ao invés de exibir no depurador.
       if (chip8_machine.last_opcode_signal != NONE)
       {
+        // Caso ative a depuração é necessário parar o loop para deixar o código do loop
+        // externo ajustar a quantidade de ciclos para zero.
         is_debugging = true;
+        break;
       }
-
-      // atualizando beeper
-      audio_beeper.is_beeping = chip8_machine.sound_timer > 0;
     }
 
     // Renderiza
