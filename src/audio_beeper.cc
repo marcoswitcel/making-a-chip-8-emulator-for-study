@@ -15,6 +15,8 @@
 /**
  * @brief Função chamada pelo callback do dispositivo de áudio do SDL para gerar os dados de som
  * e preencher o stream de áudio.
+ * Quando não está emitindo o som do 'beep', então o stream é preenchido com zeros para não
+ * garantir que não produzirá ruídos.
  * 
  * @param beeper 
  * @param audio_stream 
@@ -66,7 +68,7 @@ void beeper_audio_callback(void * user_data, uint8_t *_audio_stream, int _length
   assert(_length % 2 == 0);
   int length = _length / 2;
 
-  // @todo João, revisar se é necessário alguma forma de lock
+  // emite samples
   generate_beep_samples_on_demand(beeper, audio_stream, length);
 }
 

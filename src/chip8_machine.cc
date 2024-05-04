@@ -256,8 +256,12 @@ void execute_a_cycle(Chip8_Machine &chip8_machine)
   // limpando o sinal antigo para saber se a instrução que será executada disparou algum sinal
   chip8_machine.last_opcode_signal = NONE;
 
-  // executando a função que executa o comportamento do opcode, ou faz um segundo nível de decode
-  // do opcode e aciona o comportamento
+  /**
+   * @note A jump table aponta para instruções em alguns casos e em outros para um segundo nível de decode.
+   * Portanto, em alguns casos será um salto direto para a função que computa o efeito desejado pelo opcode,
+   * e em outros casos será um segunda função de decode que fará o despache, criando assim um sistema flexível
+   * que pode ter vários níveis e e ainda assim suportar salto diretos.
+   */
   base_instruction_jump_table[index](&chip8_machine, opcode);
 
   // manter o registro de quantos ciclos se passaram para poder acionar o decréscimo dos 'timers'
@@ -282,25 +286,11 @@ void execute_a_cycle(Chip8_Machine &chip8_machine)
       chip8_machine.delay_timer--;
     }
 
-    /**
-     * @todo João, avaliar e catalogar links abaixo.
-     * @link https://www.reddit.com/r/EmuDev/comments/ws2kfy/how_do_implement_the_chip8_sound_timer/
-     * @link https://www.youtube.com/watch?v=sH7UdYAXjDs
-     */
     if (chip8_machine.sound_timer > 0)
     {
       chip8_machine.sound_timer--;
     }
   }
-
-  /**
-   * @note Pelo que entendi vou precisar ajustar minha jump table para apontar para instruções
-   * em alguns casos e em outros, a função que será executada será um segundo nível de decode, que
-   * acionará a instrução correta. Portanto, em alguns casos será um salto direto para a função
-   * que computa o efeito desejado pelo opcode, e em outros casos será um segunda função de decode
-   * que fará o dispatch, criando assim um sistema flexível que pode ter vários níveis e e ainda assim
-   * ter salto diretos.
-   */
 
   printf("opcode: 0x%X, i: %d, pc: %d, sp: %d\n", opcode, chip8_machine.index_register, chip8_machine.program_counter, chip8_machine.stack_pointer); // apenas para visualização
 }

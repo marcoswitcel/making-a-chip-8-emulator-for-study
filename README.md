@@ -15,3 +15,5 @@ Esboço inicial da descrição.
 * [https://multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/](https://multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/)
 * [https://www.reddit.com/r/EmuDev/comments/s940xd/collision_isnt_working_in_my_chip8_emulator_where/](https://www.reddit.com/r/EmuDev/comments/s940xd/collision_isnt_working_in_my_chip8_emulator_where/)
 * [https://www.reddit.com/r/EmuDev/comments/vizxme/whats_a_good_way_to_handle_timing_when_you_have_a/](https://www.reddit.com/r/EmuDev/comments/vizxme/whats_a_good_way_to_handle_timing_when_you_have_a/)
+* [https://www.reddit.com/r/EmuDev/comments/ws2kfy/how_do_implement_the_chip8_sound_timer/](https://www.reddit.com/r/EmuDev/comments/ws2kfy/how_do_implement_the_chip8_sound_timer/)
+* [https://www.youtube.com/watch?v=sH7UdYAXjDs](https://www.youtube.com/watch?v=sH7UdYAXjDs)
