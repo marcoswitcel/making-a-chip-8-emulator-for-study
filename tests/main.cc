@@ -52,6 +52,8 @@ void test_op_2nnn(void)
 {
   Chip8_Machine machine = {};
 
+  machine.last_opcode_signal = NONE;
+
   machine.program_counter = 0xCE;
   machine.stack_pointer = 0;
   machine.stack[0] = 0;
@@ -59,6 +61,7 @@ void test_op_2nnn(void)
   assert(machine.program_counter == 0x0FFu);
   assert(machine.stack_pointer == 1);
   assert(machine.stack[0] == 0xCE);
+  assert(machine.last_opcode_signal == NONE);
 
   machine.program_counter = 0xCE;
   machine.stack_pointer = 0;
@@ -67,6 +70,40 @@ void test_op_2nnn(void)
   assert(machine.program_counter == 0xAF3u);
   assert(machine.stack_pointer == 1);
   assert(machine.stack[0] == 0xCE);
+  assert(machine.last_opcode_signal == NONE);
+
+  // signal emitido em caso de overflow da stack
+  machine.program_counter = 0x00CC;
+  machine.stack_pointer = 0;
+  machine.stack[0] = 0;
+
+  uint16_t last_pc;
+
+  for (unsigned i  = 0; i < CHIP8_STACK_SIZE; i++)
+  {
+    last_pc = machine.program_counter;
+
+    // n chamada
+    execute_op_2nnn(&machine, 0x20C1);
+    assert(machine.program_counter == 0x00C1);
+    assert(machine.stack_pointer == (i + 1));
+    assert(machine.stack[i] == last_pc);
+    assert(machine.last_opcode_signal == NONE);
+  }
+
+  // CHIP8_STACK_SIZEª chamada
+  execute_op_2nnn(&machine, 0x20C1);
+  assert(machine.program_counter == 0x00C1);
+  assert(machine.stack_pointer == 16);
+  assert(machine.stack[CHIP8_STACK_SIZE - 1] == last_pc);
+  assert(machine.last_opcode_signal == STACK_OVERFLOW);
+
+  // CHIP8_STACK_SIZE + 1 ª chamada
+  execute_op_2nnn(&machine, 0x20C1);
+  assert(machine.program_counter == 0x00C1);
+  assert(machine.stack_pointer == 16);
+  assert(machine.stack[CHIP8_STACK_SIZE - 1] == last_pc);
+  assert(machine.last_opcode_signal == STACK_OVERFLOW);
 }
 
 void test_op_3xkk(void)
