@@ -29,7 +29,6 @@ void test_op_1nnn(void)
   assert(machine.program_counter == 0xAF3u);
 }
 
-// @todo João, fazer um teste especial do opcode CALL e RET
 void test_op_2nnn(void)
 {
   Chip8_Machine machine = {};
@@ -716,6 +715,25 @@ void test_op_Fx65(void)
   assert(machine.registers[6] == 0);
 }
 
+void test_call_ret_behavior(void)
+{
+  Chip8_Machine machine = {};
+
+  uint16_t intial_pc = 0x00A0u;
+
+  machine.program_counter = intial_pc;
+  machine.stack_pointer = 0;
+  machine.stack[0] = 0;
+  execute_op_2nnn(&machine, 0x20BCu);
+  assert(machine.program_counter == 0x0BCu);
+  assert(machine.stack_pointer == 1);
+  assert(machine.stack[0] == intial_pc);
+
+  execute_op_00EE(&machine, 0x00EEu);
+  assert(machine.program_counter == intial_pc);
+  assert(machine.stack_pointer == 0);
+}
+
 /**
  * @brief ponto de entrada dos testes
  * @todo João, considerar trazer a interface gráfica e as melhorias dos outros projetos para esse
@@ -759,6 +777,9 @@ int main(void)
   test_op_Fx33();
   test_op_Fx55();
   test_op_Fx65();
+
+  // cheques de comportamentos específicos
+  test_call_ret_behavior();
   
   printf("Sucesso! 100%% dos testes passaram.");
 
