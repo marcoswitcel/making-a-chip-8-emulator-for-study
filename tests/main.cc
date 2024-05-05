@@ -16,6 +16,25 @@ void test_op_00E0(void)
   assert(machine.memory[0] == 0);
 }
 
+void test_op_00EE(void)
+{
+  Chip8_Machine machine = {};
+
+  machine.last_opcode_signal = NONE;
+
+  machine.program_counter = 0x0055;
+  machine.stack[0] = 0x0032;
+  machine.stack_pointer = 1;
+  execute_op_00EE(&machine, 0x00EE);
+  assert(machine.program_counter == 0x0032);
+  assert(machine.stack_pointer == 0);
+  assert(machine.last_opcode_signal == NONE);
+
+  // sinal emitido em caso de underflow da stack
+  execute_op_00EE(&machine, 0x00EE);
+  assert(machine.last_opcode_signal == STACK_UNDERFLOW);
+}
+
 void test_op_1nnn(void)
 {
   Chip8_Machine machine = {};
@@ -746,6 +765,7 @@ int main(void)
   UNUSED(load_rom);
 
   test_op_00E0();
+  test_op_00EE();
   test_op_1nnn();
   test_op_2nnn();
   test_op_3xkk();
