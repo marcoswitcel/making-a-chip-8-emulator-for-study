@@ -140,7 +140,8 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
     *pixel = 0x00000000;
   }
 
-  char label_sp[] = {'s', 'p', ':', chip8_machine->stack_pointer + '0', '\0'};
+  char label_sp[] = {'s', 'p', ':', '0', '\0'};
+  label_sp[3] += chip8_machine->stack_pointer;
   render_line(label_sp, (uint32_t *) pixels, 256, 256, 0, 0);
 
   char *value = NULL;
