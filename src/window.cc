@@ -46,7 +46,7 @@ constexpr uint32_t RGBA_RED = 0xFF0000FF;
  * @param y 
  * @param color 
  */
-static void render_char_colorful(char char_index, uint32_t *buffer, uint32_t buffer_width, uint32_t buffer_height, uint32_t x, uint32_t y, uint32_t color)
+static void render_char(char char_index, uint32_t *buffer, uint32_t buffer_width, uint32_t buffer_height, uint32_t x, uint32_t y, uint32_t color)
 {
   assert(char_index > -1 && char_index < 128); // @note precisa de um charset maior
 
@@ -72,14 +72,14 @@ static void render_char_colorful(char char_index, uint32_t *buffer, uint32_t buf
   }
 }
 
-static void render_line_colorful(const char *cstring, uint32_t color, uint32_t *buffer, uint32_t buffer_width, uint32_t buffer_height, uint32_t x, uint32_t y)
+static void render_line(const char *cstring, uint32_t color, uint32_t *buffer, uint32_t buffer_width, uint32_t buffer_height, uint32_t x, uint32_t y)
 {
   int length = strlen(cstring);
 
   for (int i = 0; i < length; i++)
   {
     int offset = i * 8;
-    render_char_colorful(cstring[i], (uint32_t *) buffer, buffer_width, buffer_height, x + offset, y, color);
+    render_char(cstring[i], (uint32_t *) buffer, buffer_width, buffer_height, x + offset, y, color);
   }
 }
 
@@ -108,28 +108,28 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
 
   char label_sp[] = {'s', 'p', ':', '0', '\0'};
   label_sp[3] += chip8_machine->stack_pointer;
-  render_line_colorful(label_sp, RGBA_RED, (uint32_t *) pixels, 256, 256, 0, 0);
+  render_line(label_sp, RGBA_RED, (uint32_t *) pixels, 256, 256, 0, 0);
 
   char *value = NULL;
 
-  render_line_colorful("i:", RGBA_RED, (uint32_t *) pixels, 256, 256, 0, 6);
+  render_line("i:", RGBA_RED, (uint32_t *) pixels, 256, 256, 0, 6);
   value = int_to_cstring(chip8_machine->index_register);
-  render_line_colorful(value, RGBA_RED, (uint32_t *) pixels, 256, 256, 16, 6);
+  render_line(value, RGBA_RED, (uint32_t *) pixels, 256, 256, 16, 6);
   free(value);
 
-  render_line_colorful("pc:", RGBA_RED, (uint32_t *) pixels, 256, 256, 0, 12);
+  render_line("pc:", RGBA_RED, (uint32_t *) pixels, 256, 256, 0, 12);
   value = int_to_cstring(chip8_machine->program_counter);
-  render_line_colorful(value, RGBA_RED, (uint32_t *) pixels, 256, 256, 24, 12);
+  render_line(value, RGBA_RED, (uint32_t *) pixels, 256, 256, 24, 12);
   free(value);
 
-  render_line_colorful("dt:", RGBA_RED, (uint32_t *) pixels, 256, 256, 0, 18);
+  render_line("dt:", RGBA_RED, (uint32_t *) pixels, 256, 256, 0, 18);
   value = int_to_cstring(chip8_machine->delay_timer);
-  render_line_colorful(value, RGBA_RED, (uint32_t *) pixels, 256, 256, 24, 18);
+  render_line(value, RGBA_RED, (uint32_t *) pixels, 256, 256, 24, 18);
   free(value);
 
-  render_line_colorful("st:", RGBA_RED, (uint32_t *) pixels, 256, 256, 0, 24);
+  render_line("st:", RGBA_RED, (uint32_t *) pixels, 256, 256, 0, 24);
   value = int_to_cstring(chip8_machine->sound_timer);
-  render_line_colorful(value, RGBA_RED, (uint32_t *) pixels, 256, 256, 24, 24);
+  render_line(value, RGBA_RED, (uint32_t *) pixels, 256, 256, 24, 24);
   free(value);
 
   /**
@@ -144,24 +144,24 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
     if (i > 9) label_rx[1] = (i - 10) + 'A';
     else label_rx[1] = i + '0';
 
-    render_line_colorful(label_rx, RGBA_RED, (uint32_t *) pixels, 256, 256, 56, 5 * i + i);
+    render_line(label_rx, RGBA_RED, (uint32_t *) pixels, 256, 256, 56, 5 * i + i);
     char *number = int_to_cstring(chip8_machine->registers[i]);
-    render_line_colorful(number, RGBA_RED, (uint32_t *) pixels, 256, 256, 88, 5 * i + i);
+    render_line(number, RGBA_RED, (uint32_t *) pixels, 256, 256, 88, 5 * i + i);
     free(number);
   }
 
   char opcode[] = "op:";
-  render_line_colorful(opcode, RGBA_RED, (uint32_t *) pixels, 256, 256, 0, 100);
+  render_line(opcode, RGBA_RED, (uint32_t *) pixels, 256, 256, 0, 100);
   value = int_to_cstring_in_base(chip8_machine->last_opcode_executed, HEXADECIMAL);
-  render_line_colorful(value, RGBA_RED, (uint32_t *) pixels, 256, 256, 32, 100);
+  render_line(value, RGBA_RED, (uint32_t *) pixels, 256, 256, 32, 100);
   free(value);
 
   if (chip8_machine->last_opcode_signal != NONE)
   {
     char opcode[] = "signal:";
-    render_line_colorful(opcode, 0x0000FFFF,(uint32_t *) pixels, 256, 256, 0, 106);
+    render_line(opcode, 0x0000FFFF,(uint32_t *) pixels, 256, 256, 0, 106);
     const char *signal_name = get_chip8_signal_name(chip8_machine->last_opcode_signal);
-    render_line_colorful(signal_name, 0x0000FFFF, (uint32_t *) pixels, 256, 256, 57, 106);
+    render_line(signal_name, 0x0000FFFF, (uint32_t *) pixels, 256, 256, 57, 106);
   }
   
   /**
@@ -187,7 +187,7 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
       const int key_index = (digit < 'A') ? digit - '0' : digit - 'A' + 10;
 
       uint32_t color = (chip8_machine->keypad_state[key_index]) ? 0x00FF00FF : RGBA_RED;
-      render_char_colorful(digits_in_order[i], (uint32_t *) pixels, 256, 256, pos_x, pos_y, color);
+      render_char(digits_in_order[i], (uint32_t *) pixels, 256, 256, pos_x, pos_y, color);
     }
   }
 
@@ -237,7 +237,7 @@ static void render_text_to_screen(const char *text, SDL_Renderer *renderer, int 
   // @note Parece que a textura já vem "limpa", porém por garantir zero todos os canais
   memset(pixels, 0, width * height * sizeof(uint32_t));
 
-  render_line_colorful(text, color, (uint32_t *) pixels, width, height, 0, 0);
+  render_line(text, color, (uint32_t *) pixels, width, height, 0, 0);
 
   SDL_UnlockTexture(text_texture);
 
