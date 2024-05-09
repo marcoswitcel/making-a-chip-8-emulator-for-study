@@ -32,6 +32,10 @@ typedef struct Context_Data {
 } Context_Data;
 
 constexpr uint32_t RGBA_RED = 0xFF0000FF;
+constexpr uint32_t RGBA_GREEN = 0x00FF00FF;
+constexpr uint32_t RGBA_BLUE = 0x0000FFFF;
+constexpr uint32_t RGBA_TRANSPARENT = 0x00000000;
+constexpr uint32_t RGBA_WHITE = 0xFFFFFFFF;
 
 /**
  * @brief 
@@ -103,7 +107,7 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
   for (unsigned i = 0; i < 256 * 256; i++)
   {
     uint32_t *pixel = &((uint32_t*) pixels)[i];
-    *pixel = 0x00000000;
+    *pixel = RGBA_TRANSPARENT;
   }
 
   char label_sp[] = {'s', 'p', ':', '0', '\0'};
@@ -159,9 +163,9 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
   if (chip8_machine->last_opcode_signal != NONE)
   {
     char opcode[] = "signal:";
-    render_line(opcode, 0x0000FFFF,(uint32_t *) pixels, 256, 256, 0, 106);
+    render_line(opcode, RGBA_BLUE,(uint32_t *) pixels, 256, 256, 0, 106);
     const char *signal_name = get_chip8_signal_name(chip8_machine->last_opcode_signal);
-    render_line(signal_name, 0x0000FFFF, (uint32_t *) pixels, 256, 256, 57, 106);
+    render_line(signal_name, RGBA_BLUE, (uint32_t *) pixels, 256, 256, 57, 106);
   }
   
   /**
@@ -186,7 +190,7 @@ static void render_debug_panel(SDL_Renderer *renderer, Chip8_Machine *chip8_mach
       const char digit = digits_in_order[i];
       const int key_index = (digit < 'A') ? digit - '0' : digit - 'A' + 10;
 
-      uint32_t color = (chip8_machine->keypad_state[key_index]) ? 0x00FF00FF : RGBA_RED;
+      uint32_t color = (chip8_machine->keypad_state[key_index]) ? RGBA_GREEN : RGBA_RED;
       render_char(digits_in_order[i], (uint32_t *) pixels, 256, 256, pos_x, pos_y, color);
     }
   }
@@ -301,7 +305,7 @@ static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, C
   if (is_paused)
   {
     render_full_overlay(renderer);
-    render_text_to_screen("Pausado", renderer, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 4, 0xFFFFFFFF);
+    render_text_to_screen("Pausado", renderer, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 4, RGBA_WHITE);
   }
   else if (is_debugging || show_debug_view)
   {
