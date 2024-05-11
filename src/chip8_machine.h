@@ -16,9 +16,6 @@ constexpr unsigned CHIP8_MEMORY_SIZE = 4096;
 
 constexpr unsigned CHIP8_STACK_SIZE = 16;
 
-#define BLACK_COLOR 0x141414FF
-#define WHITE_COLOR 0xC3C3C3FF
-
 typedef enum Chip8_Signal {
   /**
    * @brief representa que não houve sinal

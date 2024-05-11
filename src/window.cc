@@ -11,6 +11,7 @@
 #include "./utils.cc"
 #include "./utils.macro.h"
 #include "./audio_beeper.cc"
+#include "./color_palette.h"
 
 static constexpr int WINDOW_WIDTH = 1024;
 static constexpr int WINDOW_HEIGHT = 512;
@@ -285,9 +286,11 @@ static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, C
   int pitch;
   SDL_LockTexture(chip8_screen_memory, NULL, &pixels, &pitch);
 
+  Color_Palette palette = get_current_color_palette();
+
   for (unsigned i = 0; i < CHIP8_SCREEN_BUFFER_SIZE; i++)
   {
-    ((uint32_t *) pixels)[i] = chip8_machine->screen_buffer[i] ? WHITE_COLOR : BLACK_COLOR;
+    ((uint32_t *) pixels)[i] = chip8_machine->screen_buffer[i] ? palette.on : palette.off;
   }
 
   SDL_UnlockTexture(chip8_screen_memory);
@@ -416,6 +419,9 @@ static void handle_events_and_inputs(SDL_Window *window, SDL_Renderer *renderer,
               // @todo João, avaliar como lidar com o recarregamento da ROM
               reset_machine(*chip8_machine);
               clearing_screen_buffer(*chip8_machine);
+            } break;
+            case SDLK_i: {
+              next_color_palette();
             } break;
             // toggle fullscreen
             case SDLK_g: {
