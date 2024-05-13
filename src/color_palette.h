@@ -20,8 +20,13 @@ static Color_Palette palettes[] = {
   Color_Palette(WHITE_COLOR, BLACK_COLOR),
   Color_Palette(BLACK_COLOR, WHITE_COLOR),
   // @todo João, revisar cores abaixos e adicionar mais palettas legais
-  Color_Palette(0xFF0000FF, 0x00FF00FF),
-  Color_Palette(0x00FF00FF, 0xFF0000FF),
+  // https://lospec.com/palette-list/paperback-2
+  Color_Palette(0xB8C2B9FF, 0x382B26FF),
+  // https://lospec.com/palette-list/1bit-monitor-glow
+  Color_Palette(0x222323ff, 0xf0f6f0FF),
+  // https://lospec.com/palette-list/ibm-51
+  Color_Palette(0x323c39FF, 0xd3c9a1FF),
+  Color_Palette(0xd3c9a1FF, 0x323c39FF),
 };
 
 static int palettes_size = sizeof(palettes) / sizeof(palettes[0]);
