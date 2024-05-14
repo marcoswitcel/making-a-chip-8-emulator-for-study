@@ -305,6 +305,7 @@ static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, C
   SDL_UnlockTexture(chip8_screen_memory);
 
   // @todo João, decidir se a resolução inicial será parametrizável e se o padding será parametrizável
+  // @todo João, ajustar fullscreen também, com resoluções desproporcionais não fica legal
   constexpr int padding = 1;
   const int scale_factor = ((WINDOW_WIDTH / CHIP8_SCREEN_WIDTH) > (WINDOW_HEIGHT / CHIP8_SCREEN_HEIGHT))
     ? (WINDOW_HEIGHT / CHIP8_SCREEN_HEIGHT) - padding
