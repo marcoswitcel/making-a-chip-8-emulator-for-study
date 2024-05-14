@@ -275,7 +275,18 @@ static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, C
     .h = WINDOW_HEIGHT,
   };
 
-  SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+  Color_Palette palette = get_current_color_palette();
+
+  uint8_t r, g, b;
+
+  // @note Criar uma macro pra extrair? é uma coisa recorrente
+  r = ((palette.on >> 24) & 0xFF) * 0.7;
+  g = ((palette.on >> 16) & 0xFF) * 0.7;
+  b = ((palette.on >> 8) & 0xFF) * 0.7;
+
+  // @note Essa cor poderia ser escolhida pela usuário, mas no geral vou gerar um nova cor a partir
+  // da paletta aplicada
+  SDL_SetRenderDrawColor(renderer, r, g, b, 255);
   SDL_RenderFillRect(renderer, &area);
 
 
@@ -286,8 +297,6 @@ static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, C
   int pitch;
   SDL_LockTexture(chip8_screen_memory, NULL, &pixels, &pitch);
 
-  Color_Palette palette = get_current_color_palette();
-
   for (unsigned i = 0; i < CHIP8_SCREEN_BUFFER_SIZE; i++)
   {
     ((uint32_t *) pixels)[i] = chip8_machine->screen_buffer[i] ? palette.on : palette.off;
@@ -295,7 +304,9 @@ static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, C
 
   SDL_UnlockTexture(chip8_screen_memory);
 
-  constexpr int scale_factor = 15; // temporário?
+  // @todo João, calcular o scale_factor para deixar um padding mínimo e se ajustar de acordo
+  // com o tamanho da tela 
+  constexpr int scale_factor = 15;
   SDL_Rect dest = {
     .x = (WINDOW_WIDTH / 2) - (CHIP8_SCREEN_WIDTH * scale_factor / 2),
     .y = (WINDOW_HEIGHT / 2) - (CHIP8_SCREEN_HEIGHT * scale_factor / 2),
