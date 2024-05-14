@@ -304,13 +304,17 @@ static void render_scene(SDL_Renderer *renderer, Chip8_Machine *chip8_machine, C
 
   SDL_UnlockTexture(chip8_screen_memory);
 
-  // @todo João, calcular o scale_factor para deixar um padding mínimo e se ajustar de acordo
-  // com o tamanho da tela 
-  constexpr int scale_factor = 15;
+  // @todo João, decidir se a resolução inicial será parametrizável e se o padding será parametrizável
+  constexpr int padding = 1;
+  const int scale_factor = ((WINDOW_WIDTH / CHIP8_SCREEN_WIDTH) > (WINDOW_HEIGHT / CHIP8_SCREEN_HEIGHT))
+    ? (WINDOW_HEIGHT / CHIP8_SCREEN_HEIGHT) - padding
+    : (WINDOW_WIDTH / CHIP8_SCREEN_WIDTH) - padding;
+  const int target_width = CHIP8_SCREEN_WIDTH * scale_factor;
+  const int target_height = CHIP8_SCREEN_HEIGHT * scale_factor;
   SDL_Rect dest = {
-    .x = (WINDOW_WIDTH / 2) - (CHIP8_SCREEN_WIDTH * scale_factor / 2),
-    .y = (WINDOW_HEIGHT / 2) - (CHIP8_SCREEN_HEIGHT * scale_factor / 2),
-    .w = CHIP8_SCREEN_WIDTH * scale_factor, .h = CHIP8_SCREEN_HEIGHT * scale_factor
+    .x = (WINDOW_WIDTH / 2) - (target_width / 2),
+    .y = (WINDOW_HEIGHT / 2) - (target_height / 2),
+    .w = target_width, .h = target_height
   };
   SDL_RenderCopy(renderer, chip8_screen_memory, NULL, &dest);
 
